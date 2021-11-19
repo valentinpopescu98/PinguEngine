@@ -1,0 +1,17 @@
+# General
+/*
+!.gitignore
+!documentation.pdf
+
+!/vs
+/vs/*
+!/vs/*.sln
+!/vs/*.vcxproj
+!/vs/*.vcxproj.user
+!/vs/*.vcxproj.filters
+
+# Application
+
+!/libraries
+!/resources
+!/src
