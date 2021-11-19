@@ -30,7 +30,7 @@ void Camera::TreatMouseRotation(GLFWwindow* window, double deltaTime)
 	glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, up)));
 
 	// Check if pitch (rotation around X axis) is in the [5, 175] degres interval
-	if (!glm::angle(newOrientation, up) <= glm::radians(5.0f) or glm::angle(newOrientation, -up) <= glm::radians(5.0f))
+	if (abs(glm::angle(newOrientation, up) - glm::radians(90.0f)) <= glm::radians(85.0f))
 	{
 		orientation = newOrientation; // Use the new rotation for the pitch
 	}
