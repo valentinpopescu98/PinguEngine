@@ -4,10 +4,10 @@ in vec2 textCoord;
 
 layout(location = 0) out vec4 outColor;
 
-uniform sampler2D text0;
+uniform sampler2D textSlot;
 
 void main()
 {
-	outColor = texture(text0, textCoord) * vec4(color, 1.0f);
-	//outColor = mix(texture(text0, textCoord), vec4(color, 1.0f), 0.5f);
+	outColor = texture(textSlot, textCoord) * vec4(color, 1.0f);
+	//outColor = mix(texture(textSlot, textCoord), vec4(color, 1.0f), 0.5f);
 }

@@ -1,11 +1,9 @@
 #version 330 core
 layout(location = 0) in vec3 vPos; // Position of each vertex (XYZ)
-layout(location = 1) in vec2 vTextCoord; // Texture coordinates of each vertex (UV)
-layout(location = 2) in vec3 vNormal; // Direction of normal vectors for each vertex (XYZ)
-layout(location = 3) in vec3 vColor; // Color of each vertex (RGB)
+layout(location = 1) in vec3 vNormal; // Direction of normal vectors for each vertex (XYZ)
+layout(location = 2) in vec3 vColor; // Color of each vertex (RGB)
 
 out vec3 color; // Output color for the fragment shader
-out vec2 textCoord; // Output texture coordinates for the fragment shader
 
 uniform vec3 uniColor; // The color of all the object
 
@@ -20,5 +18,4 @@ void main()
 	
 	color = uniColor; // Send the uniform object color to the fragment shader
 	//color = vColor; // Send each vertex color to the fragment shader
-	textCoord = vTextCoord; // Send texture coordinates to the fragment shader
 }

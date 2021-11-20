@@ -29,17 +29,17 @@ class World : public Utils
 		void Draw(GLFWwindow* window);
 		void AfterDrawing(GLFWwindow* window);
 		void SetTimeValues();
+		void CheckErrors();
 
 		// INSTANCES
 		Camera camera;
 		Shader objectShader, lightShader;
-		Mesh objectMesh, lightMesh;
+		Mesh mesh;
 		Texture texture;
 		VAO objectVAO, lightVAO;
 		VBO objectVBO, lightVBO;
 		EBO objectEBO, lightEBO;
 
 		// UNIFORMS
-		GLuint color0Loc, text0Loc;
 		glm::mat4 view, projection;
 };

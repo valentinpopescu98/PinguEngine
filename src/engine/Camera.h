@@ -24,11 +24,11 @@ class Camera
 		void TreatKeyboardInputs(GLFWwindow* window, double deltaTime);
 
 		glm::vec3 position;
-		glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f);
-		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f); // Variable to rotate forward by default
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // Variable for the up vector
 
-		bool firstClick = true;
+		bool firstClick = true; // Variable for moving cursor to the middle of the cursor only one time in the main loop
 		unsigned int width, height;
-		float speed = 2.5f;
-		float sensitivity = 100.0f;
+		float speed = 2.5f; // Default speed with SHIFT unpressed
+		float sensitivity = 100.0f; // Default sensitivity
 };
