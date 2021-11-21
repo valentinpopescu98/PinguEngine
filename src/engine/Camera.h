@@ -30,5 +30,5 @@ class Camera
 		bool firstClick = true; // Variable for moving cursor to the middle of the cursor only one time in the main loop
 		unsigned int width, height;
 		float speed = 2.5f; // Default speed with SHIFT unpressed
-		float sensitivity = 100.0f; // Default sensitivity
+		float sensitivity = 5000.0f; // Default sensitivity
 };

@@ -178,12 +178,11 @@ void World::Run(GLFWwindow* window)
 	// Loop until window is closed
 	while (!glfwWindowShouldClose(window))
 	{
-		SetTimeValues(); // Compute deltaTime
-
 		BeforeDrawing();
 		Draw(window);
 		AfterDrawing(window);
 
+		SetTimeValues(); // Compute deltaTime
 		CheckErrors(); // Check for errors
 	}
 }
