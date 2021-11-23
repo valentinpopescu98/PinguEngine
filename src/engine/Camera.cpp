@@ -23,8 +23,8 @@ void Camera::TreatMouseRotation(GLFWwindow* window, double deltaTime)
 	double mouseX, mouseY;
 	glfwGetCursorPos(window, &mouseX, &mouseY); // Get cursor position
 
-	float rotX = sensitivity * (float)deltaTime * (float)(mouseY - height / 2) / height; // Calculate new pitch angle in radians (rotation around X axis)
-	float rotY = sensitivity * (float)deltaTime * (float)(mouseX - width / 2) / width; // Calculate new yaw angle in radians (rotation around Y axis)
+	float rotX = sensitivity * (float)deltaTime * (float)(mouseY - height / 2) / height; // Calculate new pitch angle in radians (rotation around OX axis)
+	float rotY = sensitivity * (float)deltaTime * (float)(mouseX - width / 2) / width; // Calculate new yaw angle in radians (rotation around OY axis)
 
 	// Calculate where the new orientation would be based on the pitch and yaw angles
 	glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, up)));
