@@ -6,8 +6,11 @@ layout(location = 3) in vec3 vColor; // Color of each vertex (RGB)
 
 out vec3 color; // Output color for the fragment shader
 out vec2 textCoord; // Output texture coordinates for the fragment shader
+out vec3 normal; // Out normals for the the fragment shader
 
-uniform vec3 uniColor; // The color of all the object
+out vec3 objPos; // The global position of the object
+
+uniform vec3 objColor; // The color of all the object
 
 uniform mat4 model; // Model matrix (LOCAL COORDS -> WORLD COORDS)
 uniform mat4 view; // View matrix (WORLD COORDS -> VIEW COORDS)
@@ -16,9 +19,13 @@ uniform mat4 projection; // Projection matrix (VIEW COORDS -> CLIP COORDS)
 
 void main()
 {
-	gl_Position = projection * view * model * vec4(vPos, 1.0); // Compute the 3D position of each vertex
+	gl_Position = projection * view * model * vec4(vPos, 1.0); // 3D position of each vertex
 	
-	color = uniColor; // Send the uniform object color to the fragment shader
+	color = objColor; // Send the uniform object color to the fragment shader
 	//color = vColor; // Send each vertex color to the fragment shader
 	textCoord = vTextCoord; // Send texture coordinates to the fragment shader
+	normal = vNormal; // Send normals to the fragment shader
+
+	// Calculate the global position of the object with the use of the model matrix and the local position
+	objPos = vec3(model * vec4(vPos, 1.0));
 }

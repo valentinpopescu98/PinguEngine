@@ -4,10 +4,10 @@
 //GLfloat vertices[] =
 //{
 //	 //    COORDS		    TEXT COORDS         NORMALS                  COLORS
-//	-0.5f, 0.0f, -0.5f,		0.0f, 0.0f,		0.0f, 0.0f, -1.0f,		1.0f, 0.0f, 0.0f,  // bottom left
-//	-0.5f, 0.0f,  0.5f,		0.0f, 1.0f,		0.0f, 0.0f, -1.0f,		0.0f, 0.0f, 1.0f,  // top left
-//	 0.5f, 0.0f,  0.5f,		1.0f, 1.0f,		0.0f, 0.0f, -1.0f,		0.0f, 1.0f, 0.0f,  // top right
-//	 0.5f, 0.0f, -0.5f,		1.0f, 0.0f,		0.0f, 0.0f, -1.0f,		1.0f, 1.0f, 0.0f   // bottom right
+//	-0.5f, 0.0f, -0.5f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,		1.0f, 0.0f, 0.0f,  // bottom left
+//	-0.5f, 0.0f,  0.5f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,  // top left
+//	 0.5f, 0.0f,  0.5f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f, 0.0f,  // top right
+//	 0.5f, 0.0f, -0.5f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f,		1.0f, 1.0f, 0.0f   // bottom right
 //};
 //
 //GLuint indices[] = 
@@ -16,84 +16,111 @@
 //	0, 3, 2    // bottom right triangle
 //};
 
+// Data for a pyramid
+GLfloat lightVertices[] =
+{
+	//    COORDS		    TEXT COORDS         NORMALS                  COLORS
+	// Base face
+   -0.5f, 0.0f, -0.5f,		0.0f, 0.0f,	    0.0f, -1.0f, 0.0f,		1.0f, 0.0f, 0.0f,  // front left
+   -0.5f, 0.0f,  0.5f,		0.0f, 1.0f,	    0.0f, -1.0f, 0.0f,		0.0f, 1.0f, 0.0f,  // back left
+	0.5f, 0.0f,  0.5f,		1.0f, 1.0f,		0.0f, -1.0f, 0.0f,		0.0f, 0.0f, 1.0f,  // back right
+	0.5f, 0.0f, -0.5f,		1.0f, 0.0f,		0.0f, -1.0f, 0.0f,		1.0f, 1.0f, 0.0f,  // front right
+
+	// Left face
+   -0.5f, 0.0f,  0.5f,		0.0f, 0.0f,	   -1.0f,  0.5f,  0.0f,		0.0f, 1.0f, 0.0f,  // back left
+   -0.5f, 0.0f, -0.5f,		1.0f, 0.0f,	   -1.0f,  0.5f,  0.0f,		1.0f, 0.0f, 0.0f,  // front left
+	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,	   -1.0f,  0.5f,  0.0f,		0.0f, 1.0f, 1.0f,  // top
+
+	// Front face
+   -0.5f, 0.0f, -0.5f,		0.0f, 0.0f,	    0.0f,  0.5f, -1.0f,		1.0f, 0.0f, 0.0f,  // front left
+	0.5f, 0.0f, -0.5f,		1.0f, 0.0f,		0.0f,  0.5f, -1.0f,		1.0f, 1.0f, 0.0f,  // front right
+	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,		0.0f,  0.5f, -1.0f,		0.0f, 1.0f, 1.0f,  // top
+
+	// Right face
+	0.5f, 0.0f, -0.5f,		0.0f, 0.0f,		1.0f,  0.5f,  0.0f,		1.0f, 1.0f, 0.0f,  // front right
+	0.5f, 0.0f,  0.5f,		1.0f, 0.0f,		1.0f,  0.5f,  0.0f,		0.0f, 0.0f, 1.0f,  // back right
+	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,		1.0f,  0.5f,  0.0f,		0.0f, 1.0f, 1.0f,  // top
+
+	// Back face
+   -0.5f, 0.0f,  0.5f,		0.0f, 0.0f,	    0.0f,  0.5f,  1.0f,		0.0f, 1.0f, 0.0f,  // back left
+	0.5f, 0.0f,  0.5f,		1.0f, 0.0f,		0.0f,  0.5f,  1.0f,		0.0f, 0.0f, 1.0f,  // back right
+	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,		0.0f,  0.5f,  1.0f,		0.0f, 1.0f, 1.0f,  // top
+};
+
+GLuint lightIndices[] =
+{
+	0, 1, 2,		// top left base triangle
+	0, 3, 2,		// bottom right base triangle
+	4, 5, 6,		// left face triangle
+	7, 9, 8,		// back face triangle
+	10, 11, 12,		// right face triangle
+	13, 15, 14		// front face triangle
+};
+
 // Data for a cube
 GLfloat objectVertices[] =
 {
 	//    COORDS		    TEXT COORDS         NORMALS                  COLORS
 	// Front face
-   -0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, 0.0f, -1.0f,		1.0f, 0.0f, 0.0f,  // bottom left
-   -0.5f,  0.5f, -0.5f,		0.0f, 1.0f,		0.0f, 0.0f, -1.0f,		0.0f, 0.0f, 1.0f,  // top left
-	0.5f,  0.5f, -0.5f,		1.0f, 1.0f,		0.0f, 0.0f, -1.0f,		0.0f, 1.0f, 0.0f,  // top right
-	0.5f, -0.5f, -0.5f,		1.0f, 0.0f,		0.0f, 0.0f, -1.0f,		1.0f, 1.0f, 0.0f,  // bottom right
+   -0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f,  0.0f, -1.0f,		1.0f, 0.0f, 0.0f,  // front bottom left
+   -0.5f,  0.5f, -0.5f,		0.0f, 1.0f,		0.0f,  0.0f, -1.0f,		0.0f, 0.0f, 1.0f,  // front top left
+	0.5f,  0.5f, -0.5f,		1.0f, 1.0f,		0.0f,  0.0f, -1.0f,		0.0f, 1.0f, 0.0f,  // front top right
+	0.5f, -0.5f, -0.5f,		1.0f, 0.0f,		0.0f,  0.0f, -1.0f,		1.0f, 1.0f, 0.0f,  // front bottom right
 
 	// Back face
-   -0.5f, -0.5f,  0.5f,		1.0f, 0.0f,		0.0f, 0.0f,  1.0f,		1.0f, 0.0f, 0.0f,  // bottom left
-   -0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		0.0f, 0.0f,  1.0f,		0.0f, 0.0f, 1.0f,  // top left
-	0.5f,  0.5f,  0.5f,		0.0f, 1.0f,		0.0f, 0.0f,  1.0f,		0.0f, 1.0f, 0.0f,  // top right
-	0.5f, -0.5f,  0.5f,		0.0f, 0.0f,		0.0f, 0.0f,  1.0f,		1.0f, 1.0f, 0.0f   // bottom right
+   -0.5f, -0.5f,  0.5f,		0.0f, 0.0f,		0.0f,  0.0f,  1.0f,		1.0f, 0.0f, 0.0f,  // back bottom left
+   -0.5f,  0.5f,  0.5f,		0.0f, 1.0f,		0.0f,  0.0f,  1.0f,		0.0f, 0.0f, 1.0f,  // back top left
+	0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		0.0f,  0.0f,  1.0f,		0.0f, 1.0f, 0.0f,  // back top right
+	0.5f, -0.5f,  0.5f,		1.0f, 0.0f,		0.0f,  0.0f,  1.0f,		1.0f, 1.0f, 0.0f,  // back bottom right
+
+	// Left face
+   -0.5f, -0.5f,  0.5f,		0.0f, 0.0f,	   -1.0f,  0.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // back bottom left
+   -0.5f,  0.5f,  0.5f,		0.0f, 1.0f,	   -1.0f,  0.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // back top left
+   -0.5f,  0.5f, -0.5f,		1.0f, 1.0f,	   -1.0f,  0.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // front top left
+   -0.5f, -0.5f, -0.5f,		1.0f, 0.0f,	   -1.0f,  0.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // front bottom left
+
+	// Right face
+	0.5f, -0.5f,  0.5f,		1.0f, 0.0f,		1.0f,  0.0f,  0.0f,		1.0f, 1.0f, 0.0f,  // back bottom right
+	0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		1.0f,  0.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // back top right
+	0.5f,  0.5f, -0.5f,		0.0f, 1.0f,		1.0f,  0.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // front top right
+	0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		1.0f,  0.0f,  0.0f,		1.0f, 1.0f, 0.0f,  // front bottom right
+
+	// Top face
+   -0.5f,  0.5f, -0.5f,		0.0f, 0.0f,		0.0f,  1.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // front top left
+   -0.5f,  0.5f,  0.5f,		0.0f, 1.0f,		0.0f,  1.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // back top left
+	0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		0.0f,  1.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // back top right
+	0.5f,  0.5f, -0.5f,		1.0f, 0.0f,		0.0f,  1.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // front top right
+
+	// Bottom face
+   -0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, -1.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // front bottom left
+   -0.5f, -0.5f,  0.5f,		0.0f, 1.0f,		0.0f, -1.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // back bottom left
+	0.5f, -0.5f,  0.5f,		1.0f, 1.0f,		0.0f, -1.0f,  0.0f,		1.0f, 1.0f, 0.0f,  // back bottom right
+	0.5f, -0.5f, -0.5f,		1.0f, 0.0f,		0.0f, -1.0f,  0.0f,		1.0f, 1.0f, 0.0f   // front bottom right
 };
 
 GLuint objectIndices[] =
 {
-	0, 1, 2,	// top left, back face triangle
-	0, 3, 2,	// bottom right, back face triangle
+	0, 1, 2,		// top left, front face triangle
+	0, 3, 2,		// bottom right, front face triangle
 
-	4, 5, 6,	// top left, back face triangle
-	4, 7, 6,	// bottom right, back face triangle
+	4, 5, 6,		// top left, back face triangle
+	4, 7, 6,		// bottom right, back face triangle
 
-	0, 1, 5,	// top left, left face triangle
-	0, 4, 5,	// bottom right, left face triangle
+	8, 9, 10,		// top left, left face triangle
+	8, 11, 10,		// bottom right, left face triangle
 
-	2, 6, 7,	// top left, right face triangle
-	3, 2, 7,	// bottom right, right face triangle
+	12, 13, 14,		// top right, right face triangle
+	12, 15, 14,		// bottom left, right face triangle
 
-	5, 1, 2,	// top left, top face triangle
-	5, 6, 2,	// bottom right, top face triangle
+	16, 17, 18,		// top left, top face triangle
+	16, 19, 18,		// bottom right, top face triangle
 
-	4, 0, 3,	// top left, bottom face triangle
-	4, 7, 3		// bottom right, bottom face triangle
-};
-
-// Data for a pyramid
-GLfloat lightVertices[] =
-{
-	//    COORDS		        NORMALS                  COLORS
-   -0.5f, 0.0f,  0.5f,		-1.0f, 1.0f,  1.0f,		1.0f, 0.0f, 0.0f,  // front left
-   -0.5f, 0.0f, -0.5f,		-1.0f, 1.0f, -1.0f,		0.0f, 1.0f, 0.0f,  // back left
-	0.5f, 0.0f, -0.5f,		 1.0f, 1.0f, -1.0f,		0.0f, 0.0f, 1.0f,  // back right
-	0.5f, 0.0f,  0.5f,		 1.0f, 1.0f,  1.0f,		1.0f, 1.0f, 0.0f,  // front right
-	0.0f, 1.0f,  0.0f,		 0.0f, 1.0f,  0.0f,		0.0f, 1.0f, 1.0f,  // top
-};
-
-GLuint lightIndices[] =
-{
-	0, 1, 2,	// top left base triangle
-	0, 2, 3,	// bottom right base triangle
-	0, 1, 4,	// left face triangle
-	1, 2, 4,	// back face triangle
-	2, 3, 4,	// right face triangle
-	3, 0, 4		// front face triangle
+	20, 21, 22,		// bottom left, bottom face triangle
+	20, 23, 22		// top right, bottom face triangle
 };
 
 void World::Init()
 {
-	// Create object shaders
-	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
-
-	// Create object buffers
-	objectVAO.Create(); // Create object VAO
-	objectVBO.Create(objectVertices, sizeof(objectVertices)); // Create object VBO, bind and send buffers to GPU
-	objectEBO.Create(objectIndices, sizeof(objectIndices)); // Create object EBO, bind and send buffers to GPU
-
-	objectVAO.LinkVBO(objectVBO, 0, 11 * sizeof(float), (void*)0); // Link object VBOs to location 0
-	objectVAO.LinkVBO(objectVBO, 1, 11 * sizeof(float), (void*)(3 * sizeof(float))); // Link object VBOs to location 1
-	objectVAO.LinkVBO(objectVBO, 2, 11 * sizeof(float), (void*)(5 * sizeof(float))); // Link object VBOs to location 2
-	objectVAO.LinkVBO(objectVBO, 3, 11 * sizeof(float), (void*)(8 * sizeof(float))); // Link object VBOs to location 3
-
-	objectVAO.Unbind(); // Unbind object VAO
-	objectVBO.Unbind(); // Unbind object VBO
-	objectEBO.Unbind(); // Unbind object EBO
-
 	// Create light shaders
 	lightShader.Create("src/shaders/light.vert", "src/shaders/light.frag");
 
@@ -102,13 +129,33 @@ void World::Init()
 	lightVBO.Create(lightVertices, sizeof(lightVertices)); // Create light source VBO, bind and send buffers to GPU
 	lightEBO.Create(lightIndices, sizeof(lightIndices)); // Create light source EBO, bind and send buffers to GPU
 
-	lightVAO.LinkVBO(lightVBO, 0, 9 * sizeof(float), (void*)0); // Link light source VBOs to location 0
-	lightVAO.LinkVBO(lightVBO, 1, 9 * sizeof(float), (void*)(3 * sizeof(float))); // Link light source VBOs to location 1
-	lightVAO.LinkVBO(lightVBO, 2, 9 * sizeof(float), (void*)(6 * sizeof(float))); // Link light source VBOs to location 2
+	lightVAO.LinkVBO(lightVBO, 0, 11 * sizeof(float), (void*)0); // Link object VBOs to location 0
+	lightVAO.LinkVBO(lightVBO, 1, 11 * sizeof(float), (void*)(3 * sizeof(float))); // Link object VBOs to location 1
+	lightVAO.LinkVBO(lightVBO, 2, 11 * sizeof(float), (void*)(5 * sizeof(float))); // Link object VBOs to location 2
+	lightVAO.LinkVBO(lightVBO, 3, 11 * sizeof(float), (void*)(8 * sizeof(float))); // Link object VBOs to location 3
 
 	lightVAO.Unbind(); // Unbind light source VAO
 	lightVBO.Unbind(); // Unbind light source VBO
 	lightEBO.Unbind(); // Unbind light source EBO
+
+
+	// Create object shaders
+	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
+
+	// Create object buffers
+	objectVAO.Create(); // Create object VAO
+	objectVBO.Create(objectVertices, sizeof(objectVertices)); // Create object VBO, bind and send buffers to GPU
+	objectEBO.Create(objectIndices, sizeof(objectIndices)); // Create object EBO, bind and send buffers to GPU
+
+	objectVAO.LinkVBO(objectVBO, 0, 11 * sizeof(float), (void*)0); // Link light source VBOs to location 0
+	objectVAO.LinkVBO(objectVBO, 1, 11 * sizeof(float), (void*)(3 * sizeof(float))); // Link light source VBOs to location 1
+	objectVAO.LinkVBO(objectVBO, 2, 11 * sizeof(float), (void*)(5 * sizeof(float))); // Link light source VBOs to location 2
+	objectVAO.LinkVBO(objectVBO, 3, 11 * sizeof(float), (void*)(8 * sizeof(float))); // Link light source VBOs to location 3
+
+	objectVAO.Unbind(); // Unbind object VAO
+	objectVBO.Unbind(); // Unbind object VBO
+	objectEBO.Unbind(); // Unbind object EBO
+
 
 	// Create texture
 	texture.Create("resources/textures/default.png", GL_TEXTURE0); // Load image and create a texture for it
@@ -124,16 +171,16 @@ void World::Init()
 
 void World::End()
 {
-	objectVAO.Delete(); // Delete object VAO
-	objectVBO.Delete(); // Delete object VBO
-	objectEBO.Delete(); // Delete object EBO
-	objectShader.Delete(); // Delete object shader
-
 	lightVAO.Delete(); // Delete light source VAO
 	lightVBO.Delete(); // Delete light source VBO
 	lightEBO.Delete(); // Delete light source EBO
-	texture.Delete(); // Delete object texture
 	lightShader.Delete(); // Delete light source shader
+
+	objectVAO.Delete(); // Delete object VAO
+	objectVBO.Delete(); // Delete object VBO
+	objectEBO.Delete(); // Delete object EBO
+	texture.Delete(); // Delete object texture
+	objectShader.Delete(); // Delete object shader
 }
 
 void World::BeforeDrawing()
@@ -148,19 +195,24 @@ void World::Draw(GLFWwindow* window)
 	camera.TreatInputs(window, deltaTime);
 	camera.UpdateMatrices(60.0f, 0.1f, 100.0f, view, projection); // Compute view and projection matrices
 
-	objectShader.Use(); // Use object's shader
-	SendMatrix4x4_Uniform(objectShader.ID, "view", view); // Send view matrix as uniform to the GPU
-	SendMatrix4x4_Uniform(objectShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
-	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
-	mesh.CreateMesh(objectShader, objectVAO, texture, "model", "uniColor", "textSlot",
-		glm::vec3(0.0f, 1.0f, 1.0f), 0, glm::vec3(0.0f, 0.0f, 0.0f), GL_TRIANGLES, sizeof(objectIndices) / sizeof(*objectIndices));
-
-	lightShader.Use(); // Use object's shader
+	lightShader.Use(); // Use light source's shader
 	SendMatrix4x4_Uniform(lightShader.ID, "view", view); // Send view matrix as uniform to the GPU
 	SendMatrix4x4_Uniform(lightShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
 	// Compute and send model matrix and color to the GPU then draw the mesh
-	mesh.CreateMesh(lightShader, lightVAO, "model", "uniColor",
-		glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-2.0f, 2.0f, -4.0f), GL_TRIANGLES, sizeof(lightIndices) / sizeof(*lightIndices));
+	lightColor = glm::vec3(1.0f, 1.0f, 1.0f); // Light source is white
+	lightPosition = glm::vec3(-2.0f, 2.0f, -4.0f);
+	mesh.CreateMesh(lightShader, lightVAO, "model", "objColor",
+		lightColor, lightPosition, GL_TRIANGLES, sizeof(lightIndices) / sizeof(*lightIndices));
+
+	objectShader.Use(); // Use object's shader
+	Send3f_Uniform(objectShader.ID, "lightColor", lightColor); // Send light color as uniform to the GPU
+	Send3f_Uniform(objectShader.ID, "lightPos", lightPosition); // Send light position as uniform to the GPU
+	Send3f_Uniform(objectShader.ID, "camPos", cameraPosition); // Send camera position as uniform to the GPU
+	SendMatrix4x4_Uniform(objectShader.ID, "view", view); // Send view matrix as uniform to the GPU
+	SendMatrix4x4_Uniform(objectShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
+	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
+	mesh.CreateMesh(objectShader, objectVAO, texture, "model", "objColor", "textSlot",
+		glm::vec3(0.0f, 1.0f, 1.0f), 0, glm::vec3(0.0f, 0.0f, 0.0f), GL_TRIANGLES, sizeof(objectIndices) / sizeof(*objectIndices));
 }
 
 void World::AfterDrawing(GLFWwindow* window)
@@ -173,7 +225,8 @@ void World::Run(GLFWwindow* window)
 {
 	glEnable(GL_DEPTH_TEST); // Enable depth
 
-	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 2.0f)); // Initialize camera with window dimensions and with specified starting position
+	cameraPosition = glm::vec3(0.0f, 0.0f, 2.0f);
+	camera.Init(Engine::resX, Engine::resY, cameraPosition); // Initialize camera with window dimensions and with specified starting position
 
 	// Loop until window is closed
 	while (!glfwWindowShouldClose(window))
