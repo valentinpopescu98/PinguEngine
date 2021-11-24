@@ -17,13 +17,14 @@ class Camera
 		void UpdateMatrices(float FOVdeg, float nearPlane, float farPlane, glm::mat4& view, glm::mat4& projection);
 		void TreatInputs(GLFWwindow* window, double deltaTime);
 
+		glm::vec3 position;
+
 		// UNIFORMS
 		GLuint viewLoc, projectionLoc;
 	private:
 		void TreatMouseRotation(GLFWwindow* window, double deltaTime);
 		void TreatKeyboardInputs(GLFWwindow* window, double deltaTime);
 
-		glm::vec3 position;
 		glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f); // Variable to rotate forward by default
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // Variable for the up vector
 

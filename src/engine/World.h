@@ -33,7 +33,6 @@ class World : public Utils
 
 		glm::vec3 lightColor;
 		glm::vec3 lightPosition;
-		glm::vec3 cameraPosition;
 
 		// INSTANCES
 		Camera camera;

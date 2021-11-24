@@ -207,7 +207,7 @@ void World::Draw(GLFWwindow* window)
 	objectShader.Use(); // Use object's shader
 	Send3f_Uniform(objectShader.ID, "lightColor", lightColor); // Send light color as uniform to the GPU
 	Send3f_Uniform(objectShader.ID, "lightPos", lightPosition); // Send light position as uniform to the GPU
-	Send3f_Uniform(objectShader.ID, "camPos", cameraPosition); // Send camera position as uniform to the GPU
+	Send3f_Uniform(objectShader.ID, "camPos", camera.position); // Send camera position as uniform to the GPU
 	SendMatrix4x4_Uniform(objectShader.ID, "view", view); // Send view matrix as uniform to the GPU
 	SendMatrix4x4_Uniform(objectShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
 	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
@@ -225,8 +225,7 @@ void World::Run(GLFWwindow* window)
 {
 	glEnable(GL_DEPTH_TEST); // Enable depth
 
-	cameraPosition = glm::vec3(0.0f, 0.0f, 2.0f);
-	camera.Init(Engine::resX, Engine::resY, cameraPosition); // Initialize camera with window dimensions and with specified starting position
+	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 2.0f)); // Initialize camera with window dimensions and with specified starting position
 
 	// Loop until window is closed
 	while (!glfwWindowShouldClose(window))
