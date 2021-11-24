@@ -31,13 +31,10 @@ class World : public Utils
 		void SetTimeValues();
 		void CheckErrors();
 
-		glm::vec3 lightColor;
-		glm::vec3 lightPosition;
-
 		// INSTANCES
 		Camera camera;
 		Shader objectShader, lightShader;
-		Mesh mesh;
+		Mesh meshLightSource, meshObject;
 		Texture texture;
 		VAO objectVAO, lightVAO;
 		VBO objectVBO, lightVBO;

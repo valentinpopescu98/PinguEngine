@@ -2,8 +2,11 @@
 
 // Overload for drawing with texture
 void Mesh::CreateMesh(Shader& shader, VAO& vao, Texture& texture, const char* modelUni, const char* colorUni, const char* textureUni,
-	glm::vec3 color, GLuint textureSlot, glm::vec3 position, GLenum drawMode, GLsizei count)
+	glm::vec3 color, glm::vec3 position, GLuint textureSlot, GLenum drawMode, GLsizei count)
 {
+	this->color = color;
+	this->position = position;
+
 	glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
 	model = glm::translate(model, position); // Calculate object's global position
 
@@ -21,6 +24,9 @@ void Mesh::CreateMesh(Shader& shader, VAO& vao, Texture& texture, const char* mo
 void Mesh::CreateMesh(Shader& shader, VAO& vao, const char* modelUni, const char* colorUni,
 	glm::vec3 color, glm::vec3 position, GLenum drawMode, GLsizei count)
 {
+	this->color = color;
+	this->position = position;
+
 	glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
 	model = glm::translate(model, position); // Calculate object's global position
 
@@ -33,4 +39,7 @@ void Mesh::CreateMesh(Shader& shader, VAO& vao, const char* modelUni, const char
 }
 
 // TODO: to implement with assimp
-void Mesh::ImportMesh() {}
+void Mesh::ImportMesh()
+{
+
+}

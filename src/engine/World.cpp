@@ -199,20 +199,18 @@ void World::Draw(GLFWwindow* window)
 	SendMatrix4x4_Uniform(lightShader.ID, "view", view); // Send view matrix as uniform to the GPU
 	SendMatrix4x4_Uniform(lightShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
 	// Compute and send model matrix and color to the GPU then draw the mesh
-	lightColor = glm::vec3(1.0f, 1.0f, 1.0f); // Light source is white
-	lightPosition = glm::vec3(-2.0f, 2.0f, -4.0f);
-	mesh.CreateMesh(lightShader, lightVAO, "model", "objColor",
-		lightColor, lightPosition, GL_TRIANGLES, sizeof(lightIndices) / sizeof(*lightIndices));
+	meshLightSource.CreateMesh(lightShader, lightVAO, "model", "objColor",
+		glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-2.0f, 2.0f, -4.0f), GL_TRIANGLES, sizeof(lightIndices) / sizeof(*lightIndices));
 
 	objectShader.Use(); // Use object's shader
-	Send3f_Uniform(objectShader.ID, "lightColor", lightColor); // Send light color as uniform to the GPU
-	Send3f_Uniform(objectShader.ID, "lightPos", lightPosition); // Send light position as uniform to the GPU
+	Send3f_Uniform(objectShader.ID, "lightColor", meshLightSource.color); // Send light color as uniform to the GPU
+	Send3f_Uniform(objectShader.ID, "lightPos", meshLightSource.position); // Send light position as uniform to the GPU
 	Send3f_Uniform(objectShader.ID, "camPos", camera.position); // Send camera position as uniform to the GPU
 	SendMatrix4x4_Uniform(objectShader.ID, "view", view); // Send view matrix as uniform to the GPU
 	SendMatrix4x4_Uniform(objectShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
 	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
-	mesh.CreateMesh(objectShader, objectVAO, texture, "model", "objColor", "textSlot",
-		glm::vec3(0.0f, 1.0f, 1.0f), 0, glm::vec3(0.0f, 0.0f, 0.0f), GL_TRIANGLES, sizeof(objectIndices) / sizeof(*objectIndices));
+	meshObject.CreateMesh(objectShader, objectVAO, texture, "model", "objColor", "textSlot",
+		glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0, GL_TRIANGLES, sizeof(objectIndices) / sizeof(*objectIndices));
 }
 
 void World::AfterDrawing(GLFWwindow* window)

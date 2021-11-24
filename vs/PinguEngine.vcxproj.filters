@@ -48,6 +48,9 @@
     <Filter Include="resources\textures">
       <UniqueIdentifier>{dc994d7e-39a1-46b3-9324-5059c68190a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources\models">
+      <UniqueIdentifier>{935ecafb-0c28-4344-a9d3-17cf75532d9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\Engine.h">
@@ -100,5 +103,10 @@
     <None Include="..\src\shaders\light.frag">
       <Filter>shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\resources\models\sphere.obj">
+      <Filter>resources\models</Filter>
+    </Object>
   </ItemGroup>
 </Project>
