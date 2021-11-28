@@ -1,5 +1,42 @@
 #include "Utils.h"
 
+std::string Utils::GetFileContents(const char* filePath)
+{
+	std::ifstream in(filePath, std::ios::binary);
+
+	if (in)
+	{
+		std::string contents;
+		in.seekg(0, std::ios::end);
+		contents.resize(in.tellg());
+		in.seekg(0, std::ios::beg);
+		in.read(&contents[0], contents.size());
+		in.close();
+		return(contents);
+	}
+
+	throw(errno + " ERROR: Could not open file.");
+}
+
+std::vector<std::string> Utils::GetFileLines(const char* filePath)
+{
+	std::ifstream in(filePath);
+	std::string line;
+	std::vector<std::string> lines;
+
+	if (in)
+	{
+		while (std::getline(in, line))
+		{
+			lines.push_back(line);
+		}
+
+		return lines;
+	}
+
+	throw(errno + " ERROR: Could not open file.");
+}
+
 void Utils::SendMatrix4x4_Uniform(GLuint shaderID, const char* uniform, glm::mat4 matrix)
 {
 	GLuint location = glGetUniformLocation(shaderID, uniform); // Create uniform variable

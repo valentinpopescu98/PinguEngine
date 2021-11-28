@@ -11,7 +11,6 @@ public:
 	static void End(GLFWwindow* window);
 	static GLFWwindow* CreateWindow(unsigned int resX, unsigned int resY);
 
-	//static GLFWwindow* window;
 	static unsigned int resX, resY;
 	static float aspectRation;
 

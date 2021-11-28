@@ -39,7 +39,55 @@ void Mesh::CreateMesh(Shader& shader, VAO& vao, const char* modelUni, const char
 }
 
 // TODO: to implement with assimp
-void Mesh::ImportMesh()
+void Mesh::ImportMesh(const char* meshPath)
 {
+	std::vector<glm::fvec3> vertex_coords;
+	std::vector<glm::fvec2> vertex_textCoords;
+	std::vector<glm::fvec3> vertex_normals;
 
+	std::vector<GLuint> vertex_coordsIndices;
+	std::vector<GLuint> vertex_textCoordsIndices;
+	std::vector<GLuint> vertex_normalsIndices;
+
+	std::vector<std::string> lines = GetFileLines(meshPath);
+	std::stringstream ss;
+	std::string prefix = "";
+	glm::vec3 temp_vec3;
+	glm::vec2 temp_vec2;
+
+	for (std::string line : lines)
+	{
+		ss.clear();
+		ss.str(line);
+		ss >> prefix;
+
+		if (prefix == "use_mtl")
+		{
+			
+		}
+			
+		// Vertex coordinate
+		if (prefix == "v")
+		{
+			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+			vertex_coords.push_back(temp_vec3);
+		}
+		// Vertex normal
+		else if (prefix == "vn")
+		{
+			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+			vertex_normals.push_back(temp_vec3);
+		}
+		// Vertex texture coordinate
+		else if (prefix == "vt")
+		{
+			ss >> temp_vec2.x >> temp_vec2.y;
+			vertex_textCoords.push_back(temp_vec2);
+		}
+		else if (prefix == "f")
+		{
+			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+			vertex_coords.push_back(temp_vec3);
+		}
+	}
 }

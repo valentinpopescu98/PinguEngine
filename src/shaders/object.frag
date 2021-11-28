@@ -1,7 +1,7 @@
 #version 330 core
-in vec3 color; // Input color from the vertex shader
-in vec2 textCoord; // Input texture coordinates from the vertex shader
 in vec3 normal; // Input normals from the vertex shader
+in vec2 textCoord; // Input texture coordinates from the vertex shader
+in vec3 color; // Input color from the vertex shader
 
 in vec3 objPos; // The global position of the object
 

@@ -1,7 +1,7 @@
 #version 330 core
 layout(location = 0) in vec3 vPos; // Position of each vertex (XYZ)
-layout(location = 1) in vec2 vTextCoord; // Texture coordinates of each vertex (UV)
-layout(location = 2) in vec3 vNormal; // Direction of normal vectors for each vertex (XYZ)
+layout(location = 1) in vec3 vNormal; // Direction of normal vectors for each vertex (XYZ)
+layout(location = 2) in vec2 vTextCoord; // Texture coordinates of each vertex (UV)
 layout(location = 3) in vec3 vColor; // Color of each vertex (RGB)
 
 out vec3 color; // Output color for the fragment shader

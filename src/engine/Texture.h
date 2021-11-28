@@ -16,6 +16,7 @@ class Texture
 
 		GLuint ID;
 		GLenum textureType;
+
 	private:
 		int widthImage, heightImage, numColCh; // Width, height and number of color channels
 		unsigned char* bytes;

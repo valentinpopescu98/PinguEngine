@@ -2,20 +2,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cerrno>
 
-class Shader
+#include "Utils.h"
+
+class Shader : public Utils
 {
 	public:
-		void Create(const char* vertexShaderLocation, const char* fragmentShaderLocation);
-
+		void Create(const char* vertexShaderPath, const char* fragmentShaderPath);
 		void Delete();
 		void Use();
 
 		GLuint ID;
 	private:
-		static std::string GetFileContents(const char* fileLocation);
-		static void CompileErrors(GLuint shader, const char* type);
+		void CheckErrors(GLuint shader, const char* type);
 };

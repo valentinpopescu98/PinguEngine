@@ -25,13 +25,13 @@
     <ClCompile Include="..\src\engine\Mesh.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\engine\Texture.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\engine\Camera.cpp">
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="..\src\engine\Utils.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\Texture.cpp">
       <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,13 +75,13 @@
     <ClInclude Include="..\src\engine\Mesh.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\engine\Texture.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\engine\Camera.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\Utils.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\Texture.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>

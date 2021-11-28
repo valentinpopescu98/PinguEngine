@@ -1,6 +1,5 @@
 #include "Engine.h"
 
-//GLFWwindow* Engine::window;
 unsigned int Engine::resX, Engine::resY;
 float Engine::aspectRation;
 
@@ -41,9 +40,8 @@ int Engine::LoadGlad()
 GLFWwindow* Engine::CreateWindow(unsigned int resX, unsigned int resY) 
 {
 	GLFWwindow* window = glfwCreateWindow(resX, resY, "Pingu Engine", NULL, NULL); // Create window
-	//Engine::window = window;
 
-	Engine::CheckFailCreateWindow(window);
+	CheckFailCreateWindow(window);
 	glfwMakeContextCurrent(window); // Make window's context current
 
 	LoadGlad();

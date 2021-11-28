@@ -1,53 +1,53 @@
 #include "World.h"
 
 // Data for a plane
-//GLfloat vertices[] =
-//{
-//	 //    COORDS		    TEXT COORDS         NORMALS                  COLORS
-//	-0.5f, 0.0f, -0.5f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,		1.0f, 0.0f, 0.0f,  // bottom left
-//	-0.5f, 0.0f,  0.5f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,  // top left
-//	 0.5f, 0.0f,  0.5f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f, 0.0f,  // top right
-//	 0.5f, 0.0f, -0.5f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f,		1.0f, 1.0f, 0.0f   // bottom right
-//};
-//
-//GLuint indices[] = 
-//{
-//	0, 1, 2,   // top left triangle
-//	0, 3, 2    // bottom right triangle
-//};
-
-// Data for a pyramid
-GLfloat lightVertices[] =
+std::vector<GLfloat> vertices =
 {
-	//    COORDS		    TEXT COORDS         NORMALS                  COLORS
-	// Base face
-   -0.5f, 0.0f, -0.5f,		0.0f, 0.0f,	    0.0f, -1.0f, 0.0f,		1.0f, 0.0f, 0.0f,  // front left
-   -0.5f, 0.0f,  0.5f,		0.0f, 1.0f,	    0.0f, -1.0f, 0.0f,		0.0f, 1.0f, 0.0f,  // back left
-	0.5f, 0.0f,  0.5f,		1.0f, 1.0f,		0.0f, -1.0f, 0.0f,		0.0f, 0.0f, 1.0f,  // back right
-	0.5f, 0.0f, -0.5f,		1.0f, 0.0f,		0.0f, -1.0f, 0.0f,		1.0f, 1.0f, 0.0f,  // front right
-
-	// Left face
-   -0.5f, 0.0f,  0.5f,		0.0f, 0.0f,	   -1.0f,  0.5f,  0.0f,		0.0f, 1.0f, 0.0f,  // back left
-   -0.5f, 0.0f, -0.5f,		1.0f, 0.0f,	   -1.0f,  0.5f,  0.0f,		1.0f, 0.0f, 0.0f,  // front left
-	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,	   -1.0f,  0.5f,  0.0f,		0.0f, 1.0f, 1.0f,  // top
-
-	// Front face
-   -0.5f, 0.0f, -0.5f,		0.0f, 0.0f,	    0.0f,  0.5f, -1.0f,		1.0f, 0.0f, 0.0f,  // front left
-	0.5f, 0.0f, -0.5f,		1.0f, 0.0f,		0.0f,  0.5f, -1.0f,		1.0f, 1.0f, 0.0f,  // front right
-	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,		0.0f,  0.5f, -1.0f,		0.0f, 1.0f, 1.0f,  // top
-
-	// Right face
-	0.5f, 0.0f, -0.5f,		0.0f, 0.0f,		1.0f,  0.5f,  0.0f,		1.0f, 1.0f, 0.0f,  // front right
-	0.5f, 0.0f,  0.5f,		1.0f, 0.0f,		1.0f,  0.5f,  0.0f,		0.0f, 0.0f, 1.0f,  // back right
-	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,		1.0f,  0.5f,  0.0f,		0.0f, 1.0f, 1.0f,  // top
-
-	// Back face
-   -0.5f, 0.0f,  0.5f,		0.0f, 0.0f,	    0.0f,  0.5f,  1.0f,		0.0f, 1.0f, 0.0f,  // back left
-	0.5f, 0.0f,  0.5f,		1.0f, 0.0f,		0.0f,  0.5f,  1.0f,		0.0f, 0.0f, 1.0f,  // back right
-	0.0f, 1.0f,  0.0f,		0.5f, 1.0f,		0.0f,  0.5f,  1.0f,		0.0f, 1.0f, 1.0f,  // top
+	 //   COORDS		         NORMALS            TEXT COORDS           COLORS
+	-0.5f, 0.0f, -0.5f,      0.0f, 1.0f, 0.0f,      0.0f, 0.0f,      1.0f, 0.0f, 0.0f,  // bottom left
+	-0.5f, 0.0f,  0.5f,      0.0f, 1.0f, 0.0f,      0.0f, 1.0f,      0.0f, 0.0f, 1.0f,  // top left
+	 0.5f, 0.0f,  0.5f,      0.0f, 1.0f, 0.0f,      1.0f, 1.0f,      0.0f, 1.0f, 0.0f,  // top right
+	 0.5f, 0.0f, -0.5f,      0.0f, 1.0f, 0.0f,      1.0f, 0.0f,      1.0f, 1.0f, 0.0f   // bottom right
 };
 
-GLuint lightIndices[] =
+std::vector<GLuint> indices = 
+{
+	0, 1, 2,   // top left triangle
+	0, 3, 2    // bottom right triangle
+};
+
+// Data for a pyramid
+std::vector<GLfloat> lightVertices =
+{
+	//   COORDS		             NORMALS             TEXT COORDS           COLORS
+	// Base face
+   -0.5f, 0.0f, -0.5f,      0.0f, -1.0f,  0.0f,      0.0f, 0.0f,      1.0f, 0.0f, 0.0f,  // front left
+   -0.5f, 0.0f,  0.5f,      0.0f, -1.0f,  0.0f,      0.0f, 1.0f,      0.0f, 1.0f, 0.0f,  // back left
+	0.5f, 0.0f,  0.5f,      0.0f, -1.0f,  0.0f,      1.0f, 1.0f,      0.0f, 0.0f, 1.0f,  // back right
+	0.5f, 0.0f, -0.5f,      0.0f, -1.0f,  0.0f,      1.0f, 0.0f,      1.0f, 1.0f, 0.0f,  // front right
+
+	// Left face
+   -0.5f, 0.0f,  0.5f,     -1.0f,  0.5f,  0.0f,      0.0f, 0.0f,      0.0f, 1.0f, 0.0f,  // back left
+   -0.5f, 0.0f, -0.5f,     -1.0f,  0.5f,  0.0f,      1.0f, 0.0f,      1.0f, 0.0f, 0.0f,  // front left
+	0.0f, 1.0f,  0.0f,     -1.0f,  0.5f,  0.0f,      0.5f, 1.0f,      0.0f, 1.0f, 1.0f,  // top
+
+	// Front face
+   -0.5f, 0.0f, -0.5f,      0.0f,  0.5f, -1.0f,      0.0f, 0.0f,      1.0f, 0.0f, 0.0f,  // front left
+	0.5f, 0.0f, -0.5f,      0.0f,  0.5f, -1.0f,      1.0f, 0.0f,      1.0f, 1.0f, 0.0f,  // front right
+	0.0f, 1.0f,  0.0f,      0.0f,  0.5f, -1.0f,      0.5f, 1.0f,      0.0f, 1.0f, 1.0f,  // top
+
+	// Right face
+	0.5f, 0.0f, -0.5f,      1.0f,  0.5f,  0.0f,      0.0f, 0.0f,      1.0f, 1.0f, 0.0f,  // front right
+	0.5f, 0.0f,  0.5f,      1.0f,  0.5f,  0.0f,      1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // back right
+	0.0f, 1.0f,  0.0f,      1.0f,  0.5f,  0.0f,      0.5f, 1.0f,      0.0f, 1.0f, 1.0f,  // top
+
+	// Back face
+   -0.5f, 0.0f,  0.5f,      0.0f,  0.5f,  1.0f,      0.0f, 0.0f,      0.0f, 1.0f, 0.0f,  // back left
+	0.5f, 0.0f,  0.5f,      0.0f,  0.5f,  1.0f,      1.0f, 0.0f,      0.0f, 0.0f, 1.0f,  // back right
+	0.0f, 1.0f,  0.0f,      0.0f,  0.5f,  1.0f,      0.5f, 1.0f,      0.0f, 1.0f, 1.0f,  // top
+};
+
+std::vector<GLuint> lightIndices =
 {
 	0, 1, 2,		// top left base triangle
 	0, 3, 2,		// bottom right base triangle
@@ -58,47 +58,47 @@ GLuint lightIndices[] =
 };
 
 // Data for a cube
-GLfloat objectVertices[] =
+std::vector<GLfloat> objectVertices =
 {
-	//    COORDS		    TEXT COORDS         NORMALS                  COLORS
+	//    COORDS		          NORMALS             TEXT COORDS             COLORS
 	// Front face
-   -0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f,  0.0f, -1.0f,		1.0f, 0.0f, 0.0f,  // front bottom left
-   -0.5f,  0.5f, -0.5f,		0.0f, 1.0f,		0.0f,  0.0f, -1.0f,		0.0f, 0.0f, 1.0f,  // front top left
-	0.5f,  0.5f, -0.5f,		1.0f, 1.0f,		0.0f,  0.0f, -1.0f,		0.0f, 1.0f, 0.0f,  // front top right
-	0.5f, -0.5f, -0.5f,		1.0f, 0.0f,		0.0f,  0.0f, -1.0f,		1.0f, 1.0f, 0.0f,  // front bottom right
+   -0.5f, -0.5f, -0.5f,      0.0f,  0.0f, -1.0f,      0.0f,  0.0f,      1.0f,  0.0f,  0.0f,  // front bottom left
+   -0.5f,  0.5f, -0.5f,      0.0f,  0.0f, -1.0f,      0.0f,  1.0f,      0.0f,  0.0f,  1.0f,  // front top left
+	0.5f,  0.5f, -0.5f,      0.0f,  0.0f, -1.0f,      1.0f,  1.0f,      0.0f,  1.0f,  0.0f,  // front top right
+	0.5f, -0.5f, -0.5f,      0.0f,  0.0f, -1.0f,      1.0f,  0.0f,      1.0f,  1.0f,  0.0f,  // front bottom right
 
 	// Back face
-   -0.5f, -0.5f,  0.5f,		0.0f, 0.0f,		0.0f,  0.0f,  1.0f,		1.0f, 0.0f, 0.0f,  // back bottom left
-   -0.5f,  0.5f,  0.5f,		0.0f, 1.0f,		0.0f,  0.0f,  1.0f,		0.0f, 0.0f, 1.0f,  // back top left
-	0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		0.0f,  0.0f,  1.0f,		0.0f, 1.0f, 0.0f,  // back top right
-	0.5f, -0.5f,  0.5f,		1.0f, 0.0f,		0.0f,  0.0f,  1.0f,		1.0f, 1.0f, 0.0f,  // back bottom right
+   -0.5f, -0.5f,  0.5f,      0.0f,  0.0f,  1.0f,      0.0f,  0.0f,      1.0f,  0.0f,  0.0f,  // back bottom left
+   -0.5f,  0.5f,  0.5f,      0.0f,  0.0f,  1.0f,      0.0f,  1.0f,      0.0f,  0.0f,  1.0f,  // back top left
+	0.5f,  0.5f,  0.5f,      0.0f,  0.0f,  1.0f,      1.0f,  1.0f,      0.0f,  1.0f,  0.0f,  // back top right
+	0.5f, -0.5f,  0.5f,      0.0f,  0.0f,  1.0f,      1.0f,  0.0f,      1.0f,  1.0f,  0.0f,  // back bottom right
 
 	// Left face
-   -0.5f, -0.5f,  0.5f,		0.0f, 0.0f,	   -1.0f,  0.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // back bottom left
-   -0.5f,  0.5f,  0.5f,		0.0f, 1.0f,	   -1.0f,  0.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // back top left
-   -0.5f,  0.5f, -0.5f,		1.0f, 1.0f,	   -1.0f,  0.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // front top left
-   -0.5f, -0.5f, -0.5f,		1.0f, 0.0f,	   -1.0f,  0.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // front bottom left
+   -0.5f, -0.5f,  0.5f,     -1.0f,  0.0f,  0.0f,      0.0f,  0.0f,      1.0f,  0.0f,  0.0f,  // back bottom left
+   -0.5f,  0.5f,  0.5f,     -1.0f,  0.0f,  0.0f,      0.0f,  1.0f,      0.0f,  0.0f,  1.0f,  // back top left
+   -0.5f,  0.5f, -0.5f,     -1.0f,  0.0f,  0.0f,      1.0f,  1.0f,      0.0f,  0.0f,  1.0f,  // front top left
+   -0.5f, -0.5f, -0.5f,     -1.0f,  0.0f,  0.0f,      1.0f,  0.0f,      1.0f,  0.0f,  0.0f,  // front bottom left
 
 	// Right face
-	0.5f, -0.5f,  0.5f,		1.0f, 0.0f,		1.0f,  0.0f,  0.0f,		1.0f, 1.0f, 0.0f,  // back bottom right
-	0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		1.0f,  0.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // back top right
-	0.5f,  0.5f, -0.5f,		0.0f, 1.0f,		1.0f,  0.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // front top right
-	0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		1.0f,  0.0f,  0.0f,		1.0f, 1.0f, 0.0f,  // front bottom right
+	0.5f, -0.5f,  0.5f,      1.0f,  0.0f,  0.0f,      1.0f,  0.0f,      1.0f,  1.0f,  0.0f,  // back bottom right
+	0.5f,  0.5f,  0.5f,      1.0f,  0.0f,  0.0f,      1.0f,  1.0f,      0.0f,  1.0f,  0.0f,  // back top right
+	0.5f,  0.5f, -0.5f,      1.0f,  0.0f,  0.0f,      0.0f,  1.0f,      0.0f,  1.0f,  0.0f,  // front top right
+	0.5f, -0.5f, -0.5f,      1.0f,  0.0f,  0.0f,      0.0f,  0.0f,      1.0f,  1.0f,  0.0f,  // front bottom right
 
 	// Top face
-   -0.5f,  0.5f, -0.5f,		0.0f, 0.0f,		0.0f,  1.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // front top left
-   -0.5f,  0.5f,  0.5f,		0.0f, 1.0f,		0.0f,  1.0f,  0.0f,		0.0f, 0.0f, 1.0f,  // back top left
-	0.5f,  0.5f,  0.5f,		1.0f, 1.0f,		0.0f,  1.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // back top right
-	0.5f,  0.5f, -0.5f,		1.0f, 0.0f,		0.0f,  1.0f,  0.0f,		0.0f, 1.0f, 0.0f,  // front top right
-
+   -0.5f,  0.5f, -0.5f,      0.0f,  1.0f,  0.0f,      0.0f,  0.0f,      0.0f,  0.0f,  1.0f,  // front top left
+   -0.5f,  0.5f,  0.5f,      0.0f,  1.0f,  0.0f,      0.0f,  1.0f,      0.0f,  0.0f,  1.0f,  // back top left
+	0.5f,  0.5f,  0.5f,      0.0f,  1.0f,  0.0f,      1.0f,  1.0f,      0.0f,  1.0f,  0.0f,  // back top right
+	0.5f,  0.5f, -0.5f,      0.0f,  1.0f,  0.0f,      1.0f,  0.0f,      0.0f,  1.0f,  0.0f,  // front top right
+   
 	// Bottom face
-   -0.5f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, -1.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // front bottom left
-   -0.5f, -0.5f,  0.5f,		0.0f, 1.0f,		0.0f, -1.0f,  0.0f,		1.0f, 0.0f, 0.0f,  // back bottom left
-	0.5f, -0.5f,  0.5f,		1.0f, 1.0f,		0.0f, -1.0f,  0.0f,		1.0f, 1.0f, 0.0f,  // back bottom right
-	0.5f, -0.5f, -0.5f,		1.0f, 0.0f,		0.0f, -1.0f,  0.0f,		1.0f, 1.0f, 0.0f   // front bottom right
+   -0.5f, -0.5f, -0.5f,      0.0f, -1.0f,  0.0f,      0.0f,  0.0f,      1.0f,  0.0f,  0.0f,  // front bottom left
+   -0.5f, -0.5f,  0.5f,      0.0f, -1.0f,  0.0f,      0.0f,  1.0f,      1.0f,  0.0f,  0.0f,  // back bottom left
+	0.5f, -0.5f,  0.5f,      0.0f, -1.0f,  0.0f,      1.0f,  1.0f,      1.0f,  1.0f,  0.0f,  // back bottom right
+	0.5f, -0.5f, -0.5f,      0.0f, -1.0f,  0.0f,      1.0f,  0.0f,      1.0f,  1.0f,  0.0f   // front bottom right
 };
 
-GLuint objectIndices[] =
+std::vector<GLuint> objectIndices =
 {
 	0, 1, 2,		// top left, front face triangle
 	0, 3, 2,		// bottom right, front face triangle
@@ -125,14 +125,14 @@ void World::Init()
 	lightShader.Create("src/shaders/light.vert", "src/shaders/light.frag");
 
 	// Create light buffers
-	lightVAO.Create(); // Create light source VAO
-	lightVBO.Create(lightVertices, sizeof(lightVertices)); // Create light source VBO, bind and send buffers to GPU
-	lightEBO.Create(lightIndices, sizeof(lightIndices)); // Create light source EBO, bind and send buffers to GPU
+	lightVAO.Create(); // Create light source VAO and bind it
+	lightVBO.Create(lightVertices); // Create light source VBO, bind and send buffers to GPU
+	lightEBO.Create(lightIndices); // Create light source EBO, bind and send buffers to GPU
 
-	lightVAO.LinkVBO(lightVBO, 0, 11 * sizeof(float), (void*)0); // Link object VBOs to location 0
-	lightVAO.LinkVBO(lightVBO, 1, 11 * sizeof(float), (void*)(3 * sizeof(float))); // Link object VBOs to location 1
-	lightVAO.LinkVBO(lightVBO, 2, 11 * sizeof(float), (void*)(5 * sizeof(float))); // Link object VBOs to location 2
-	lightVAO.LinkVBO(lightVBO, 3, 11 * sizeof(float), (void*)(8 * sizeof(float))); // Link object VBOs to location 3
+	lightVAO.LinkVBO(lightVBO, 0, 11 * sizeof(float), (void*)0); // Link light source VBOs to location 0
+	lightVAO.LinkVBO(lightVBO, 1, 11 * sizeof(float), (void*)(3 * sizeof(GLfloat))); // Link light source VBOs to location 1
+	lightVAO.LinkVBO(lightVBO, 2, 11 * sizeof(float), (void*)(6 * sizeof(GLfloat))); // Link light source VBOs to location 2
+	lightVAO.LinkVBO(lightVBO, 3, 11 * sizeof(float), (void*)(8 * sizeof(GLfloat))); // Link light source VBOs to location 3
 
 	lightVAO.Unbind(); // Unbind light source VAO
 	lightVBO.Unbind(); // Unbind light source VBO
@@ -144,13 +144,13 @@ void World::Init()
 
 	// Create object buffers
 	objectVAO.Create(); // Create object VAO
-	objectVBO.Create(objectVertices, sizeof(objectVertices)); // Create object VBO, bind and send buffers to GPU
-	objectEBO.Create(objectIndices, sizeof(objectIndices)); // Create object EBO, bind and send buffers to GPU
+	objectVBO.Create(objectVertices); // Create object VBO, bind and send buffers to GPU
+	objectEBO.Create(objectIndices); // Create object EBO, bind and send buffers to GPU
 
-	objectVAO.LinkVBO(objectVBO, 0, 11 * sizeof(float), (void*)0); // Link light source VBOs to location 0
-	objectVAO.LinkVBO(objectVBO, 1, 11 * sizeof(float), (void*)(3 * sizeof(float))); // Link light source VBOs to location 1
-	objectVAO.LinkVBO(objectVBO, 2, 11 * sizeof(float), (void*)(5 * sizeof(float))); // Link light source VBOs to location 2
-	objectVAO.LinkVBO(objectVBO, 3, 11 * sizeof(float), (void*)(8 * sizeof(float))); // Link light source VBOs to location 3
+	objectVAO.LinkVBO(objectVBO, 0, 11 * sizeof(float), (void*)0); // Link object VBOs to location 0
+	objectVAO.LinkVBO(objectVBO, 1, 11 * sizeof(float), (void*)(3 * sizeof(GLfloat))); // Link object VBOs to location 1
+	objectVAO.LinkVBO(objectVBO, 2, 11 * sizeof(float), (void*)(6 * sizeof(GLfloat))); // Link object VBOs to location 2
+	objectVAO.LinkVBO(objectVBO, 3, 11 * sizeof(float), (void*)(8 * sizeof(GLfloat))); // Link object VBOs to location 3
 
 	objectVAO.Unbind(); // Unbind object VAO
 	objectVBO.Unbind(); // Unbind object VBO
@@ -200,7 +200,7 @@ void World::Draw(GLFWwindow* window)
 	SendMatrix4x4_Uniform(lightShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
 	// Compute and send model matrix and color to the GPU then draw the mesh
 	meshLightSource.CreateMesh(lightShader, lightVAO, "model", "objColor",
-		glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-2.0f, 2.0f, -4.0f), GL_TRIANGLES, sizeof(lightIndices) / sizeof(*lightIndices));
+		glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-2.0f, 2.0f, -4.0f), GL_TRIANGLES, lightIndices.size());
 
 	objectShader.Use(); // Use object's shader
 	Send3f_Uniform(objectShader.ID, "lightColor", meshLightSource.color); // Send light color as uniform to the GPU
@@ -210,7 +210,9 @@ void World::Draw(GLFWwindow* window)
 	SendMatrix4x4_Uniform(objectShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
 	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
 	meshObject.CreateMesh(objectShader, objectVAO, texture, "model", "objColor", "textSlot",
-		glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0, GL_TRIANGLES, sizeof(objectIndices) / sizeof(*objectIndices));
+		glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0, GL_TRIANGLES, objectIndices.size());
+
+	meshObject.ImportMesh("resources/models/sphere.obj");
 }
 
 void World::AfterDrawing(GLFWwindow* window)

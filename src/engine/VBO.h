@@ -1,11 +1,12 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 class VBO
 {
 	public:
-		void Create(float vertices[], GLsizeiptr size);
+		void Create(std::vector<GLfloat> vertices);
 		void Delete();
 		void Bind();
 		void Unbind();
