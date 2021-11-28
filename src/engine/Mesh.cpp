@@ -1,7 +1,27 @@
 #include "Mesh.h"
 
-// Overload for drawing with texture
-void Mesh::CreateMesh(Shader& shader, VAO& vao, Texture& texture, const char* modelUni, const char* colorUni, const char* textureUni,
+void Mesh::InitLight(Shader& shader, glm::mat4 view, glm::mat4 projection)
+{
+	SendMatrix4x4_Uniform(shader.ID, "view", view); // Send view matrix as uniform to the GPU
+	SendMatrix4x4_Uniform(shader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
+}
+
+void Mesh::InitObject(Shader& shader, Mesh& lightSource, Camera& camera,
+	glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess, glm::mat4 view, glm::mat4 projection)
+{
+	Send3f_Uniform(shader.ID, "material.ambient", ambient);
+	Send3f_Uniform(shader.ID, "material.diffuse", diffuse);
+	Send3f_Uniform(shader.ID, "material.specular", specular);
+	Send1f_Uniform(shader.ID, "material.shininess", shininess);
+	Send3f_Uniform(shader.ID, "lightColor", lightSource.color); // Send light color as uniform to the GPU
+	Send3f_Uniform(shader.ID, "lightPos", lightSource.position); // Send light position as uniform to the GPU
+	Send3f_Uniform(shader.ID, "camPos", camera.position); // Send camera position as uniform to the GPU
+	SendMatrix4x4_Uniform(shader.ID, "view", view); // Send view matrix as uniform to the GPU
+	SendMatrix4x4_Uniform(shader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
+}
+
+// Overload for drawing default mesh with texture
+void Mesh::Create(Shader& shader, VAO& vao, Texture& texture, const char* modelUni, const char* colorUni, const char* textureUni,
 	glm::vec3 color, glm::vec3 position, GLuint textureSlot, GLenum drawMode, GLsizei count)
 {
 	this->color = color;
@@ -20,8 +40,8 @@ void Mesh::CreateMesh(Shader& shader, VAO& vao, Texture& texture, const char* mo
 	glDrawElements(drawMode, count, GL_UNSIGNED_INT, 0); // Draw VBO data from VAO with specified mode
 }
 
-// Overload for drawing without texture
-void Mesh::CreateMesh(Shader& shader, VAO& vao, const char* modelUni, const char* colorUni,
+// Overload for drawing default mesh without texture
+void Mesh::Create(Shader& shader, VAO& vao, const char* modelUni, const char* colorUni,
 	glm::vec3 color, glm::vec3 position, GLenum drawMode, GLsizei count)
 {
 	this->color = color;
@@ -39,55 +59,7 @@ void Mesh::CreateMesh(Shader& shader, VAO& vao, const char* modelUni, const char
 }
 
 // TODO: to implement with assimp
-void Mesh::ImportMesh(const char* meshPath)
+void Mesh::Import(const char* meshPath)
 {
-	std::vector<glm::fvec3> vertex_coords;
-	std::vector<glm::fvec2> vertex_textCoords;
-	std::vector<glm::fvec3> vertex_normals;
-
-	std::vector<GLuint> vertex_coordsIndices;
-	std::vector<GLuint> vertex_textCoordsIndices;
-	std::vector<GLuint> vertex_normalsIndices;
-
-	std::vector<std::string> lines = GetFileLines(meshPath);
-	std::stringstream ss;
-	std::string prefix = "";
-	glm::vec3 temp_vec3;
-	glm::vec2 temp_vec2;
-
-	for (std::string line : lines)
-	{
-		ss.clear();
-		ss.str(line);
-		ss >> prefix;
-
-		if (prefix == "use_mtl")
-		{
-			
-		}
-			
-		// Vertex coordinate
-		if (prefix == "v")
-		{
-			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
-			vertex_coords.push_back(temp_vec3);
-		}
-		// Vertex normal
-		else if (prefix == "vn")
-		{
-			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
-			vertex_normals.push_back(temp_vec3);
-		}
-		// Vertex texture coordinate
-		else if (prefix == "vt")
-		{
-			ss >> temp_vec2.x >> temp_vec2.y;
-			vertex_textCoords.push_back(temp_vec2);
-		}
-		else if (prefix == "f")
-		{
-			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
-			vertex_coords.push_back(temp_vec3);
-		}
-	}
+	
 }

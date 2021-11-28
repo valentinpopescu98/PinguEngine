@@ -49,6 +49,12 @@ void Utils::Send1i_Uniform(GLuint shaderID, const char* uniform, int value)
 	glUniform1i(location, value); // Set value for the uniform
 }
 
+void Utils::Send1f_Uniform(GLuint shaderID, const char* uniform, float value)
+{
+	GLuint location = glGetUniformLocation(shaderID, uniform); // Create uniform variable
+	glUniform1f(location, value); // Set value for the uniform
+}
+
 void Utils::Send3f_Uniform(GLuint shaderID, const char* uniform, glm::vec3 values)
 {
 	GLuint location = glGetUniformLocation(shaderID, uniform); // Create uniform variable

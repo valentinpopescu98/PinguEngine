@@ -7,17 +7,13 @@
 //#include <assimp/Importer.hpp>
 //#include <assimp/scene.h>
 //#include <assimp/postprocess.h>
-
-//#include <fstream>
-//#include <sstream>
-//#include <cerrno>
-//#include <iostream>
-#include <vector>
+#include <iostream>
 
 #include "Utils.h"
 #include "Engine.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Camera.h"
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
@@ -25,11 +21,14 @@
 class Mesh : public Utils
 {
 	public:
-		void CreateMesh(Shader& shader, VAO& vao, Texture& texture, const char* modelUni, const char* colorUni, const char* textureUni,
+		void InitLight(Shader& shader, glm::mat4 view, glm::mat4 projection);
+		void InitObject(Shader& shader, Mesh& lightSource, Camera& camera,
+			glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess, glm::mat4 view, glm::mat4 projection);
+		void Create(Shader& shader, VAO& vao, Texture& texture, const char* modelUni, const char* colorUni, const char* textureUni,
 			glm::vec3 color, glm::vec3 position, GLuint textureSlot, GLenum drawMode, GLsizei count);
-		void CreateMesh(Shader& shader, VAO& vao, const char* modelUni, const char* colorUni,
+		void Create(Shader& shader, VAO& vao, const char* modelUni, const char* colorUni,
 			glm::vec3 color, glm::vec3 position, GLenum drawMode, GLsizei count);
-		void ImportMesh(const char* meshPath);
+		void Import(const char* meshPath);
 
 		glm::vec3 position;
 		glm::vec3 color;

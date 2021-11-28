@@ -195,24 +195,21 @@ void World::Draw(GLFWwindow* window)
 	camera.TreatInputs(window, deltaTime);
 	camera.UpdateMatrices(60.0f, 0.1f, 100.0f, view, projection); // Compute view and projection matrices
 
-	lightShader.Use(); // Use light source's shader
-	SendMatrix4x4_Uniform(lightShader.ID, "view", view); // Send view matrix as uniform to the GPU
-	SendMatrix4x4_Uniform(lightShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
+	lightShader.Use(); // Use light source's shaders
+	meshLightSource.InitLight(lightShader, view, projection); // Send view and projection matrix to light source's shaders
 	// Compute and send model matrix and color to the GPU then draw the mesh
-	meshLightSource.CreateMesh(lightShader, lightVAO, "model", "objColor",
+	meshLightSource.Create(lightShader, lightVAO, "model", "objColor",
 		glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-2.0f, 2.0f, -4.0f), GL_TRIANGLES, lightIndices.size());
 
 	objectShader.Use(); // Use object's shader
-	Send3f_Uniform(objectShader.ID, "lightColor", meshLightSource.color); // Send light color as uniform to the GPU
-	Send3f_Uniform(objectShader.ID, "lightPos", meshLightSource.position); // Send light position as uniform to the GPU
-	Send3f_Uniform(objectShader.ID, "camPos", camera.position); // Send camera position as uniform to the GPU
-	SendMatrix4x4_Uniform(objectShader.ID, "view", view); // Send view matrix as uniform to the GPU
-	SendMatrix4x4_Uniform(objectShader.ID, "projection", projection); // Send projection matrix as uniform to the GPU
+	// Send miscellaneous data to object's shaders
+	meshObject.InitObject(objectShader, meshLightSource, camera,
+		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f, view, projection);
 	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
-	meshObject.CreateMesh(objectShader, objectVAO, texture, "model", "objColor", "textSlot",
+	meshObject.Create(objectShader, objectVAO, texture, "model", "objColor", "textSlot",
 		glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0, GL_TRIANGLES, objectIndices.size());
 
-	meshObject.ImportMesh("resources/models/sphere.obj");
+	meshObject.Import("resources/models/sphere.obj");
 }
 
 void World::AfterDrawing(GLFWwindow* window)
