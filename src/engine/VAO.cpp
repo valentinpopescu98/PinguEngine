@@ -2,18 +2,18 @@
 
 void VAO::Create()
 {
-	glGenVertexArrays(1, &ID); // Create a VAO buffer
-	glBindVertexArray(ID); // Bind VBO buffer to VAO target
+	glGenVertexArrays(1, &id); // Create a VAO buffer
+	glBindVertexArray(id); // Bind VBO buffer to VAO target
 }
 
 void VAO::Delete()
 {
-	glDeleteBuffers(1, &ID); // Delete VBO
+	glDeleteBuffers(1, &id); // Delete VBO
 }
 
 void VAO::Bind()
 {
-	glBindVertexArray(ID); // Bind VBO buffer to VAO target
+	glBindVertexArray(id); // Bind VBO buffer to VAO target
 }
 
 void VAO::Unbind()

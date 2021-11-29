@@ -11,5 +11,5 @@ public:
 	void Bind();
 	void Unbind();
 
-	GLuint ID;
+	GLuint id;
 };

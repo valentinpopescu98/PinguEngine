@@ -3,6 +3,10 @@
 unsigned int Engine::resX, Engine::resY;
 float Engine::aspectRation;
 
+double Engine::previousTime = 0.0;
+double Engine::elapsedTime = 0.0;
+double Engine::deltaTime = 0.0;
+
 void Engine::Init() 
 {
 	glfwInit(); // Initialize GLFW
@@ -53,4 +57,11 @@ GLFWwindow* Engine::CreateWindow(unsigned int resX, unsigned int resY)
 	Engine::aspectRation = (float)resX / resY; // Set aspect ratio variable for further use
 	
 	return window;
+}
+
+void Engine::SetTimeValues()
+{
+	elapsedTime = glfwGetTime();
+	deltaTime = elapsedTime - previousTime;
+	previousTime = elapsedTime;
 }

@@ -13,5 +13,5 @@ public:
 	void Unbind();
 	void LinkVBO(VBO& vbo, GLuint layoutLocation, GLsizei stride, const void* startPtr);
 
-	GLuint ID;
+	GLuint id;
 };

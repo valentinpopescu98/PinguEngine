@@ -62,7 +62,6 @@
     <ClInclude Include="..\src\engine\Shader.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\glm.h" />
     <ClInclude Include="..\src\engine\VAO.h">
       <Filter>engine</Filter>
     </ClInclude>

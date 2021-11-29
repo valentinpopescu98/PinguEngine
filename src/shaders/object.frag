@@ -10,16 +10,15 @@ struct Material
 in vec3 normal; // Input normals from the vertex shader
 in vec2 textCoord; // Input texture coordinates from the vertex shader
 in vec3 color; // Input color from the vertex shader
-
 in vec3 objPos; // The global position of the object
 
 layout(location = 0) out vec4 outColor; // Fragment color
 
+uniform Material material;
 uniform sampler2D textSlot; // Value coresponding to the used texture slot
 uniform vec3 lightColor; // Color of the light source (TODO: implement a combined color from many light sources)
 uniform vec3 lightPos; // Color of the light position (TODO: implement an array of many light sources)
 uniform vec3 camPos; // Position of the camera
-uniform Material material;
 
 void main()
 {

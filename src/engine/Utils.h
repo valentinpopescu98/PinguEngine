@@ -8,6 +8,21 @@
 #include <sstream>
 #include <cerrno>
 
+struct VertexStruct
+{
+    glm::vec3 coords;
+    glm::vec3 normals;
+    glm::vec2 textCoords;
+    glm::vec3 colors;
+};
+
+struct TextureStruct
+{
+    GLuint id;
+    std::string type;
+    const char* path;
+};
+
 class Utils
 {
 public:
