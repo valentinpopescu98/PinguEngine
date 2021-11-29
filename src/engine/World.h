@@ -11,9 +11,6 @@
 #include "Shader.h"
 #include "Mesh.h"
 //#include "Texture.h"
-//#include "VAO.h"
-//#include "VBO.h"
-//#include "EBO.h"
 
 class World : public Utils
 {

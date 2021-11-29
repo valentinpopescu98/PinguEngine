@@ -14,18 +14,19 @@ void Texture::Delete()
 	glDeleteTextures(1, &ID); // Delete texture
 }
 
-void Texture::Bind(GLenum textureType)
+void Texture::Bind(GLenum dimension)
 {
-	this->textureType = textureType;
-	glBindTexture(textureType, ID); // Bind the texture as 2D texture
+	this->dimension = dimension;
+	glBindTexture(dimension, ID); // Bind the texture as 2D texture
 }
 
 void Texture::Unbind()
 {
 	stbi_image_free(bytes); // Delete image data
-	glBindTexture(textureType, 0); // Unbind texture
+	glBindTexture(dimension, 0); // Unbind texture
 }
 
+// Base overload function
 int Texture::GenerateMipmap(GLint interpType, GLint wrapType)
 {
 	if (wrapType == GL_CLAMP_TO_BORDER)
@@ -34,27 +35,27 @@ int Texture::GenerateMipmap(GLint interpType, GLint wrapType)
 		return -1;
 	}
 
-	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, interpType); // Interpolate texture pixels with chosen type when minifying
-	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, interpType); // Interpolate texture pixels with chosen type when magnifying
+	glTexParameteri(dimension, GL_TEXTURE_MIN_FILTER, interpType); // Interpolate texture pixels with chosen type when minifying
+	glTexParameteri(dimension, GL_TEXTURE_MAG_FILTER, interpType); // Interpolate texture pixels with chosen type when magnifying
 
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, wrapType); // Cover empty horizontal space with the chosen wrapping style
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, wrapType); // Cover empty vertical space with the chosen wrapping style
+	glTexParameteri(dimension, GL_TEXTURE_WRAP_S, wrapType); // Cover empty horizontal space with the chosen wrapping style
+	glTexParameteri(dimension, GL_TEXTURE_WRAP_T, wrapType); // Cover empty vertical space with the chosen wrapping style
 
-	glTexImage2D(textureType, 0, GL_RGBA, widthImage, heightImage, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes); // Process texture
-	glGenerateMipmap(textureType); // Create mip-map
+	glTexImage2D(dimension, 0, GL_RGBA, widthImage, heightImage, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes); // Process texture
+	glGenerateMipmap(dimension); // Create mip-map
 }
 
+// Overload for wrapping with GL_TEXTURE_BORDER_COLOR
 void Texture::GenerateMipmap(GLint interpType, float borderColor[])
 {
-	glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, interpType); // Interpolate texture pixels with chosen type when minifying
-	glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, interpType); // Interpolate texture pixels with chosen type when magnifying
+	glTexParameteri(dimension, GL_TEXTURE_MIN_FILTER, interpType); // Interpolate texture pixels with chosen type when minifying
+	glTexParameteri(dimension, GL_TEXTURE_MAG_FILTER, interpType); // Interpolate texture pixels with chosen type when magnifying
 
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER); // Cover empty horizontal space with the given color
-	glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); // Cover empty vertical space with the given color
+	glTexParameteri(dimension, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER); // Cover empty horizontal space with the given color
+	glTexParameteri(dimension, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); // Cover empty vertical space with the given color
 
-	float flatColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
-	glTexImage2D(textureType, 0, GL_RGBA, widthImage, heightImage, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes); // Process texture
-	glGenerateMipmap(textureType); // Create mip-map
+	glTexImage2D(dimension, 0, GL_RGBA, widthImage, heightImage, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes); // Process texture
+	glGenerateMipmap(dimension); // Create mip-map
 }

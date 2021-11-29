@@ -14,17 +14,16 @@ in vec3 objPos; // The global position of the object
 
 layout(location = 0) out vec4 outColor; // Fragment color
 
-uniform Material material;
-uniform sampler2D textSlot; // Value coresponding to the used texture slot
 uniform vec3 lightColor; // Color of the light source (TODO: implement a combined color from many light sources)
 uniform vec3 lightPos; // Color of the light position (TODO: implement an array of many light sources)
 uniform vec3 camPos; // Position of the camera
+uniform sampler2D texture_diffuse1; // Value coresponding to the used texture slot
+uniform Material material;
 
 void main()
 {
 	vec3 outNormal = normalize(normal); // Normalize the normals (make it in range [0, 1])
 
-	//float ambient = 0.2; // Ambient light value
 	vec3 ambient = material.ambient; // Ambient light value
 
 	vec3 lightDirection = normalize(lightPos - objPos); // Calculate light direction and normalize it
@@ -46,6 +45,5 @@ void main()
 	vec3 specular = spec * material.specular;
 
 	vec3 phong = ambient + diffuse + specular;
-	outColor = texture(textSlot, textCoord) * vec4(color * lightColor * phong, 1.0f); // Output color of each fragment
-	//outColor = mix(texture(textSlot, textCoord), vec4(color, 1.0f) * vec4(lightColor, 1.0f) * (ambient + diffuse + specular), 0.5f);
+	outColor = texture(texture_diffuse1, textCoord) * vec4(color * lightColor * phong, 1.0f); // Output color of each fragment
 }

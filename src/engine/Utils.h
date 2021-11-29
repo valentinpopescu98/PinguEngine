@@ -18,7 +18,6 @@ struct VertexStruct
 
 struct TextureStruct
 {
-    GLuint id;
     std::string type;
     const char* path;
 };

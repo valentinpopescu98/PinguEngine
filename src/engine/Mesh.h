@@ -11,7 +11,6 @@
 //#include <assimp/postprocess.h>
 
 #include "Utils.h"
-//#include "Engine.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
@@ -24,8 +23,7 @@ class Mesh : public Utils
 	public:
         void CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures);
         void DeleteBuffers();
-        void Draw(Shader& shader, const char* modelUni, const char* colorUni, const char* textureUni, glm::vec3 position, glm::vec3 color, GLuint textureSlot);
-        void Draw(Shader& shader, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color);
+        void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color);
 
         // Mesh data
         std::vector<VertexStruct> vertices;
@@ -36,9 +34,10 @@ class Mesh : public Utils
         glm::vec3 color;
 
     private:
-        // Render data
-        void SetupMesh();
+        void UseTextures(GLuint shaderID);
+        void UseTextures(GLuint shaderID, glm::vec4 borderColor);
 
+        // Render data
         VAO vao;
         VBO vbo;
         EBO ebo;

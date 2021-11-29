@@ -11,11 +11,11 @@ class Texture
 		void Delete();
 		void Bind(GLenum textureType);
 		void Unbind();
-		int GenerateMipmap(GLint interpType, GLint wrapType); // base overload function
-		void GenerateMipmap(GLint interpType, float borderColor[]); // overload for wrapping with GL_TEXTURE_BORDER_COLOR
+		int GenerateMipmap(GLint interpType, GLint wrapType);
+		void GenerateMipmap(GLint interpType, float borderColor[]);
 
 		GLuint ID;
-		GLenum textureType;
+		GLenum dimension;
 
 	private:
 		int widthImage, heightImage, numColCh; // Width, height and number of color channels

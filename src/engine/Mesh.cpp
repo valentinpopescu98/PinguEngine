@@ -6,11 +6,6 @@ void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigne
     this->indices = indices;
     this->textures = textures;
 
-    SetupMesh();
-}
-
-void Mesh::SetupMesh()
-{
     // Create buffers
     vao.Create(); // Create VAO and bind it
     vbo.Create(vertices); // Create VBO, bind and send buffers to GPU
@@ -28,71 +23,89 @@ void Mesh::SetupMesh()
 
 void Mesh::DeleteBuffers()
 {
-    vao.Delete(); // Delete light source VAO
-    vbo.Delete(); // Delete light source VBO
-    ebo.Delete(); // Delete light source EBO
+    vao.Delete(); // Delete VAO
+    vbo.Delete(); // Delete VBO
+    ebo.Delete(); // Delete EBO
 }
 
-void Mesh::Draw(Shader& shader, const char* modelUni, const char* colorUni, const char* textureUni, glm::vec3 position, glm::vec3 color, GLuint textureSlot)
+void Mesh::UseTextures(GLuint shaderID)
+{
+    GLuint diffuseNr = 1;
+    GLuint specularNr = 1;
+    GLuint normalNr = 1;
+    GLuint heightNr = 1;
+    std::string number;
+
+    for (GLuint i = 0; i < textures.size(); i++)
+    {
+        // Create texture
+        texture.Create(textures[i].path, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+
+        if (textures[i].type == "texture_diffuse")
+            number = std::to_string(diffuseNr++); // Transfer unsigned int to string
+        else if (textures[i].type == "texture_specular")
+            number = std::to_string(specularNr++); // Transfer unsigned int to string
+        else if (textures[i].type == "texture_normal")
+            number = std::to_string(normalNr++); // transfer unsigned int to string
+        else if (textures[i].type == "texture_height")
+            number = std::to_string(heightNr++); // transfer unsigned int to string
+
+        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i);
+        texture.Bind(GL_TEXTURE_2D);
+
+        texture.GenerateMipmap(GL_LINEAR, GL_REPEAT); // Generate mipmap
+        texture.Unbind(); // Unbind texture
+    }
+}
+
+void Mesh::UseTextures(GLuint shaderID, glm::vec4 borderColor)
+{
+    GLuint diffuseNr = 1;
+    GLuint specularNr = 1;
+    GLuint normalNr = 1;
+    GLuint heightNr = 1;
+    std::string number;
+
+    for (GLuint i = 0; i < textures.size(); i++)
+    {
+        // Create texture
+        texture.Create(textures[i].path, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+
+        if (textures[i].type == "texture_diffuse")
+            number = std::to_string(diffuseNr++); // Transfer unsigned int to string
+        else if (textures[i].type == "texture_specular")
+            number = std::to_string(specularNr++); // Transfer unsigned int to string
+        else if (textures[i].type == "texture_normal")
+            number = std::to_string(normalNr++); // transfer unsigned int to string
+        else if (textures[i].type == "texture_height")
+            number = std::to_string(heightNr++); // transfer unsigned int to string
+
+        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i);
+        texture.Bind(GL_TEXTURE_2D);
+
+        // Use this overload for filling the empty space near the texture with a chosen color
+        texture.GenerateMipmap(GL_LINEAR, &borderColor[0]); // Generate mipmap
+        texture.Unbind(); // Unbind texture
+    }
+}
+
+void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color)
 {
     this->color = color;
     this->position = position;
 
-    texture.Create("resources/textures/default.png", GL_TEXTURE0); // Load image and create a texture for it
-    texture.Bind(GL_TEXTURE_2D); // Bind the texture
-
-    // Use this overload for filling the empty space near the texture with a chosen color
-    //float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    //texture.GenerateMipmap(GL_LINEAR, borderColor);
-
-    texture.GenerateMipmap(GL_LINEAR, GL_REPEAT); // Generate mipmap
-    texture.Unbind(); // Unbind texture
-
-    //GLuint diffuseNr = 1;
-    //GLuint specularNr = 1;
-
-    //for (GLuint i = 0; i < textures.size(); i++)
-    //{
-    //    texture.Create(textures[i].path, GL_TEXTURE0 + i); // Create proper texture
-    //    std::string number; // Retrieve texture number
-    //    std::string name = textures[i].type; // Retrieve texture type
-    //    if (name == "texture_diffuse")
-    //        number = std::to_string(diffuseNr++);
-    //    else if (name == "texture_specular")
-    //        number = std::to_string(specularNr++);
-
-    //    Send1f_Uniform(shader.id, ("material." + name + number).c_str(), i);
-    //    texture.Bind(GL_TEXTURE_2D);
-    //}
-    //texture.Create(textures[0].path, GL_TEXTURE0);
+    UseTextures(shaderID, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
     glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
     model = glm::translate(model, position); // Calculate object's global position
 
-    SendMatrix4x4_Uniform(shader.id, modelUni, model); // Send view matrix as uniform to the GPU
-    Send3f_Uniform(shader.id, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
-    Send1i_Uniform(shader.id, textureUni, textureSlot); // Send texture slot as uniform to the GPU
+    SendMatrix4x4_Uniform(shaderID, modelUni, model); // Send view matrix as uniform to the GPU
+    Send3f_Uniform(shaderID, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
 
     // Draw mesh
     texture.Bind(GL_TEXTURE_2D);
     vao.Bind();
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     vao.Unbind();
-}
-
-void Mesh::Draw(Shader& shader, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color)
-{
-    this->color = color;
-    this->position = position;
-
-    glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
-    model = glm::translate(model, position); // Calculate object's global position
-
-    SendMatrix4x4_Uniform(shader.id, modelUni, model); // Send view matrix as uniform to the GPU
-    Send3f_Uniform(shader.id, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
-
-    // Draw mesh
-    vao.Bind();
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    vao.Unbind();
+    glActiveTexture(GL_TEXTURE0); // Reset to default texture
 }
