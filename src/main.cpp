@@ -5,7 +5,6 @@
 int main() 
 {
 	Engine::Init(); // Initialize GLFW
-
 	GLFWwindow* window = Engine::CreateWindow(800, 800); // Create window of given resolution
 
 	World world; // Create world object

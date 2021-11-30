@@ -6,9 +6,6 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-//#include <assimp/Importer.hpp>
-//#include <assimp/scene.h>
-//#include <assimp/postprocess.h>
 
 #include "Utils.h"
 #include "Shader.h"
@@ -24,6 +21,11 @@ class Mesh : public Utils
         void CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures);
         void DeleteBuffers();
         void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color);
+        void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
+            GLenum textureDimension, GLint interpType, GLint wrapType);
+        void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
+            GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
+        void DeleteTextures();
 
         // Mesh data
         std::vector<VertexStruct> vertices;
@@ -32,10 +34,9 @@ class Mesh : public Utils
 
         glm::vec3 position;
         glm::vec3 color;
-
     private:
-        void UseTextures(GLuint shaderID);
-        void UseTextures(GLuint shaderID, glm::vec4 borderColor);
+        void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType);
+        void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
 
         // Render data
         VAO vao;

@@ -11,6 +11,7 @@ public:
 	static void End(GLFWwindow* window);
 	static GLFWwindow* CreateWindow(unsigned int resX, unsigned int resY);
 	static void SetTimeValues();
+	static void CheckErrorCodes();
 
 	static unsigned int resX, resY;
 	static float aspectRation;
@@ -18,7 +19,6 @@ public:
 	static double previousTime;
 	static double elapsedTime;
 	static double deltaTime;
-
 private:
 	static int CheckFailCreateWindow(GLFWwindow* window);
 	static int LoadGlad();

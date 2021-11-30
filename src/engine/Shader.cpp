@@ -2,6 +2,9 @@
 
 void Shader::Create(const char* vertexShaderPath, const char* fragmentShaderPath)
 {
+	this->vertexShaderPath = vertexShaderPath;
+	this->fragmentShaderPath = fragmentShaderPath;
+
 	std::string vertexCode = GetFileContents(vertexShaderPath); // Store VS source code in a string
 	std::string fragmentCode = GetFileContents(fragmentShaderPath); // Store FS source code in a string
 
@@ -67,7 +70,16 @@ void Shader::CheckErrors(GLuint shader, const char* type)
 		if (hasCompiled == GL_FALSE)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "SHADER_COMPILATION_ERROR for: " << type << "\n" << std::endl;
+			std::cout << "SHADER_COMPILATION_ERROR for: " << type << std::endl;
+
+			if (type == "VERTEX")
+			{
+				std::cout << "FAULTY SHADER AT: " << vertexShaderPath << std::endl << std::endl;
+			}
+			else if (type == "FRAGMENT")
+			{
+				std::cout << "FAULTY SHADER AT: " << fragmentShaderPath << std::endl << std::endl;
+			}
 		}
 	}
 	else
@@ -76,7 +88,7 @@ void Shader::CheckErrors(GLuint shader, const char* type)
 		if (hasCompiled == GL_FALSE)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "SHADER_LINKING_ERROR for: " << type << "\n" << std::endl;
+			std::cout << "SHADER_LINKING_ERROR for: " << type << std::endl << std::endl;
 		}
 	}
 }

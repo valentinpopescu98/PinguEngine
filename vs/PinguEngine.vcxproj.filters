@@ -34,6 +34,9 @@
     <ClCompile Include="..\src\engine\Texture.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\engine\Model.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="engine">
@@ -81,6 +84,9 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\Texture.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\Model.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>

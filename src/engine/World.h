@@ -10,7 +10,6 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Mesh.h"
-//#include "Texture.h"
 
 class World : public Utils
 {
@@ -22,13 +21,11 @@ class World : public Utils
 		void BeforeDrawing();
 		void Draw(GLFWwindow* window);
 		void AfterDrawing(GLFWwindow* window);
-		void CheckErrors();
 
 		// INSTANCES
 		Camera camera;
 		Shader objectShader, lightShader;
 		Mesh meshLightSource, meshObject;
-		/*Texture texture;*/
 
 		// UNIFORMS
 		glm::mat4 view, projection;

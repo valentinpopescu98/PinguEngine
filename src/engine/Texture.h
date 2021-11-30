@@ -7,16 +7,14 @@
 class Texture
 {
 	public:
-		void Create(const char* imagePath, GLenum unit);
-		void Delete();
-		void Bind(GLenum textureType);
+		void Create(const char* imagePath, GLuint id, GLenum unit);
+		void Delete(GLuint id);
+		void Bind(GLenum dimension, GLuint id);
 		void Unbind();
 		int GenerateMipmap(GLint interpType, GLint wrapType);
 		void GenerateMipmap(GLint interpType, float borderColor[]);
 
-		GLuint ID;
 		GLenum dimension;
-
 	private:
 		int widthImage, heightImage, numColCh; // Width, height and number of color channels
 		unsigned char* bytes;

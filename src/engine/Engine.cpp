@@ -65,3 +65,13 @@ void Engine::SetTimeValues()
 	deltaTime = elapsedTime - previousTime;
 	previousTime = elapsedTime;
 }
+
+void Engine::CheckErrorCodes()
+{
+	GLenum errCode;
+
+	if ((errCode = glGetError()) != GL_NO_ERROR)
+	{
+		std::cout << errCode << std::endl;
+	}
+}

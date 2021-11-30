@@ -20,9 +20,7 @@ void World::Init()
 
 	// Supports: texture_diffuse, texture_specular, texture_normal, texture_height
 	std::vector<TextureStruct> textures
-	{
-		{ "texture_diffuse", "resources/textures/default.png" }
-	};
+	{};
 
 	// Data for a pyramid
 	std::vector<VertexStruct> lightVertices
@@ -66,9 +64,7 @@ void World::Init()
 	};
 
 	std::vector<TextureStruct> lightTextures
-	{
-		{ "texture_diffuse", "resources/textures/default.png" }
-	};
+	{};
 
 	// Data for a cube
 	std::vector<VertexStruct> objectVertices
@@ -148,11 +144,12 @@ void World::Init()
 
 void World::End()
 {
-	meshLightSource.DeleteBuffers();
-	lightShader.Delete(); // Delete light source shader
+	meshLightSource.DeleteBuffers(); // Delete light source's buffers
+	meshLightSource.DeleteTextures(); // Delete light source's textures
+	lightShader.Delete(); // Delete light source's shader
 
-	meshObject.DeleteBuffers();
-	//texture.Delete(); // Delete object texture
+	meshObject.DeleteBuffers(); // Delete object's buffers
+	meshObject.DeleteTextures(); // Delete object's textures
 	objectShader.Delete(); // Delete object shader
 }
 
@@ -179,7 +176,8 @@ void World::Draw(GLFWwindow* window)
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
 	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
-	meshObject.Draw(objectShader.id, "model", "objColor", glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+	meshObject.Draw(objectShader.id, "model", "objColor", glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f),
+		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
 
 	//meshObject.Import("resources/models/sphere.obj");
 }
@@ -205,16 +203,6 @@ void World::Run(GLFWwindow* window)
 		AfterDrawing(window);
 
 		Engine::SetTimeValues(); // Compute deltaTime
-		CheckErrors(); // Check for errors
-	}
-}
-
-void World::CheckErrors()
-{
-	GLenum errCode;
-
-	if ((errCode = glGetError()) != GL_NO_ERROR)
-	{
-		std::cout << errCode << std::endl;
+		Engine::CheckErrorCodes(); // Check for GLAD error codes
 	}
 }

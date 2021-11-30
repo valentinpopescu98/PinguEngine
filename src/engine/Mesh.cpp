@@ -28,7 +28,7 @@ void Mesh::DeleteBuffers()
     ebo.Delete(); // Delete EBO
 }
 
-void Mesh::UseTextures(GLuint shaderID)
+void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType)
 {
     GLuint diffuseNr = 1;
     GLuint specularNr = 1;
@@ -39,7 +39,7 @@ void Mesh::UseTextures(GLuint shaderID)
     for (GLuint i = 0; i < textures.size(); i++)
     {
         // Create texture
-        texture.Create(textures[i].path, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+        texture.Create(textures[i].path, i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
@@ -50,26 +50,26 @@ void Mesh::UseTextures(GLuint shaderID)
         else if (textures[i].type == "texture_height")
             number = std::to_string(heightNr++); // transfer unsigned int to string
 
-        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i);
-        texture.Bind(GL_TEXTURE_2D);
+        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
+        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
 
-        texture.GenerateMipmap(GL_LINEAR, GL_REPEAT); // Generate mipmap
+        texture.GenerateMipmap(interpType, wrapType); // Generate mipmap
         texture.Unbind(); // Unbind texture
     }
 }
 
-void Mesh::UseTextures(GLuint shaderID, glm::vec4 borderColor)
+void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
 {
-    GLuint diffuseNr = 1;
-    GLuint specularNr = 1;
-    GLuint normalNr = 1;
-    GLuint heightNr = 1;
-    std::string number;
+    GLuint diffuseNr = 1; // Counter for diffuse texture number
+    GLuint specularNr = 1; // Counter for specular texture number
+    GLuint normalNr = 1; // Counter for normal texture number
+    GLuint heightNr = 1; // Counter for height texture number
+    std::string number; // String for the number of the used texture
 
     for (GLuint i = 0; i < textures.size(); i++)
     {
         // Create texture
-        texture.Create(textures[i].path, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+        texture.Create(textures[i].path, i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
@@ -80,21 +80,27 @@ void Mesh::UseTextures(GLuint shaderID, glm::vec4 borderColor)
         else if (textures[i].type == "texture_height")
             number = std::to_string(heightNr++); // transfer unsigned int to string
 
-        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i);
-        texture.Bind(GL_TEXTURE_2D);
+        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
+        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
 
-        // Use this overload for filling the empty space near the texture with a chosen color
-        texture.GenerateMipmap(GL_LINEAR, &borderColor[0]); // Generate mipmap
+        texture.GenerateMipmap(interpType, &borderColor[0]); // Generate mipmap with specific border color
         texture.Unbind(); // Unbind texture
     }
 }
 
+void Mesh::DeleteTextures()
+{
+    for (GLuint i = 0; i < textures.size(); i++)
+    {
+        texture.Delete(i); // Delete proper texture from memory
+    }
+}
+
+// Use this for objects without textures.
 void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color)
 {
     this->color = color;
     this->position = position;
-
-    UseTextures(shaderID, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
     glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
     model = glm::translate(model, position); // Calculate object's global position
@@ -103,7 +109,50 @@ void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm
     Send3f_Uniform(shaderID, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
 
     // Draw mesh
-    texture.Bind(GL_TEXTURE_2D);
+    vao.Bind();
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    vao.Unbind();
+    glActiveTexture(GL_TEXTURE0); // Reset to default texture
+}
+
+// Use this for objects with textures wrapped with anything except GL_CLAMP_TO_BORDER.
+void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
+    GLenum textureDimension, GLint interpType, GLint wrapType)
+{
+    this->color = color;
+    this->position = position;
+
+    CreateTextures(shaderID, textureDimension, interpType, wrapType); // Create texture that covers empty space with the chosen wrapping style
+
+    glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
+    model = glm::translate(model, position); // Calculate object's global position
+
+    SendMatrix4x4_Uniform(shaderID, modelUni, model); // Send view matrix as uniform to the GPU
+    Send3f_Uniform(shaderID, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
+
+    // Draw mesh
+    vao.Bind();
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    vao.Unbind();
+    glActiveTexture(GL_TEXTURE0); // Reset to default texture
+}
+
+// Use this for objects with textures wrapped with GL_CLAMP_TO_BORDER.
+void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
+    GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+{
+    this->color = color;
+    this->position = position;
+
+    CreateTextures(shaderID, textureDimension, interpType, borderColor);
+
+    glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
+    model = glm::translate(model, position); // Calculate object's global position
+
+    SendMatrix4x4_Uniform(shaderID, modelUni, model); // Send view matrix as uniform to the GPU
+    Send3f_Uniform(shaderID, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
+
+    // Draw mesh
     vao.Bind();
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     vao.Unbind();

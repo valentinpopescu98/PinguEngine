@@ -1,23 +1,23 @@
 #include "Texture.h"
 
-void Texture::Create(const char* imagePath, GLenum unit)
+void Texture::Create(const char* imagePath, GLuint id, GLenum unit)
 {
 	stbi_set_flip_vertically_on_load(true); // Flip the texture, so that [0, 0] is in the bottom left, not top left
 	bytes = stbi_load(imagePath, &widthImage, &heightImage, &numColCh, 0); // Read data from the texture and store it in image's variables
 
-	glGenTextures(1, &ID); // Create a texture
+	glGenTextures(1, &id); // Create a texture
 	glActiveTexture(unit); // Activate texture of given unit
 }
 
-void Texture::Delete()
+void Texture::Delete(GLuint id)
 {
-	glDeleteTextures(1, &ID); // Delete texture
+	glDeleteTextures(1, &id); // Delete texture by id
 }
 
-void Texture::Bind(GLenum dimension)
+void Texture::Bind(GLenum dimension, GLuint id)
 {
 	this->dimension = dimension;
-	glBindTexture(dimension, ID); // Bind the texture as 2D texture
+	glBindTexture(dimension, id); // Bind the texture as 2D texture
 }
 
 void Texture::Unbind()
@@ -45,7 +45,7 @@ int Texture::GenerateMipmap(GLint interpType, GLint wrapType)
 	glGenerateMipmap(dimension); // Create mip-map
 }
 
-// Overload for wrapping with GL_TEXTURE_BORDER_COLOR
+// Overload for wrapping with GL_CLAMP_TO_BORDER
 void Texture::GenerateMipmap(GLint interpType, float borderColor[])
 {
 	glTexParameteri(dimension, GL_TEXTURE_MIN_FILTER, interpType); // Interpolate texture pixels with chosen type when minifying

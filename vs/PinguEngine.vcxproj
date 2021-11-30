@@ -178,6 +178,7 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClCompile Include="..\src\engine\Camera.cpp" />
     <ClCompile Include="..\src\engine\EBO.cpp" />
     <ClCompile Include="..\src\engine\Engine.cpp" />
+    <ClCompile Include="..\src\engine\Model.cpp" />
     <ClCompile Include="..\src\engine\Texture.cpp" />
     <ClCompile Include="..\src\engine\Utils.cpp" />
     <ClCompile Include="..\src\engine\Mesh.cpp" />
@@ -193,6 +194,7 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClInclude Include="..\src\engine\Camera.h" />
     <ClInclude Include="..\src\engine\EBO.h" />
     <ClInclude Include="..\src\engine\Engine.h" />
+    <ClInclude Include="..\src\engine\Model.h" />
     <ClInclude Include="..\src\engine\Texture.h" />
     <ClInclude Include="..\src\engine\Utils.h" />
     <ClInclude Include="..\src\engine\Mesh.h" />
