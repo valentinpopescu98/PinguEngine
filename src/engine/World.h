@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "Model.h"
 
 class World : public Utils
 {
@@ -26,6 +27,7 @@ class World : public Utils
 		Camera camera;
 		Shader objectShader, lightShader;
 		Mesh meshLightSource, meshObject;
+		Model object2;
 
 		// UNIFORMS
 		glm::mat4 view, projection;

@@ -140,6 +140,8 @@ void World::Init()
 	// Create object shaders
 	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
 	meshObject.CreateBuffers(objectVertices, objectIndices, objectTextures);
+
+	object2.Import("resources/models/sphere.obj");
 }
 
 void World::End()
@@ -159,6 +161,7 @@ void World::BeforeDrawing()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color buffer and depth buffer
 }
 
+//TODO: make a shader for both textured and non-textured meshes or make these overloads work with only 1 shader
 void World::Draw(GLFWwindow* window)
 {
 	// Treat camera inputs (WASD - move on X/Z axis, LEFT CTRL/SPACE - move on Y axis, SHIFT - speed modifier)
@@ -179,7 +182,7 @@ void World::Draw(GLFWwindow* window)
 	meshObject.Draw(objectShader.id, "model", "objColor", glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f),
 		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
 
-	//meshObject.Import("resources/models/sphere.obj");
+	object2.Draw(objectShader.id, "model", "objColor", glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 0.0f, 1.0f));
 }
 
 void World::AfterDrawing(GLFWwindow* window)

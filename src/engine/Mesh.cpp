@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures)
+Mesh Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures)
 {
     this->vertices = vertices;
     this->indices = indices;
@@ -19,6 +19,8 @@ void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigne
     vao.Unbind(); // Unbind VAO
     vbo.Unbind(); // Unbind VBO
     ebo.Unbind(); // Unbind EBO
+
+    return *this;
 }
 
 void Mesh::DeleteBuffers()
