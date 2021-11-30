@@ -27,7 +27,7 @@ class World : public Utils
 		Camera camera;
 		Shader objectShader, lightShader;
 		Mesh meshLightSource, meshObject;
-		Model object2;
+		Model object2, object3;
 
 		// UNIFORMS
 		glm::mat4 view, projection;

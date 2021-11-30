@@ -1,24 +1,39 @@
 #include "Model.h"
 
-void Model::Import(std::string path)
+void Model::Import(const char* modelPath, const char* texturePathDirectory)
 {
     Assimp::Importer import;
-    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = import.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
     if (!scene or scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE or !scene->mRootNode)
     {
         std::cout << "ASSIMP ERROR: " << import.GetErrorString() << std::endl;
         return;
     }
-    directory = path.substr(0, path.find_last_of('/'));
+    directory = texturePathDirectory;
 
     ProcessNode(scene->mRootNode, scene);
 }
 
-void Model::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color)
+void Model::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color)
 {
 	for (GLuint i = 0; i < meshes.size(); i++)
-		meshes[i].Draw(shaderID, modelUni, colorUni, position, color);
+		meshes[i].Draw(shaderID, position, color);
+}
+
+void Model::ProcessNode(aiNode* node, const aiScene* scene)
+{
+    // Process all the node's meshes (if any)
+    for (GLuint i = 0; i < node->mNumMeshes; i++)
+    {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        meshes.push_back(ProcessMesh(mesh, scene));
+    }
+    // Do the same for each of its children
+    for (GLuint i = 0; i < node->mNumChildren; i++)
+    {
+        ProcessNode(node->mChildren[i], scene);
+    }
 }
 
 std::vector<TextureStruct> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
@@ -50,9 +65,17 @@ std::vector<TextureStruct> Model::LoadMaterialTextures(aiMaterial* mat, aiTextur
             texture.path = str.C_Str();
 
             textures.push_back(texture);
-            texturesLoaded.push_back(texture); // add to loaded textures
+            texturesLoaded.push_back(texture); // Add to loaded textures
         }
     }
+
+    /*for (GLuint i = 0; i < mat->GetTextureCount(type); i++)
+    {
+        TextureStruct texture;
+        texture.type = typeName;
+        texture.path = texturePath;
+        textures.push_back(texture);
+    }*/
 
     return textures;
 }
@@ -120,33 +143,21 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     // Process material
     if (mesh->mMaterialIndex >= 0)
     {
-        if (mesh->mMaterialIndex >= 0)
-        {
-            aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-            std::vector<TextureStruct> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-            textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+        std::vector<TextureStruct> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-            std::vector<TextureStruct> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-            textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-        }
+        std::vector<TextureStruct> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+        std::vector<TextureStruct> normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+        textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+
+        std::vector<TextureStruct> heightMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, "texture_height");
+        textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
     }
 
     Mesh meshObj;
     return meshObj.CreateBuffers(vertices, indices, textures);
-}
-
-void Model::ProcessNode(aiNode* node, const aiScene* scene)
-{
-    // process all the node's meshes (if any)
-    for (unsigned int i = 0; i < node->mNumMeshes; i++)
-    {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(ProcessMesh(mesh, scene));
-    }
-    // then do the same for each of its children
-    for (unsigned int i = 0; i < node->mNumChildren; i++)
-    {
-        ProcessNode(node->mChildren[i], scene);
-    }
 }

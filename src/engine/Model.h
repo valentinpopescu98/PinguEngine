@@ -9,11 +9,11 @@
 
 #include "Mesh.h"
 
-class Model : public Utils
+class Model : public Utils, public Mesh
 {
 	public:
-		void Import(std::string path);
-		void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color);
+		void Import(const char* modelPath, const char* texturePath);
+		void Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color);
 	private:
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);

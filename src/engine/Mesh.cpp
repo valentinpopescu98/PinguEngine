@@ -30,8 +30,11 @@ void Mesh::DeleteBuffers()
     ebo.Delete(); // Delete EBO
 }
 
+// Use this for objects with textures wrapped with anything except GL_CLAMP_TO_BORDER
 void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType)
 {
+    hasTexture = true;
+
     GLuint diffuseNr = 1;
     GLuint specularNr = 1;
     GLuint normalNr = 1;
@@ -60,8 +63,11 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
     }
 }
 
+// Use this for objects with textures wrapped with GL_CLAMP_TO_BORDER
 void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
 {
+    hasTexture = true;
+
     GLuint diffuseNr = 1; // Counter for diffuse texture number
     GLuint specularNr = 1; // Counter for specular texture number
     GLuint normalNr = 1; // Counter for normal texture number
@@ -98,8 +104,7 @@ void Mesh::DeleteTextures()
     }
 }
 
-// Use this for objects without textures.
-void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color)
+void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color)
 {
     this->color = color;
     this->position = position;
@@ -107,52 +112,9 @@ void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm
     glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
     model = glm::translate(model, position); // Calculate object's global position
 
-    SendMatrix4x4_Uniform(shaderID, modelUni, model); // Send view matrix as uniform to the GPU
-    Send3f_Uniform(shaderID, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
-
-    // Draw mesh
-    vao.Bind();
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    vao.Unbind();
-    glActiveTexture(GL_TEXTURE0); // Reset to default texture
-}
-
-// Use this for objects with textures wrapped with anything except GL_CLAMP_TO_BORDER.
-void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
-    GLenum textureDimension, GLint interpType, GLint wrapType)
-{
-    this->color = color;
-    this->position = position;
-
-    CreateTextures(shaderID, textureDimension, interpType, wrapType); // Create texture that covers empty space with the chosen wrapping style
-
-    glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
-    model = glm::translate(model, position); // Calculate object's global position
-
-    SendMatrix4x4_Uniform(shaderID, modelUni, model); // Send view matrix as uniform to the GPU
-    Send3f_Uniform(shaderID, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
-
-    // Draw mesh
-    vao.Bind();
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    vao.Unbind();
-    glActiveTexture(GL_TEXTURE0); // Reset to default texture
-}
-
-// Use this for objects with textures wrapped with GL_CLAMP_TO_BORDER.
-void Mesh::Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
-    GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
-{
-    this->color = color;
-    this->position = position;
-
-    CreateTextures(shaderID, textureDimension, interpType, borderColor);
-
-    glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
-    model = glm::translate(model, position); // Calculate object's global position
-
-    SendMatrix4x4_Uniform(shaderID, modelUni, model); // Send view matrix as uniform to the GPU
-    Send3f_Uniform(shaderID, colorUni, glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
+    Send1i_Uniform(shaderID, "hasTexture", hasTexture);
+    SendMatrix4x4_Uniform(shaderID, "model", model); // Send view matrix as uniform to the GPU
+    Send3f_Uniform(shaderID, "objColor", glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
 
     // Draw mesh
     vao.Bind();

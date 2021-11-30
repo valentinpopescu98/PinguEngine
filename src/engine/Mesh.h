@@ -20,13 +20,10 @@ class Mesh : public Utils
 	public:
         Mesh CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures);
         void DeleteBuffers();
-
-        void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color);
-        void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
-            GLenum textureDimension, GLint interpType, GLint wrapType);
-        void Draw(GLuint shaderID, const char* modelUni, const char* colorUni, glm::vec3 position, glm::vec3 color,
-            GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
+        void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType);
+        void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
         void DeleteTextures();
+        void Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color);
 
         // Mesh data
         std::vector<VertexStruct> vertices;
@@ -36,12 +33,12 @@ class Mesh : public Utils
         glm::vec3 position;
         glm::vec3 color;
     private:
-        void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType);
-        void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
-
         // Render data
         VAO vao;
         VBO vbo;
         EBO ebo;
         Texture texture;
+        /* Variable that toggles when any of the CreateTexture overloads is called.
+           To work properly, you need to create a new Mesh or Model class for every new object, even if it is of the same type. */
+        bool hasTexture = false;
 };

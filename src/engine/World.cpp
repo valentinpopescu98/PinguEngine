@@ -20,7 +20,9 @@ void World::Init()
 
 	// Supports: texture_diffuse, texture_specular, texture_normal, texture_height
 	std::vector<TextureStruct> textures
-	{};
+	{
+		{ "texture_diffuse", "resources/textures/default.png" }
+	};
 
 	// Data for a pyramid
 	std::vector<VertexStruct> lightVertices
@@ -64,7 +66,9 @@ void World::Init()
 	};
 
 	std::vector<TextureStruct> lightTextures
-	{};
+	{
+		{ "texture_diffuse", "resources/textures/default.png" }
+	};
 
 	// Data for a cube
 	std::vector<VertexStruct> objectVertices
@@ -133,6 +137,11 @@ void World::Init()
 		{ "texture_diffuse", "resources/textures/default.png" }
 	};
 
+	std::vector<TextureStruct> object2Textures
+	{
+		{ "texture_diffuse", "resources/textures/noise.png" }
+	};
+
 	// Create light shaders
 	lightShader.Create("src/shaders/light.vert", "src/shaders/light.frag");
 	meshLightSource.CreateBuffers(lightVertices, lightIndices, lightTextures);
@@ -141,7 +150,8 @@ void World::Init()
 	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
 	meshObject.CreateBuffers(objectVertices, objectIndices, objectTextures);
 
-	object2.Import("resources/models/sphere.obj");
+	object2.Import("resources/models/sphere.obj", "resources/textures/noise.png");
+	object3.Import("resources/models/backpack.obj", "resources/models/backpack/");
 }
 
 void World::End()
@@ -161,7 +171,6 @@ void World::BeforeDrawing()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color buffer and depth buffer
 }
 
-//TODO: make a shader for both textured and non-textured meshes or make these overloads work with only 1 shader
 void World::Draw(GLFWwindow* window)
 {
 	// Treat camera inputs (WASD - move on X/Z axis, LEFT CTRL/SPACE - move on Y axis, SHIFT - speed modifier)
@@ -171,18 +180,21 @@ void World::Draw(GLFWwindow* window)
 	lightShader.Use(); // Use light source's shaders
 	lightShader.InitMatrices(view, projection); // Send view and projection matrix to light source's shaders
 	// Compute and send model matrix and color to the GPU then draw the mesh
-	meshLightSource.Draw(lightShader.id, "model", "objColor", glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	meshLightSource.Draw(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	objectShader.Use(); // Use object's shader
 	// Send material data to object's shaders
 	objectShader.InitMaterial(meshLightSource.position, meshLightSource.color, camera.position,
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
+	meshObject.CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
 	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
-	meshObject.Draw(objectShader.id, "model", "objColor", glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f),
-		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
+	meshObject.Draw(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 
-	object2.Draw(objectShader.id, "model", "objColor", glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 0.0f, 1.0f));
+	object2.CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
+	object2.Draw(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 0.0f, 1.0f));
+
+	object3.Draw(objectShader.id, glm::vec3(4.0f, -2.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 }
 
 void World::AfterDrawing(GLFWwindow* window)

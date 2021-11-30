@@ -14,6 +14,7 @@ in vec3 objPos; // The global position of the object
 
 layout(location = 0) out vec4 outColor; // Fragment color
 
+uniform bool hasTexture; // Variable that determines if textures are to be used or not
 uniform vec3 lightColor; // Color of the light source (TODO: implement a combined color from many light sources)
 uniform vec3 lightPos; // Color of the light position (TODO: implement an array of many light sources)
 uniform vec3 camPos; // Position of the camera
@@ -45,5 +46,13 @@ void main()
 	vec3 specular = spec * material.specular;
 
 	vec3 phong = ambient + diffuse + specular;
-	outColor = texture(texture_diffuse1, textCoord) * vec4(color * lightColor * phong, 1.0f); // Output color of each fragment
+
+	if (hasTexture)
+	{
+		outColor = texture(texture_diffuse1, textCoord) * vec4(color * lightColor * phong, 1.0f); // Output color of each fragment
+	}
+	else
+	{
+		outColor = vec4(color * lightColor * phong, 1.0f); // Output color of each fragment
+	}
 }

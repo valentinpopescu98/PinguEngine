@@ -54,6 +54,9 @@
     <Filter Include="resources\models">
       <UniqueIdentifier>{935ecafb-0c28-4344-a9d3-17cf75532d9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources\textures\backpack">
+      <UniqueIdentifier>{a6ce4562-8416-4ffd-a276-e82c4239f46d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\Engine.h">
@@ -94,6 +97,21 @@
     <Image Include="..\resources\textures\default.png">
       <Filter>resources\textures</Filter>
     </Image>
+    <Image Include="..\resources\textures\noise.png">
+      <Filter>resources\textures</Filter>
+    </Image>
+    <Image Include="..\resources\textures\random.jpg">
+      <Filter>resources\textures</Filter>
+    </Image>
+    <Image Include="..\resources\textures\backpack\diffuse.jpg">
+      <Filter>resources\textures\backpack</Filter>
+    </Image>
+    <Image Include="..\resources\textures\backpack\normal.png">
+      <Filter>resources\textures\backpack</Filter>
+    </Image>
+    <Image Include="..\resources\textures\backpack\specular.jpg">
+      <Filter>resources\textures\backpack</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\shaders\object.frag">
@@ -111,6 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\resources\models\sphere.obj">
+      <Filter>resources\models</Filter>
+    </Object>
+    <Object Include="..\resources\models\backpack.obj">
       <Filter>resources\models</Filter>
     </Object>
   </ItemGroup>
