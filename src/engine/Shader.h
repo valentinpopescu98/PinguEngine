@@ -18,7 +18,7 @@ class Shader : public Utils
 		GLuint id;
 		glm::mat4 view, projection;
 	private:
-		void CheckErrors(GLuint shader, const char* type);
+		int CheckErrors(GLuint shader, const char* type);
 
 		std::string vertexShaderPath, fragmentShaderPath;
 };

@@ -19,7 +19,7 @@ struct VertexStruct
 struct TextureStruct
 {
     std::string type;
-    const char* path;
+    std::string path;
 };
 
 class Utils

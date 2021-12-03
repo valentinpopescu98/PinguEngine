@@ -5,7 +5,8 @@
 int main() 
 {
 	Engine::Init(); // Initialize GLFW
-	GLFWwindow* window = Engine::CreateWindow(800, 800); // Create window of given resolution
+	GLFWwindow* window = Engine::CreateWindow(1024, 768); // Create window of given resolution
+	Engine::EnableVsync(true); // Enable vertical synchronization
 
 	World world; // Create world object
 	world.Init(); // Create prerequisites

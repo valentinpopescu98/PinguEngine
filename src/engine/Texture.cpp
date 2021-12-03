@@ -2,6 +2,8 @@
 
 void Texture::Create(const char* imagePath, GLuint id, GLenum unit)
 {
+	this->id = id;
+
 	stbi_set_flip_vertically_on_load(true); // Flip the texture, so that [0, 0] is in the bottom left, not top left
 	bytes = stbi_load(imagePath, &widthImage, &heightImage, &numColCh, 0); // Read data from the texture and store it in image's variables
 

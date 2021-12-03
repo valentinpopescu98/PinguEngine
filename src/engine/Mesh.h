@@ -18,12 +18,14 @@
 class Mesh : public Utils
 {
 	public:
-        Mesh CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures);
+        void CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures);
         void DeleteBuffers();
         void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType);
         void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
         void DeleteTextures();
         void Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color);
+        void Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType);
+        void Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
 
         // Mesh data
         std::vector<VertexStruct> vertices;

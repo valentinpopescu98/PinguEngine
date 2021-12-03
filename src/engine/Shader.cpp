@@ -8,24 +8,36 @@ void Shader::Create(const char* vertexShaderPath, const char* fragmentShaderPath
 	std::string vertexCode = GetFileContents(vertexShaderPath); // Store VS source code in a string
 	std::string fragmentCode = GetFileContents(fragmentShaderPath); // Store FS source code in a string
 
-	const char* vertexSource = vertexCode.c_str(); // Convert the VS code into a recognizable format by GLAD (char array)
-	const char* fragmentSource = fragmentCode.c_str(); // Convert the FS code into a recognizable format by GLAD (char array)
+	const char* vertexSource = vertexCode.c_str(); // Convert the VS code into a recognizable format by GLAD (zero-terminated array of characters)
+	const char* fragmentSource = fragmentCode.c_str(); // Convert the FS code into a recognizable format by GLAD (zero-terminated array of characters)
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER); // Create VS object
 	glShaderSource(vertexShader, 1, &vertexSource, NULL); // Attach VS source code to VS object
 	glCompileShader(vertexShader); // Compile VS into machine code
-	CheckErrors(vertexShader, "VERTEX"); // Check for errors for VS
+	// Check for errors for VS
+	if (CheckErrors(vertexShader, "VERTEX"))
+	{
+		return;
+	}
 
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // Create FS object
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL); // Attach FS source code to VS object
 	glCompileShader(fragmentShader); // Compile FS into machine code
-	CheckErrors(fragmentShader, "FRAGMENT"); // Check for errors for FS
+	// Check for errors for FS
+	if (CheckErrors(fragmentShader, "FRAGMENT"))
+	{
+		return;
+	}
 
 	id = glCreateProgram(); // Create final object shader
 	glAttachShader(id, vertexShader); // Attach VS to the new shader
 	glAttachShader(id, fragmentShader); // Attach FS to the new shader
 	glLinkProgram(id); // Link final shader into the shading program
-	CheckErrors(id, "PROGRAM"); // Check for error for the main shader
+	// Check for error for the main shader
+	if (CheckErrors(id, "PROGRAM"))
+	{
+		return;
+	}
 
 	glDeleteShader(vertexShader); // Delete VS object
 	glDeleteShader(fragmentShader); // Delete FS object
@@ -59,7 +71,7 @@ void Shader::InitMaterial(glm::vec3 lightSrcPosition, glm::vec3 lightSrcColor, g
 	Send3f_Uniform(id, "camPos", cameraPosition); // Send camera position as uniform to the GPU
 }
 
-void Shader::CheckErrors(GLuint shader, const char* type)
+int Shader::CheckErrors(GLuint shader, const char* type)
 {
 	GLint hasCompiled;
 	char infoLog[1024];
@@ -75,10 +87,12 @@ void Shader::CheckErrors(GLuint shader, const char* type)
 			if (type == "VERTEX")
 			{
 				std::cout << "FAULTY SHADER AT: " << vertexShaderPath << std::endl << std::endl;
+				return -1;
 			}
 			else if (type == "FRAGMENT")
 			{
 				std::cout << "FAULTY SHADER AT: " << fragmentShaderPath << std::endl << std::endl;
+				return -2;
 			}
 		}
 	}
@@ -89,6 +103,9 @@ void Shader::CheckErrors(GLuint shader, const char* type)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
 			std::cout << "SHADER_LINKING_ERROR for: " << type << std::endl << std::endl;
+			return -3;
 		}
 	}
+
+	return 0;
 }

@@ -11,6 +11,7 @@ public:
 	static void End(GLFWwindow* window);
 	static GLFWwindow* CreateWindow(unsigned int resX, unsigned int resY);
 	static void SetTimeValues();
+	static void EnableVsync(bool isEnabled);
 	static void CheckErrorCodes();
 
 	static unsigned int resX, resY;

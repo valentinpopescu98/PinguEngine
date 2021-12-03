@@ -117,13 +117,13 @@
     <None Include="..\src\shaders\object.frag">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\src\shaders\object.vert">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="..\src\shaders\light.vert">
       <Filter>shaders</Filter>
     </None>
     <None Include="..\src\shaders\light.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\src\shaders\object.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

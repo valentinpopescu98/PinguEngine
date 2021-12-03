@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures)
+void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures)
 {
     this->vertices = vertices;
     this->indices = indices;
@@ -19,8 +19,6 @@ Mesh Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigne
     vao.Unbind(); // Unbind VAO
     vbo.Unbind(); // Unbind VBO
     ebo.Unbind(); // Unbind EBO
-
-    return *this;
 }
 
 void Mesh::DeleteBuffers()
@@ -44,7 +42,7 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
     for (GLuint i = 0; i < textures.size(); i++)
     {
         // Create texture
-        texture.Create(textures[i].path, i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
@@ -77,7 +75,7 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
     for (GLuint i = 0; i < textures.size(); i++)
     {
         // Create texture
-        texture.Create(textures[i].path, i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
@@ -104,6 +102,7 @@ void Mesh::DeleteTextures()
     }
 }
 
+// Use this to render a mesh with no texture
 void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color)
 {
     this->color = color;
@@ -121,4 +120,18 @@ void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color)
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     vao.Unbind();
     glActiveTexture(GL_TEXTURE0); // Reset to default texture
+}
+
+// Use this to render a mesh with 1 or more textures. Choose how to wrap the texture with any style except GL_CLAMP_TO_BORDER
+void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
+{
+    CreateTextures(shaderID, textureDimension, interpType, wrapType);
+    Draw(shaderID, position, color);
+}
+
+// Use this to render a mesh with 1 or more textures. Use this for GL_CLAMP_TO_BORDER wrapping
+void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+{
+    CreateTextures(shaderID, textureDimension, interpType, borderColor);
+    Draw(shaderID, position, color);
 }

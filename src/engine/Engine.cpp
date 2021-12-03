@@ -66,6 +66,18 @@ void Engine::SetTimeValues()
 	previousTime = elapsedTime;
 }
 
+void Engine::EnableVsync(bool isEnabled)
+{
+	if (isEnabled)
+	{
+		glfwSwapInterval(1);
+	}
+	else
+	{
+		glfwSwapInterval(0);
+	}
+}
+
 void Engine::CheckErrorCodes()
 {
 	GLenum errCode;

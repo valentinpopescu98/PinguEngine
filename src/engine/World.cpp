@@ -19,10 +19,7 @@ void World::Init()
 	};
 
 	// Supports: texture_diffuse, texture_specular, texture_normal, texture_height
-	std::vector<TextureStruct> textures
-	{
-		{ "texture_diffuse", "resources/textures/default.png" }
-	};
+	std::vector<TextureStruct> textures;
 
 	// Data for a pyramid
 	std::vector<VertexStruct> lightVertices
@@ -65,10 +62,7 @@ void World::Init()
 		13, 15, 14		// front face triangle
 	};
 
-	std::vector<TextureStruct> lightTextures
-	{
-		{ "texture_diffuse", "resources/textures/default.png" }
-	};
+	std::vector<TextureStruct> lightTextures;
 
 	// Data for a cube
 	std::vector<VertexStruct> objectVertices
@@ -150,19 +144,21 @@ void World::Init()
 	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
 	meshObject.CreateBuffers(objectVertices, objectIndices, objectTextures);
 
-	object2.Import("resources/models/sphere.obj", "resources/textures/noise.png");
-	object3.Import("resources/models/backpack.obj", "resources/models/backpack/");
+	modelObject.Import("resources/models/sphere.obj", object2Textures);
+	modelObject2.Import("resources/models/backpack.obj", "resources/textures/backpack/");
 }
 
 void World::End()
 {
-	meshLightSource.DeleteBuffers(); // Delete light source's buffers
-	meshLightSource.DeleteTextures(); // Delete light source's textures
-	lightShader.Delete(); // Delete light source's shader
+	meshLightSource.DeleteBuffers(); // Delete light sources' buffers
+	meshLightSource.DeleteTextures(); // Delete light sources' textures
+	lightShader.Delete(); // Delete light sources' shader
 
-	meshObject.DeleteBuffers(); // Delete object's buffers
-	meshObject.DeleteTextures(); // Delete object's textures
-	objectShader.Delete(); // Delete object shader
+	meshObject.DeleteBuffers(); // Delete objects' buffers
+	meshObject.DeleteTextures(); // Delete objects' textures
+	modelObject.DeleteTextures(); // Delete all the textures for all the meshes in the model
+	modelObject2.DeleteTextures(); // Delete all the textures for all the meshes in the model
+	objectShader.Delete(); // Delete objects' shader
 }
 
 void World::BeforeDrawing()
@@ -177,24 +173,25 @@ void World::Draw(GLFWwindow* window)
 	camera.TreatInputs(window, Engine::deltaTime);
 	camera.UpdateMatrices(60.0f, 0.1f, 100.0f, view, projection); // Compute view and projection matrices
 
+	// RENDER LIGHT SOURCES SECTION
 	lightShader.Use(); // Use light source's shaders
 	lightShader.InitMatrices(view, projection); // Send view and projection matrix to light source's shaders
-	// Compute and send model matrix and color to the GPU then draw the mesh
-	meshLightSource.Draw(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	meshLightSource.Draw(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 1.0f, 1.0f)); // Only draw (render without texture)
 
+	// RENDER NORMAL OBJECTS SECTION
 	objectShader.Use(); // Use object's shader
 	// Send material data to object's shaders
 	objectShader.InitMaterial(meshLightSource.position, meshLightSource.color, camera.position,
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
-	meshObject.CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-	// Compute and send model matrix, color and texture slot to the GPU then draw the mesh
-	meshObject.Draw(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+	meshObject.Render(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f),
+		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create texture then draw
 
-	object2.CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-	object2.Draw(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 0.0f, 1.0f));
+	modelObject.Render(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 0.0f, 1.0f),
+		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create all meshes, then all textures and apply them to every mesh
 
-	object3.Draw(objectShader.id, glm::vec3(4.0f, -2.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+	modelObject2.Render(objectShader.id, glm::vec3(7.0f, 0.0f, -15.0f), glm::vec3(1.0f, 1.0f, 0.0f),
+		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create all meshes
 }
 
 void World::AfterDrawing(GLFWwindow* window)
