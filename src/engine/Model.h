@@ -31,18 +31,19 @@ class Model : public Utils
 		glm::vec3 scale;
 		glm::vec3 color;
 	private:
+		void CreateTextures(GLuint shaderID, Mesh& mesh, GLenum textureDimension, GLint interpType, GLint wrapType);
+		void CreateTextures(GLuint shaderID, Mesh& mesh, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
 		int CheckErrors(const aiScene* scene, Assimp::Importer& importer);
-		GLuint TextureFromFile(const char* path);
-		std::vector<TextureStruct> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+		void TextureFromFile(const char* path);
+		std::vector<TextureStruct> ReadTexturesOfType(aiMaterial* mat, aiTextureType type, std::string typeName);
 		Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 		void ProcessNode(aiNode* node, const aiScene* scene);
 
 		// Variables for Mesh class
 		GLuint shaderID;
-		std::vector<TextureStruct> customTextures;
 
 		// Variables for Model class
-		std::vector<TextureStruct> texturesLoaded;
+		std::vector<TextureStruct> textures;
 		std::vector<Mesh> meshes;
 		std::string texturesDirPath;
 		int hasTexture;

@@ -57,6 +57,9 @@
     <Filter Include="resources\textures\backpack">
       <UniqueIdentifier>{a6ce4562-8416-4ffd-a276-e82c4239f46d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="xml">
+      <UniqueIdentifier>{fd5e28aa-3e26-429a-ac51-016c981f744e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\Engine.h">
@@ -126,6 +129,9 @@
     <None Include="..\src\shaders\object.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="..\resources\models\backpack.mtl">
+      <Filter>resources\models</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\resources\models\sphere.obj">
@@ -134,5 +140,10 @@
     <Object Include="..\resources\models\backpack.obj">
       <Filter>resources\models</Filter>
     </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\src\xml\scene.xml">
+      <Filter>xml</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 void World::Init()
 {
 	// Data for a plane
-	std::vector<VertexStruct> vertices =
+	std::vector<VertexStruct> planeVertices =
 	{
 		//	             COORDS		                   NORMALS                 TEXT COORDS                  COLORS
 		{ glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front left
@@ -12,17 +12,14 @@ void World::Init()
 		{ glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }  // front right
 	};
 
-	std::vector<GLuint> indices
+	std::vector<GLuint> planeIndices
 	{
 		0, 1, 2,		// top left triangle
 		0, 3, 2			// bottom right triangle
 	};
 
-	// Supports: texture_diffuse, texture_specular, texture_normal, texture_height
-	std::vector<TextureStruct> textures;
-
 	// Data for a pyramid
-	std::vector<VertexStruct> lightVertices
+	std::vector<VertexStruct> pyramidVertices
 	{
 		//	             COORDS		                    NORMALS                  TEXT COORDS                  COLORS
 		// Base face
@@ -52,7 +49,7 @@ void World::Init()
 		{ glm::vec3( 0.0f, 1.0f,  0.0f), glm::vec3( 0.0f,  0.5f,  1.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }  // top
 	};
 
-	std::vector<GLuint> lightIndices
+	std::vector<GLuint> pyramidIndices
 	{
 		0, 1, 2,		// top left base triangle
 		0, 3, 2,		// bottom right base triangle
@@ -62,10 +59,8 @@ void World::Init()
 		13, 15, 14		// front face triangle
 	};
 
-	std::vector<TextureStruct> lightTextures;
-
 	// Data for a cube
-	std::vector<VertexStruct> objectVertices
+	std::vector<VertexStruct> cubeVertices
 	{
 		//	             COORDS		                    NORMALS                  TEXT COORDS                  COLORS
 		// Front face
@@ -105,7 +100,7 @@ void World::Init()
 		{ glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }  // front bottom right
 	};
 
-	std::vector<GLuint> objectIndices
+	std::vector<GLuint> cubeIndices
 	{
 		0, 1, 2,		// top left, front face triangle
 		0, 3, 2,		// bottom right, front face triangle
@@ -126,6 +121,7 @@ void World::Init()
 		20, 23, 22		// top right, bottom face triangle
 	};
 
+	// Supports: texture_diffuse, texture_specular, texture_normal, texture_height
 	std::vector<TextureStruct> objectTextures
 	{
 		{ "texture_diffuse", "resources/textures/default.png" }
@@ -141,25 +137,34 @@ void World::Init()
 	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
 
 	// Create meshes
-	meshLightSource.CreateBuffers(lightVertices, lightIndices, lightTextures);
-	meshObject.CreateBuffers(objectVertices, objectIndices, objectTextures);
+	meshObjects.push_back(Mesh());
+	meshObjects[0].CreateBuffers(cubeVertices, cubeIndices, objectTextures);
+	meshObjects.push_back(Mesh());
+	meshObjects[1].CreateBuffers(pyramidVertices, pyramidIndices, object2Textures);
 
 	// Create models
-	modelObject.Import("resources/models/sphere.obj", object2Textures);
-	modelObject2.Import("resources/models/backpack.obj");
+	modelLights.push_back(Model());
+	modelLights[0].Import("resources/models/sphere.obj");
+	modelObjects.push_back(Model());
+	modelObjects[0].Import("resources/models/sphere.obj", object2Textures);
+	modelObjects.push_back(Model());
+	modelObjects[1].Import("resources/models/backpack.obj", "resources/textures/backpack/");
 }
 
 void World::End()
 {
-	meshLightSource.DeleteBuffers(); // Delete light sources' buffers
-	meshLightSource.DeleteTextures(); // Delete light sources' textures
-	lightShader.Delete(); // Delete light sources' shader
+	// Delete buffers
+	meshObjects[0].DeleteBuffers(); // Delete object's buffers
+	meshObjects[1].DeleteBuffers(); // Delete object's buffers
 
-	meshObject.DeleteBuffers(); // Delete objects' buffers
-	meshObject.DeleteTextures(); // Delete objects' textures
-	modelObject.DeleteTextures(); // Delete all the textures for all the meshes in the model
-	modelObject2.DeleteTextures(); // Delete all the textures for all the meshes in the model
-	objectShader.Delete(); // Delete objects' shader
+	// Delete textures
+	modelLights[0].DeleteTextures(); // Delete light source's textures
+	modelObjects[0].DeleteTextures(); // Delete all textures and meshes for the model
+	modelObjects[1].DeleteTextures(); // Delete all textures and meshes for the model
+
+	// Delete shaders
+	lightShader.Delete();
+	objectShader.Delete();
 }
 
 void World::BeforeDrawing()
@@ -177,23 +182,28 @@ void World::Draw(GLFWwindow* window)
 	// RENDER LIGHT SOURCES SECTION
 	lightShader.Use(); // Use light source's shaders
 	lightShader.InitMatrices(view, projection); // Send view and projection matrix to light source's shaders
-	// Only draw (render without texture)
-	meshLightSource.Render(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+
+	// Render without texture
+	modelLights[0].Render(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// RENDER NORMAL OBJECTS SECTION
 	objectShader.Use(); // Use object's shader
 	// Send material data to object's shaders
-	objectShader.InitMaterial(meshLightSource.position, meshLightSource.color, camera.position,
+	objectShader.InitMaterial(modelLights[0].position, modelLights[0].color, camera.position,
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
-	meshObject.Render(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f),
+
+	meshObjects[0].Render(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f),
 		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create texture then draw
 
-	modelObject.Render(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 1.0f),
+	meshObjects[1].RenderChild(objectShader.id, meshObjects[0], glm::vec3(2.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f),
+		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create texture then draw
+
+	modelObjects[0].Render(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 1.0f),
 		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create all meshes, then all textures and apply them to every mesh
 
 	// Create all meshes
-	modelObject2.Render(objectShader.id, glm::vec3(7.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+	modelObjects[1].Render(objectShader.id, glm::vec3(7.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void World::AfterDrawing(GLFWwindow* window)

@@ -212,6 +212,7 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <Image Include="..\resources\textures\random.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\resources\models\backpack.mtl" />
     <None Include="..\src\shaders\light.frag" />
     <None Include="..\src\shaders\light.vert" />
     <None Include="..\src\shaders\object.frag" />
@@ -228,6 +229,9 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\src\xml\scene.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

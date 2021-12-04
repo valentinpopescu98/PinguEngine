@@ -1,5 +1,25 @@
 #include "Mesh.h"
 
+void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices)
+{
+    this->vertices = vertices;
+    this->indices = indices;
+
+    // Create buffers
+    vao.Create(); // Create VAO and bind it
+    vbo.Create(vertices); // Create VBO, bind and send buffers to GPU
+    ebo.Create(indices); // Create EBO, bind and send buffers to GPU
+
+    vao.LinkVBO(vbo, 0, sizeof(VertexStruct), (void*)0); // Link VBOs to location 0
+    vao.LinkVBO(vbo, 1, sizeof(VertexStruct), (void*)offsetof(VertexStruct, normals)); // Link VBOs to location 1
+    vao.LinkVBO(vbo, 2, sizeof(VertexStruct), (void*)offsetof(VertexStruct, textCoords)); // Link VBOs to location 2
+    vao.LinkVBO(vbo, 3, sizeof(VertexStruct), (void*)offsetof(VertexStruct, colors)); // Link VBOs to location 3
+
+    vao.Unbind(); // Unbind VAO
+    vbo.Unbind(); // Unbind VBO
+    ebo.Unbind(); // Unbind EBO
+}
+
 void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures)
 {
     this->vertices = vertices;

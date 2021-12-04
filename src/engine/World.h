@@ -24,10 +24,10 @@ class World : public Utils
 		void AfterDrawing(GLFWwindow* window);
 
 		// INSTANCES
-		Camera camera;
 		Shader objectShader, lightShader;
-		Mesh meshLightSource, meshObject;
-		Model modelObject, modelObject2;
+		Camera camera;
+		std::vector<Mesh> meshLights, meshObjects;
+		std::vector<Model> modelLights, modelObjects;
 
 		// UNIFORMS
 		glm::mat4 view, projection;

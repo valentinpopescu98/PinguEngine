@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sceneData>
+    <entities>
+        <mesh type="light">
+            <position x="-2.0" y="2.0" z="-6.0"></position>
+            <rotation x="0.0" y="0.0" z="0.0"></rotation>
+            <scale x="1.0" y="1.0" z="1.0"></scale>
+            <color r="1.0" g="1.0" b="1.0"></color>
+            <textureDimension></textureDimension>
+            <interpType></interpType>
+            <wrapType></wrapType>
+            <borderColor></borderColor>
+            <children></children>
+        </mesh>
+
+        <mesh type="object">
+            <position x="0.0" y="0.0" z="-2.0"></position>
+            <rotation x="0.0" y="0.0" z="0.0"></rotation>
+            <scale x="1.0" y="1.0" z="1.0"></scale>
+            <color r="0.0" g="1.0" b="1.0"></color>
+            <textureDimension>GL_TEXTURE_2D</textureDimension>
+            <interpType>GL_LINEAR</interpType>
+            <wrapType>GL_REPEAT</wrapType>
+            <borderColor></borderColor>
+            <children></children>
+        </mesh>
+
+        <model modelPath="resources/models/sphere.obj" texturePath="">
+            <position x="0.0" y="0.0" z="-2.0"></position>
+            <rotation x="0.0" y="0.0" z="0.0"></rotation>
+            <scale x="1.0" y="1.0" z="1.0">1.0, 1.0, 1.0</scale>
+            <color r="0.0" g="1.0" b="1.0"></color>
+            <textureDimension>GL_TEXTURE_2D</textureDimension>
+            <interpType>GL_LINEAR</interpType>
+            <wrapType>GL_REPEAT</wrapType>
+            <borderColor></borderColor>
+            <children></children>
+        </model>
+
+        <model modelPath="resources/models/backpack.obj" texturePath="resources/textures/backpack/">
+            <position x="7.0" y="0.0" z="-15.0">7.0, 0.0, -15.0</position>
+            <rotation x="0.0" y="0.0" z="0.0">0.0, 0.0, 0.0</rotation>
+            <scale x="1.0" y="1.0" z="1.0">1.0, 1.0, 1.0</scale>
+            <color r="1.0" g="1.0" b="1.0"></color>
+            <textureDimension>GL_TEXTURE_2D</textureDimension>
+            <interpType>GL_LINEAR</interpType>
+            <wrapType>GL_REPEAT</wrapType>
+            <borderColor></borderColor>
+            <children></children>
+        </model>
+    </entities>
+</sceneData>

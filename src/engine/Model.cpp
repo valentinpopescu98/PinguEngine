@@ -20,7 +20,7 @@ void Model::Import(std::string meshPath)
 void Model::Import(std::string meshPath, std::vector<TextureStruct> customTextures)
 {
     hasTexture = 1;
-    this->customTextures = customTextures;
+    textures = customTextures;
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(meshPath, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -40,11 +40,32 @@ void Model::Import(std::string meshPath, std::string texturesDirPath)
     this->texturesDirPath = texturesDirPath;
 
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(meshPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(meshPath, aiProcess_Triangulate);
 
     if (CheckErrors(scene, importer))
     {
         return;
+    }
+
+    aiNode* root = scene->mRootNode;
+    if (root->mNumMeshes == 0)
+    {
+        root = root->mChildren[0];
+    }
+
+    for (GLuint i = 0; i < root->mNumMeshes; i++)
+    {
+        aiMesh* mesh = scene->mMeshes[root->mMeshes[i]];
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+        std::vector<TextureStruct> diffuseMaps = ReadTexturesOfType(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+        std::vector<TextureStruct> specularMaps = ReadTexturesOfType(material, aiTextureType_SPECULAR, "texture_specular");
+        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+        std::vector<TextureStruct> normalMaps = ReadTexturesOfType(material, aiTextureType_HEIGHT, "texture_normal");
+        textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     }
 
     ProcessNode(scene->mRootNode, scene);
@@ -74,6 +95,7 @@ void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm:
 
     for (GLuint i = 0; i < meshes.size(); i++)
     {
+        meshes[i].textures = textures;
         meshes[i].CreateTextures(shaderID, textureDimension, interpType, wrapType);
         meshes[i].Draw(shaderID, position, rotation, scale, color);
     }
@@ -89,6 +111,7 @@ void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm:
 
     for (GLuint i = 0; i < meshes.size(); i++)
     {
+        meshes[i].textures = textures;
         meshes[i].CreateTextures(shaderID, textureDimension, interpType, borderColor);
         meshes[i].Draw(shaderID, position, rotation, scale, color);
     }
@@ -112,6 +135,72 @@ void Model::RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm:
     Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, borderColor);
 }
 
+//void Model::CreateTextures(GLuint shaderID, Mesh& mesh, GLenum textureDimension, GLint interpType, GLint wrapType)
+//{
+//    mesh.hasTexture = true;
+//
+//    GLuint diffuseNr = 1;
+//    GLuint specularNr = 1;
+//    GLuint normalNr = 1;
+//    GLuint heightNr = 1;
+//    std::string number;
+//
+//    for (GLuint i = 0; i < textures.size(); i++)
+//    {
+//        // Create texture
+//        Texture texture;
+//        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+//
+//        if (textures[i].type == "texture_diffuse")
+//            number = std::to_string(diffuseNr++); // Transfer unsigned int to string
+//        else if (textures[i].type == "texture_specular")
+//            number = std::to_string(specularNr++); // Transfer unsigned int to string
+//        else if (textures[i].type == "texture_normal")
+//            number = std::to_string(normalNr++); // transfer unsigned int to string
+//        else if (textures[i].type == "texture_height")
+//            number = std::to_string(heightNr++); // transfer unsigned int to string
+//
+//        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
+//        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
+//
+//        texture.GenerateMipmap(interpType, wrapType); // Generate mipmap
+//        texture.Unbind(); // Unbind texture
+//    }
+//}
+//
+//void Model::CreateTextures(GLuint shaderID, Mesh& mesh, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+//{
+//    mesh.hasTexture = true;
+//
+//    GLuint diffuseNr = 1;
+//    GLuint specularNr = 1;
+//    GLuint normalNr = 1;
+//    GLuint heightNr = 1;
+//    std::string number;
+//
+//    for (GLuint i = 0; i < textures.size(); i++)
+//    {
+//        // Create texture
+//        Texture texture;
+//        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+//
+//        if (textures[i].type == "texture_diffuse")
+//            number = std::to_string(diffuseNr++); // Transfer unsigned int to string
+//        else if (textures[i].type == "texture_specular")
+//            number = std::to_string(specularNr++); // Transfer unsigned int to string
+//        else if (textures[i].type == "texture_normal")
+//            number = std::to_string(normalNr++); // transfer unsigned int to string
+//        else if (textures[i].type == "texture_height")
+//            number = std::to_string(heightNr++); // transfer unsigned int to string
+//
+//        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
+//        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
+//
+//        texture.GenerateMipmap(interpType, &borderColor[0]); // Generate mipmap
+//        texture.Unbind(); // Unbind texture
+//    }
+//}
+
 // Delete all textures for all the meshes
 void Model::DeleteTextures()
 {
@@ -131,58 +220,10 @@ int Model::CheckErrors(const aiScene* scene, Assimp::Importer& importer)
     return 0;
 }
 
-GLuint Model::TextureFromFile(const char* path)
-{
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-
-    int width, height, nrComponents;
-    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
-    if (data)
-    {
-        GLenum format;
-        if (nrComponents == 1)
-        {
-            format = GL_RED;
-        }
-        else if (nrComponents == 3)
-        {
-            format = GL_RGB;
-        }
-        else if (nrComponents == 4)
-        {
-            format = GL_RGBA;
-        }
-        else
-        {
-            throw std::invalid_argument("Invalid texture format!");
-        }
-
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glGenerateMipmap(GL_TEXTURE_2D); // Create mip-map
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
-        stbi_image_free(data);
-    }
-
-    return textureID;
-}
-
-std::vector<TextureStruct> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<TextureStruct> Model::ReadTexturesOfType(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
     std::vector<TextureStruct> textures;
+    std::vector<TextureStruct> texturesLoaded;
 
     for (GLuint i = 0; i < mat->GetTextureCount(type); i++)
     {
@@ -206,8 +247,6 @@ std::vector<TextureStruct> Model::LoadMaterialTextures(aiMaterial* mat, aiTextur
             // If texture hasn't been loaded already, load it
             TextureStruct texture;
             std::string textPath = texturesDirPath + str.C_Str();
-            //texture.id = TextureFromFile(textPath.c_str());
-            TextureFromFile(textPath.c_str());
             texture.type = typeName;
             texture.path = textPath;
 
@@ -281,30 +320,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
     // Process material
     Mesh meshObj;
-
-    if (hasTexture == 0)
-    {
-        meshObj.CreateBuffers(vertices, indices, textures);
-    }
-    if (hasTexture == 1)
-    {
-        meshObj.CreateBuffers(vertices, indices, customTextures);
-    }
-    else if(hasTexture == 2)
-    {
-        if (mesh->mMaterialIndex >= 0)
-        {
-            aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-            std::vector<TextureStruct> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-            textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-            std::vector<TextureStruct> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-            textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-
-            meshObj.CreateBuffers(vertices, indices, textures);
-        }
-    }
+    meshObj.CreateBuffers(vertices, indices, textures);
 
     return meshObj;
 }
