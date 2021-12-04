@@ -50,33 +50,66 @@ void Model::Import(std::string meshPath, std::string texturesDirPath)
     ProcessNode(scene->mRootNode, scene);
 }
 
-// Render mesh. Use with import method without texture parameters
-void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 color)
+// Render meshes. Use with import method without texture parameters
+void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
+    this->position = position;
+    this->rotation = rotation;
+    this->scale = scale;
+    this->color = color;
+
     for (GLuint i = 0; i < meshes.size(); i++)
     {
-		meshes[i].Draw(shaderID, position, color);
+		meshes[i].Draw(shaderID, position, rotation, scale, color);
     }
 }
 
-// Render mesh and textures with any wrapping except GL_CLAMP_TO_BORDER. Use with import method with texture parameters
-void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
+// Render meshes and textures with any wrapping except GL_CLAMP_TO_BORDER. Use with import method with texture parameters
+void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
 {
+    this->position = position;
+    this->rotation = rotation;
+    this->scale = scale;
+    this->color = color;
+
     for (GLuint i = 0; i < meshes.size(); i++)
     {
         meshes[i].CreateTextures(shaderID, textureDimension, interpType, wrapType);
-        meshes[i].Draw(shaderID, position, color);
+        meshes[i].Draw(shaderID, position, rotation, scale, color);
     }
 }
 
-// Render mesh and textures with GL_CLAMP_TO_BORDER wrapping. Use with import method with texture parameters
-void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+// Render meshes and textures with GL_CLAMP_TO_BORDER wrapping. Use with import method with texture parameters
+void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
 {
+    this->position = position;
+    this->rotation = rotation;
+    this->scale = scale;
+    this->color = color;
+
     for (GLuint i = 0; i < meshes.size(); i++)
     {
         meshes[i].CreateTextures(shaderID, textureDimension, interpType, borderColor);
-        meshes[i].Draw(shaderID, position, color);
+        meshes[i].Draw(shaderID, position, rotation, scale, color);
     }
+}
+
+// Render child meshes. Use with import method without texture parameters
+void Model::RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+{
+    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
+}
+
+// Render child meshes and textures with any wrapping except GL_CLAMP_TO_BORDER. Use with import method with texture parameters
+void Model::RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
+{
+    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, wrapType);
+}
+
+// Render child meshes and textures with GL_CLAMP_TO_BORDER wrapping. Use with import method with texture parameters
+void Model::RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+{
+    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, borderColor);
 }
 
 // Delete all textures for all the meshes
@@ -109,11 +142,21 @@ GLuint Model::TextureFromFile(const char* path)
     {
         GLenum format;
         if (nrComponents == 1)
+        {
             format = GL_RED;
+        }
         else if (nrComponents == 3)
+        {
             format = GL_RGB;
+        }
         else if (nrComponents == 4)
+        {
             format = GL_RGBA;
+        }
+        else
+        {
+            throw std::invalid_argument("Invalid texture format!");
+        }
 
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
@@ -239,11 +282,15 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     // Process material
     Mesh meshObj;
 
+    if (hasTexture == 0)
+    {
+        meshObj.CreateBuffers(vertices, indices, textures);
+    }
     if (hasTexture == 1)
     {
         meshObj.CreateBuffers(vertices, indices, customTextures);
     }
-    else if(hasTexture == 0 or hasTexture == 2)
+    else if(hasTexture == 2)
     {
         if (mesh->mMaterialIndex >= 0)
         {

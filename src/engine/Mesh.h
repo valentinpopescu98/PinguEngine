@@ -23,9 +23,13 @@ class Mesh : public Utils
         void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType);
         void CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
         void DeleteTextures();
-        void Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color);
-        void Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType);
-        void Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
+        void Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+        void Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+        void Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType);
+        void Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
+        void RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+        void RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType);
+        void RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
 
         // Mesh data
         std::vector<VertexStruct> vertices;
@@ -33,6 +37,8 @@ class Mesh : public Utils
         std::vector<TextureStruct> textures;
 
         glm::vec3 position;
+        glm::vec3 rotation;
+        glm::vec3 scale;
         glm::vec3 color;
     private:
         // Render data

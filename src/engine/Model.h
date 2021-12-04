@@ -18,10 +18,18 @@ class Model : public Utils
 		void Import(std::string meshPath);
 		void Import(std::string meshPath, std::vector<TextureStruct> customTextures);
 		void Import(std::string meshPath, std::string texturesDirPath);
-		void Render(GLuint shaderID, glm::vec3 position, glm::vec3 color);
-		void Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType);
-		void Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
+		void Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+		void Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType);
+		void Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
+		void RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+		void RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType);
+		void RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
 		void DeleteTextures();
+
+		glm::vec3 position;
+		glm::vec3 rotation;
+		glm::vec3 scale;
+		glm::vec3 color;
 	private:
 		int CheckErrors(const aiScene* scene, Assimp::Importer& importer);
 		GLuint TextureFromFile(const char* path);

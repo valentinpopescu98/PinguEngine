@@ -37,13 +37,31 @@ int Texture::GenerateMipmap(GLint interpType, GLint wrapType)
 		return -1;
 	}
 
+	GLenum format;
+	if (numColCh == 1)
+	{
+		format = GL_RED;
+	}
+	else if (numColCh == 3)
+	{
+		format = GL_RGB;
+	}
+	else if (numColCh == 4)
+	{
+		format = GL_RGBA;
+	}
+	else
+	{
+		throw std::invalid_argument("Invalid texture format!");
+	}
+
 	glTexParameteri(dimension, GL_TEXTURE_MIN_FILTER, interpType); // Interpolate texture pixels with chosen type when minifying
 	glTexParameteri(dimension, GL_TEXTURE_MAG_FILTER, interpType); // Interpolate texture pixels with chosen type when magnifying
 
 	glTexParameteri(dimension, GL_TEXTURE_WRAP_S, wrapType); // Cover empty horizontal space with the chosen wrapping style
 	glTexParameteri(dimension, GL_TEXTURE_WRAP_T, wrapType); // Cover empty vertical space with the chosen wrapping style
 
-	glTexImage2D(dimension, 0, GL_RGBA, widthImage, heightImage, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes); // Process texture
+	glTexImage2D(dimension, 0, format, widthImage, heightImage, 0, format, GL_UNSIGNED_BYTE, bytes); // Process texture
 	glGenerateMipmap(dimension); // Create mip-map
 }
 

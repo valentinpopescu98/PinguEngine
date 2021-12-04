@@ -136,16 +136,17 @@ void World::Init()
 		{ "texture_diffuse", "resources/textures/noise.png" }
 	};
 
-	// Create light shaders
+	// Create shaders
 	lightShader.Create("src/shaders/light.vert", "src/shaders/light.frag");
-	meshLightSource.CreateBuffers(lightVertices, lightIndices, lightTextures);
-
-	// Create object shaders
 	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
+
+	// Create meshes
+	meshLightSource.CreateBuffers(lightVertices, lightIndices, lightTextures);
 	meshObject.CreateBuffers(objectVertices, objectIndices, objectTextures);
 
+	// Create models
 	modelObject.Import("resources/models/sphere.obj", object2Textures);
-	modelObject2.Import("resources/models/backpack.obj", "resources/textures/backpack/");
+	modelObject2.Import("resources/models/backpack.obj");
 }
 
 void World::End()
@@ -176,7 +177,8 @@ void World::Draw(GLFWwindow* window)
 	// RENDER LIGHT SOURCES SECTION
 	lightShader.Use(); // Use light source's shaders
 	lightShader.InitMatrices(view, projection); // Send view and projection matrix to light source's shaders
-	meshLightSource.Draw(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 1.0f, 1.0f)); // Only draw (render without texture)
+	// Only draw (render without texture)
+	meshLightSource.Render(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// RENDER NORMAL OBJECTS SECTION
 	objectShader.Use(); // Use object's shader
@@ -184,14 +186,14 @@ void World::Draw(GLFWwindow* window)
 	objectShader.InitMaterial(meshLightSource.position, meshLightSource.color, camera.position,
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
-	meshObject.Render(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 1.0f, 1.0f),
+	meshObject.Render(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f),
 		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create texture then draw
 
-	modelObject.Render(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(1.0f, 0.0f, 1.0f),
+	modelObject.Render(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 1.0f),
 		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create all meshes, then all textures and apply them to every mesh
 
-	modelObject2.Render(objectShader.id, glm::vec3(7.0f, 0.0f, -15.0f), glm::vec3(1.0f, 1.0f, 0.0f),
-		GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT); // Create all meshes
+	// Create all meshes
+	modelObject2.Render(objectShader.id, glm::vec3(7.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 }
 
 void World::AfterDrawing(GLFWwindow* window)

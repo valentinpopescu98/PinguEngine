@@ -102,14 +102,20 @@ void Mesh::DeleteTextures()
     }
 }
 
-// Use this to render a mesh with no texture
-void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color)
+void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
-    this->color = color;
     this->position = position;
+    this->rotation = rotation;
+    this->scale = scale;
+    this->color = color;
 
     glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
-    model = glm::translate(model, position); // Calculate object's global position
+    // Calculate object's global position, rotation and scale
+    model = glm::translate(model, position);
+    model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, scale);
 
     Send1i_Uniform(shaderID, "hasTexture", hasTexture);
     SendMatrix4x4_Uniform(shaderID, "model", model); // Send view matrix as uniform to the GPU
@@ -122,16 +128,40 @@ void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 color)
     glActiveTexture(GL_TEXTURE0); // Reset to default texture
 }
 
+// Use this to render a mesh with no texture
+void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+{
+    Draw(shaderID, position, rotation, scale, color);
+}
+
 // Use this to render a mesh with 1 or more textures. Choose how to wrap the texture with any style except GL_CLAMP_TO_BORDER
-void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
+void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
 {
     CreateTextures(shaderID, textureDimension, interpType, wrapType);
-    Draw(shaderID, position, color);
+    Draw(shaderID, position, rotation, scale, color);
 }
 
 // Use this to render a mesh with 1 or more textures. Use this for GL_CLAMP_TO_BORDER wrapping
-void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
 {
     CreateTextures(shaderID, textureDimension, interpType, borderColor);
-    Draw(shaderID, position, color);
+    Draw(shaderID, position, rotation, scale, color);
+}
+
+// Use this to render a child mesh with no texture
+void Mesh::RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+{
+    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
+}
+
+// Use this to render a child mesh with 1 or more textures. Choose how to wrap the texture with any style except GL_CLAMP_TO_BORDER
+void Mesh::RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
+{
+    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, wrapType);
+}
+
+// Use this to render a child mesh with 1 or more textures. Use this for GL_CLAMP_TO_BORDER wrapping
+void Mesh::RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+{
+    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, borderColor);
 }
