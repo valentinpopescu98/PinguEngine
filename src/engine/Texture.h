@@ -15,7 +15,6 @@ class Texture
 		void GenerateMipmap(GLint interpType, float borderColor[]);
 
 		GLenum dimension;
-		GLuint id;
 	private:
 		int widthImage, heightImage, numColCh; // Width, height and number of color channels
 		unsigned char* bytes;

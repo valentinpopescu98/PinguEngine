@@ -1,17 +1,22 @@
 # General
 /*
 !.gitignore
-!documentation.pdf
+!icon.ico
 
+# Visual Studio
 !/vs
 /vs/*
 !/vs/*.sln
+!/vs/*.rc
+!/vs/*.aps
 !/vs/*.vcxproj
-!/vs/*.vcxproj.user
 !/vs/*.vcxproj.filters
+!/vs/*.vcxproj.user
+!/vs/resource.h
 
 # Application
 
 !/dependencies
 !/resources
 !/src
+!/docs

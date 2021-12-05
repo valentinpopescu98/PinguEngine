@@ -60,6 +60,9 @@
     <Filter Include="xml">
       <UniqueIdentifier>{fd5e28aa-3e26-429a-ac51-016c981f744e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources\textures\scimitar">
+      <UniqueIdentifier>{5588e7b8-e5c5-474f-8e5e-f22ccd7de61d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\Engine.h">
@@ -95,6 +98,7 @@
     <ClInclude Include="..\src\engine\Model.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\textures\default.png">
@@ -115,6 +119,10 @@
     <Image Include="..\resources\textures\backpack\specular.jpg">
       <Filter>resources\textures\backpack</Filter>
     </Image>
+    <Image Include="..\icon.ico" />
+    <Image Include="..\resources\textures\scimitar\diffuse.jpg">
+      <Filter>resources\textures\scimitar</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\shaders\object.frag">
@@ -132,6 +140,9 @@
     <None Include="..\resources\models\backpack.mtl">
       <Filter>resources\models</Filter>
     </None>
+    <None Include="..\resources\models\scimitar.mtl">
+      <Filter>resources\models</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\resources\models\sphere.obj">
@@ -140,10 +151,16 @@
     <Object Include="..\resources\models\backpack.obj">
       <Filter>resources\models</Filter>
     </Object>
+    <Object Include="..\resources\models\scimitar.obj">
+      <Filter>resources\models</Filter>
+    </Object>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\src\xml\scene.xml">
       <Filter>xml</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PinguEngine.rc" />
   </ItemGroup>
 </Project>

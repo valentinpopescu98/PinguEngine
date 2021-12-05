@@ -2,8 +2,6 @@
 
 void Texture::Create(const char* imagePath, GLuint id, GLenum unit)
 {
-	this->id = id;
-
 	stbi_set_flip_vertically_on_load(true); // Flip the texture, so that [0, 0] is in the bottom left, not top left
 	bytes = stbi_load(imagePath, &widthImage, &heightImage, &numColCh, 0); // Read data from the texture and store it in image's variables
 
@@ -24,7 +22,6 @@ void Texture::Bind(GLenum dimension, GLuint id)
 
 void Texture::Unbind()
 {
-	stbi_image_free(bytes); // Delete image data
 	glBindTexture(dimension, 0); // Unbind texture
 }
 
@@ -63,6 +60,8 @@ int Texture::GenerateMipmap(GLint interpType, GLint wrapType)
 
 	glTexImage2D(dimension, 0, format, widthImage, heightImage, 0, format, GL_UNSIGNED_BYTE, bytes); // Process texture
 	glGenerateMipmap(dimension); // Create mip-map
+
+	stbi_image_free(bytes); // Delete image data
 }
 
 // Overload for wrapping with GL_CLAMP_TO_BORDER
@@ -78,4 +77,6 @@ void Texture::GenerateMipmap(GLint interpType, float borderColor[])
 
 	glTexImage2D(dimension, 0, GL_RGBA, widthImage, heightImage, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes); // Process texture
 	glGenerateMipmap(dimension); // Create mip-map
+
+	stbi_image_free(bytes); // Delete image data
 }

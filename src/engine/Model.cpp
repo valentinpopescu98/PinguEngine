@@ -69,10 +69,16 @@ void Model::Import(std::string meshPath, std::string texturesDirPath)
     }
 
     ProcessNode(scene->mRootNode, scene);
+
+    for (GLuint i = 0; i < meshes.size(); i++)
+    {
+        meshes[i].textures = textures;
+        meshes[i].CreateTextures(shaderID, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
+    }
 }
 
 // Render meshes. Use with import method without texture parameters
-void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Model::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->position = position;
     this->rotation = rotation;
@@ -81,125 +87,15 @@ void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm:
 
     for (GLuint i = 0; i < meshes.size(); i++)
     {
-		meshes[i].Draw(shaderID, position, rotation, scale, color);
-    }
-}
-
-// Render meshes and textures with any wrapping except GL_CLAMP_TO_BORDER. Use with import method with texture parameters
-void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
-{
-    this->position = position;
-    this->rotation = rotation;
-    this->scale = scale;
-    this->color = color;
-
-    for (GLuint i = 0; i < meshes.size(); i++)
-    {
-        meshes[i].textures = textures;
-        meshes[i].CreateTextures(shaderID, textureDimension, interpType, wrapType);
-        meshes[i].Draw(shaderID, position, rotation, scale, color);
-    }
-}
-
-// Render meshes and textures with GL_CLAMP_TO_BORDER wrapping. Use with import method with texture parameters
-void Model::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
-{
-    this->position = position;
-    this->rotation = rotation;
-    this->scale = scale;
-    this->color = color;
-
-    for (GLuint i = 0; i < meshes.size(); i++)
-    {
-        meshes[i].textures = textures;
-        meshes[i].CreateTextures(shaderID, textureDimension, interpType, borderColor);
         meshes[i].Draw(shaderID, position, rotation, scale, color);
     }
 }
 
 // Render child meshes. Use with import method without texture parameters
-void Model::RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Model::DrawChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
-    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
+    Draw(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
 }
-
-// Render child meshes and textures with any wrapping except GL_CLAMP_TO_BORDER. Use with import method with texture parameters
-void Model::RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
-{
-    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, wrapType);
-}
-
-// Render child meshes and textures with GL_CLAMP_TO_BORDER wrapping. Use with import method with texture parameters
-void Model::RenderChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
-{
-    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, borderColor);
-}
-
-//void Model::CreateTextures(GLuint shaderID, Mesh& mesh, GLenum textureDimension, GLint interpType, GLint wrapType)
-//{
-//    mesh.hasTexture = true;
-//
-//    GLuint diffuseNr = 1;
-//    GLuint specularNr = 1;
-//    GLuint normalNr = 1;
-//    GLuint heightNr = 1;
-//    std::string number;
-//
-//    for (GLuint i = 0; i < textures.size(); i++)
-//    {
-//        // Create texture
-//        Texture texture;
-//        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
-//
-//        if (textures[i].type == "texture_diffuse")
-//            number = std::to_string(diffuseNr++); // Transfer unsigned int to string
-//        else if (textures[i].type == "texture_specular")
-//            number = std::to_string(specularNr++); // Transfer unsigned int to string
-//        else if (textures[i].type == "texture_normal")
-//            number = std::to_string(normalNr++); // transfer unsigned int to string
-//        else if (textures[i].type == "texture_height")
-//            number = std::to_string(heightNr++); // transfer unsigned int to string
-//
-//        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
-//        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
-//
-//        texture.GenerateMipmap(interpType, wrapType); // Generate mipmap
-//        texture.Unbind(); // Unbind texture
-//    }
-//}
-//
-//void Model::CreateTextures(GLuint shaderID, Mesh& mesh, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
-//{
-//    mesh.hasTexture = true;
-//
-//    GLuint diffuseNr = 1;
-//    GLuint specularNr = 1;
-//    GLuint normalNr = 1;
-//    GLuint heightNr = 1;
-//    std::string number;
-//
-//    for (GLuint i = 0; i < textures.size(); i++)
-//    {
-//        // Create texture
-//        Texture texture;
-//        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
-//
-//        if (textures[i].type == "texture_diffuse")
-//            number = std::to_string(diffuseNr++); // Transfer unsigned int to string
-//        else if (textures[i].type == "texture_specular")
-//            number = std::to_string(specularNr++); // Transfer unsigned int to string
-//        else if (textures[i].type == "texture_normal")
-//            number = std::to_string(normalNr++); // transfer unsigned int to string
-//        else if (textures[i].type == "texture_height")
-//            number = std::to_string(heightNr++); // transfer unsigned int to string
-//
-//        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
-//        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
-//
-//        texture.GenerateMipmap(interpType, &borderColor[0]); // Generate mipmap
-//        texture.Unbind(); // Unbind texture
-//    }
-//}
 
 // Delete all textures for all the meshes
 void Model::DeleteTextures()
@@ -243,7 +139,7 @@ std::vector<TextureStruct> Model::ReadTexturesOfType(aiMaterial* mat, aiTextureT
         }
 
         if (!skip)
-        {   
+        {
             // If texture hasn't been loaded already, load it
             TextureStruct texture;
             std::string textPath = texturesDirPath + str.C_Str();

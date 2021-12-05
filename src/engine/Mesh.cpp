@@ -122,6 +122,7 @@ void Mesh::DeleteTextures()
     }
 }
 
+// Use this to render a mesh with no texture
 void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->position = position;
@@ -148,40 +149,8 @@ void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::ve
     glActiveTexture(GL_TEXTURE0); // Reset to default texture
 }
 
-// Use this to render a mesh with no texture
-void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
-{
-    Draw(shaderID, position, rotation, scale, color);
-}
-
-// Use this to render a mesh with 1 or more textures. Choose how to wrap the texture with any style except GL_CLAMP_TO_BORDER
-void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
-{
-    CreateTextures(shaderID, textureDimension, interpType, wrapType);
-    Draw(shaderID, position, rotation, scale, color);
-}
-
-// Use this to render a mesh with 1 or more textures. Use this for GL_CLAMP_TO_BORDER wrapping
-void Mesh::Render(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
-{
-    CreateTextures(shaderID, textureDimension, interpType, borderColor);
-    Draw(shaderID, position, rotation, scale, color);
-}
-
 // Use this to render a child mesh with no texture
-void Mesh::RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Mesh::DrawChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
-    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
-}
-
-// Use this to render a child mesh with 1 or more textures. Choose how to wrap the texture with any style except GL_CLAMP_TO_BORDER
-void Mesh::RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, GLint wrapType)
-{
-    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, wrapType);
-}
-
-// Use this to render a child mesh with 1 or more textures. Use this for GL_CLAMP_TO_BORDER wrapping
-void Mesh::RenderChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
-{
-    Render(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color, textureDimension, interpType, borderColor);
+    Draw(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
 }
