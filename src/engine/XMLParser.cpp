@@ -1,0 +1,107 @@
+#include "XMLParser.h"
+
+void XMLParser::ParseScene(const char* path)
+{
+	pugi::xml_parse_result result = doc.load_file(path); // Load the XML file
+	scene = doc.child("scene"); // Create node for the scene
+}
+
+// Initialize all MODELS from the XML
+void XMLParser::CreateModels(pugi::xml_node node)
+{
+	for (pugi::xml_node entity : node.children())
+	{
+		std::string modelPath = entity.attribute("modelPath").value();
+		std::string texturePath = entity.attribute("texturePath").value();
+
+		float posX = std::stof(entity.child("position").attribute("x").value());
+		float posY = std::stof(entity.child("position").attribute("y").value());
+		float posZ = std::stof(entity.child("position").attribute("z").value());
+
+		float rotX = std::stof(entity.child("rotation").attribute("x").value());
+		float rotY = std::stof(entity.child("rotation").attribute("y").value());
+		float rotZ = std::stof(entity.child("rotation").attribute("z").value());
+
+		float scaleX = std::stof(entity.child("scale").attribute("x").value());
+		float scaleY = std::stof(entity.child("scale").attribute("y").value());
+		float scaleZ = std::stof(entity.child("scale").attribute("z").value());
+
+		float colX = std::stof(entity.child("color").attribute("r").value());
+		float colY = std::stof(entity.child("color").attribute("g").value());
+		float colZ = std::stof(entity.child("color").attribute("b").value());
+
+		std::string parentName = entity.parent().name();
+		if (parentName == (std::string)"scene")
+		{
+			parent.position = glm::vec3(0.0f, 0.0f, 0.0f);
+			parent.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+			parent.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		}
+
+		if (entity.attribute("texturePath").value() == (std::string)"")
+		{
+			if (entity.name() == (std::string)"light")
+			{
+				modelLights.push_back(Model());
+				modelLights.back().Import(modelPath, parent,
+					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
+			}
+			else if (entity.name() == (std::string)"object")
+			{
+				modelObjects.push_back(Model());
+				modelObjects.back().Import(modelPath, parent,
+					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
+			}
+		}
+		else
+		{
+			if (entity.name() == (std::string)"light")
+			{
+				modelLights.push_back(Model());
+				modelLights.back().Import(modelPath, texturePath, parent,
+					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
+				modelLights.back().CreateTextures();
+			}
+			else if (entity.name() == (std::string)"object")
+			{
+				modelObjects.push_back(Model());
+				modelObjects.back().Import(modelPath, texturePath, parent,
+					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
+				modelObjects.back().CreateTextures();
+			}
+		}
+
+		pugi::xml_node childrenNode = entity.child("children");
+		if (std::distance(childrenNode.children().begin(), childrenNode.children().end()) > 0)
+		{
+			if (entity.name() == (std::string)"light")
+			{
+				parent = modelLights.back();
+			}
+			else if (entity.name() == (std::string)"object")
+			{
+				parent = modelObjects.back();
+			}
+
+			CreateModels(childrenNode);
+		}
+	}
+}
+
+// Draw all lights of type MODEL from the XML
+void XMLParser::DrawModelLights(GLuint shaderID)
+{
+	for (Model lightSource : modelLights)
+	{
+		lightSource.Draw(shaderID);
+	}
+}
+
+// Draw all objects of type MODEL from the XML
+void XMLParser::DrawModelObjects(GLuint shaderID)
+{
+	for (Model object : modelObjects)
+	{
+		object.Draw(shaderID);
+	}
+}

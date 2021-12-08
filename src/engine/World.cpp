@@ -1,6 +1,6 @@
 #include "World.h"
 
-Texture texture;
+//Texture texture;
 
 void World::Init()
 {
@@ -8,16 +8,16 @@ void World::Init()
 	std::vector<VertexStruct> planeVertices =
 	{
 		//	             COORDS		                   NORMALS                 TEXT COORDS                  COLORS
-		{ glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front left
-		{ glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // back left
-		{ glm::vec3( 0.5f, 0.0f,  0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back right
-		{ glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }  // front right
+		{ glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front left
+		{ glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // front right
+		{ glm::vec3(0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back right
+		{ glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }  // back left
 	};
 
 	std::vector<GLuint> planeIndices
 	{
-		0, 1, 2,		// top left triangle
-		0, 3, 2			// bottom right triangle
+		0, 1, 2,		// bottom right triangle
+		3, 2, 0			// top left triangle
 	};
 
 	// Data for a pyramid
@@ -25,111 +25,111 @@ void World::Init()
 	{
 		//	             COORDS		                    NORMALS                  TEXT COORDS                  COLORS
 		// Base face
-		{ glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front left
-		{ glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back left
-		{ glm::vec3( 0.5f, 0.0f,  0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // back right
-		{ glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // front right
+		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back left
+		{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back right
+		{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // front right
+		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front left
 
-		// Left face
-		{ glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(-1.0f,  0.5f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back left
-		{ glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(-1.0f,  0.5f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front left
-		{ glm::vec3( 0.0f, 1.0f,  0.0f), glm::vec3(-1.0f,  0.5f,  0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }, // top
+		// Front face	    
+		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front left
+		{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // front right
+		{ glm::vec3(0.0f,  0.5f,  0.0f), glm::vec3(0.0f,  1.0f,  1.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }, // top
 
-		// Front face
-		{ glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3( 0.0f,  0.5f, -1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front left
-		{ glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3( 0.0f,  0.5f, -1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // front right
-		{ glm::vec3( 0.0f, 1.0f,  0.0f), glm::vec3( 0.0f,  0.5f, -1.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }, // top
+		// Right face	    
+		{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // front right
+		{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back right
+		{ glm::vec3(0.0f,  0.5f,  0.0f), glm::vec3(1.0f,  1.0f,  0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }, // top
 
-		// Right face
-		{ glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3( 1.0f,  0.5f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // front right
-		{ glm::vec3( 0.5f, 0.0f,  0.5f), glm::vec3( 1.0f,  0.5f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // back right
-		{ glm::vec3( 0.0f, 1.0f,  0.0f), glm::vec3( 1.0f,  0.5f,  0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }, // top
+		// Back face	    
+		{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  1.0f, -1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back right
+		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  1.0f, -1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back left
+		{ glm::vec3(0.0f,  0.5f,  0.0f), glm::vec3(0.0f,  1.0f, -1.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }, // top
 
-		// Back face
-		{ glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3( 0.0f,  0.5f,  1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back left
-		{ glm::vec3( 0.5f, 0.0f,  0.5f), glm::vec3( 0.0f,  0.5f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // back right
-		{ glm::vec3( 0.0f, 1.0f,  0.0f), glm::vec3( 0.0f,  0.5f,  1.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }  // top
+		// Left face	    
+		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back left
+		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front left
+		{ glm::vec3(0.0f,  0.5f,  0.0f), glm::vec3(-1.0f,  1.0f,  0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f) }  // top
 	};
 
 	std::vector<GLuint> pyramidIndices
 	{
-		0, 1, 2,		// top left base triangle
-		0, 3, 2,		// bottom right base triangle
-		4, 5, 6,		// left face triangle
-		7, 9, 8,		// back face triangle
-		10, 11, 12,		// right face triangle
-		13, 15, 14		// front face triangle
+		0, 1, 2,		// bottom right base triangle
+		2, 3, 0,		// top left base triangle
+		4, 5, 6,		// front face triangle
+		7, 8, 9,		// right face triangle
+		10, 11, 12,		// back face triangle
+		13, 14, 15		// left face triangle
 	};
 
 	// Data for a cube
 	std::vector<VertexStruct> cubeVertices
 	{
 		//	             COORDS		                    NORMALS                  TEXT COORDS                  COLORS
-		// Front face
-		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front bottom left
-		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // front top left
-		{ glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front top right
-		{ glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // front bottom right
-
-		// Back face
-		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back bottom left
-		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // back top left
-		{ glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back top right
-		{ glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back bottom right
-
-		// Left face
-		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back bottom left
-		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // back top left
-		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // front top left
-		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front bottom left
-
-		// Right face
-		{ glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3( 1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back bottom right
-		{ glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3( 1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back top right
-		{ glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3( 1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back top right
-		{ glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3( 1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back bottom right
+		// Bottom face
+		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back bottom left
+		{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back bottom right
+		{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) }, // front bottom right
+		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front bottom left
 
 		// Top face
-		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // front top left
-		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f) }, // back top left
-		{ glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // back top right
-		{ glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front top right
+		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front top left
+		{ glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f) }, // front top right
+		{ glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back top right
+		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back top left
 
-		// Bottom face
-		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // front bottom left
-		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back bottom left
-		{ glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back bottom right
-		{ glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }  // front bottom right
+		// Front face
+		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front bottom left
+		{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) }, // front bottom right
+		{ glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f) }, // front top right
+		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front top left
+
+		// Right face
+		{ glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) }, // front bottom right
+		{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back bottom right
+		{ glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back top right
+		{ glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f) }, // front top right
+
+		// Back face
+		{ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back bottom right
+		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back bottom left
+		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back top left
+		{ glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f) }, // back top right
+
+		// Left face
+		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) }, // back bottom left
+		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front bottom left
+		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f) }, // front top left
+		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f) }  // back top left
 	};
 
 	std::vector<GLuint> cubeIndices
 	{
-		0, 1, 2,		// top left, front face triangle
-		0, 3, 2,		// bottom right, front face triangle
+		0, 1, 2,		// bottom right, front face triangle
+		2, 3, 0,		// top left, front face triangle
 
-		4, 5, 6,		// top left, back face triangle
-		4, 7, 6,		// bottom right, back face triangle
+		4, 5, 6,		// bottom right, back face triangle
+		6, 7, 4,		// top left, back face triangle
 
-		8, 9, 10,		// top left, left face triangle
-		8, 11, 10,		// bottom right, left face triangle
+		8, 9, 10,		// bottom right, left face triangle
+		10, 11, 8,		// top left, left face triangle
 
-		12, 13, 14,		// top right, right face triangle
-		12, 15, 14,		// bottom left, right face triangle
+		12, 13, 14,		// bottom right, right face triangle
+		14, 15, 12,		// top left, right face triangle
 
-		16, 17, 18,		// top left, top face triangle
-		16, 19, 18,		// bottom right, top face triangle
+		16, 17, 18,		// bottom right, top face triangle
+		18, 19, 16,		// top left, top face triangle
 
-		20, 21, 22,		// bottom left, bottom face triangle
-		20, 23, 22		// top right, bottom face triangle
+		20, 21, 22,		// bottom right, bottom face triangle
+		22, 23, 20		// top right, bottom face triangle
 	};
 
 	// Supports: texture_diffuse, texture_specular, texture_normal, texture_height
-	std::vector<TextureStruct> objectTextures
+	std::vector<TextureStruct> defaultTexture
 	{
 		{ "texture_diffuse", "resources/textures/default.png" }
 	};
 
-	std::vector<TextureStruct> object2Textures
+	std::vector<TextureStruct> noiseTexture
 	{
 		{ "texture_diffuse", "resources/textures/noise.png" }
 	};
@@ -140,19 +140,15 @@ void World::Init()
 
 	// Create meshes
 	meshObjects.push_back(Mesh());
-	meshObjects[0].CreateBuffers(cubeVertices, cubeIndices, objectTextures);
+	meshObjects[0].CreateBuffers(cubeVertices, cubeIndices, defaultTexture);
 	meshObjects.push_back(Mesh());
-	meshObjects[1].CreateBuffers(pyramidVertices, pyramidIndices, object2Textures);
+	meshObjects[1].CreateBuffers(pyramidVertices, pyramidIndices, noiseTexture);
 
 	// Create models
-	modelLights.push_back(Model());
-	modelLights[0].Import("resources/models/sphere.obj");
-	modelObjects.push_back(Model());
-	modelObjects[0].Import("resources/models/sphere.obj", object2Textures);
-	modelObjects.push_back(Model());
-	modelObjects[1].Import("resources/models/backpack.obj", "resources/textures/backpack/");
-	modelObjects.push_back(Model());
-	modelObjects[2].Import("resources/models/scimitar.obj", "resources/textures/scimitar/");
+	parser.ParseScene("src/xml/scene.xml"); // Parse XML
+	parser.CreateModels(parser.scene); // Initialize models
+	//parser.CreateModelLights(parser.scene); // Initialize all lights of type MODEL from the XML
+	//parser.CreateModelObjects(parser.scene); // Initialize all objects of type MODEL from the XML
 
 	// Create textures
 	//meshObjects[0].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
@@ -173,19 +169,38 @@ void World::Init()
 	//texture.Bind(GL_TEXTURE_2D, 0); // Bind proper texture to the GPU
 	//texture.GenerateMipmap(GL_LINEAR, GL_REPEAT); // Generate mipmap
 	//texture.Unbind(); // Unbind texture
+
+	// Enable backface culling
+	Culler::BackFaceCulling();
 }
 
 void World::End()
 {
 	// Delete buffers
-	meshObjects[0].DeleteBuffers(); // Delete object's buffers
-	meshObjects[1].DeleteBuffers(); // Delete object's buffers
+	meshObjects[0].DeleteBuffers();
+	meshObjects[1].DeleteBuffers();
+
+	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	{
+		parser.modelLights[i].DeleteBuffers();
+	}
+	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	{
+		parser.modelObjects[i].DeleteBuffers();
+	}
 
 	// Delete textures
-	modelLights[0].DeleteTextures(); // Delete light source's textures
-	modelObjects[0].DeleteTextures(); // Delete all textures and meshes for the model
-	modelObjects[1].DeleteTextures(); // Delete all textures and meshes for the model
-	modelObjects[2].DeleteTextures(); // Delete all textures and meshes for the model
+	meshObjects[0].DeleteTextures();
+	meshObjects[1].DeleteTextures();
+
+	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	{
+		parser.modelLights[i].DeleteTextures();
+	}
+	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	{
+		parser.modelObjects[i].DeleteTextures();
+	}
 
 	// Delete shaders
 	lightShader.Delete();
@@ -208,24 +223,22 @@ void World::Draw(GLFWwindow* window)
 	lightShader.Use(); // Use light source's shaders
 	lightShader.InitMatrices(view, projection); // Send view and projection matrix to light source's shaders
 
-	// Render without texture
-	modelLights[0].Draw(lightShader.id, glm::vec3(-2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	parser.DrawModelLights(lightShader.id); // Draw all lights of type MODEL from the XML
 
 	// RENDER NORMAL OBJECTS SECTION
 	objectShader.Use(); // Use object's shader
 	// Send material data to object's shaders
-	objectShader.InitMaterial(modelLights[0].position, modelLights[0].color, camera.position,
+	objectShader.InitMaterial(parser.modelLights[0].position, parser.modelLights[0].color, camera.position,
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
 
 	meshObjects[0].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-	meshObjects[0].Draw(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Create texture then draw
+	meshObjects[0].Draw(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	meshObjects[1].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-	meshObjects[1].DrawChild(objectShader.id, meshObjects[0], glm::vec3(2.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f)); // Create texture then draw
+	meshObjects[1].DrawChild(objectShader.id, meshObjects[0],
+		glm::vec3(2.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 
-	modelObjects[0].Draw(objectShader.id, glm::vec3(2.0f, 2.0f, -6.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 1.0f)); // Create all meshes, then all textures and apply them to every mesh
-	modelObjects[1].Draw(objectShader.id, glm::vec3(7.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)); // Create all meshes
-	modelObjects[2].Draw(objectShader.id, glm::vec3(-5.0f, 0.0f, -7.0f), glm::vec3(-90.0f, 0.0f, 0.0f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(1.0f, 1.0f, 1.0f));
+	parser.DrawModelObjects(objectShader.id); // Draw all objects of type MODEL from the XML
 }
 
 void World::AfterDrawing(GLFWwindow* window)

@@ -176,6 +176,7 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\engine\Camera.cpp" />
+    <ClCompile Include="..\src\engine\Culler.cpp" />
     <ClCompile Include="..\src\engine\EBO.cpp" />
     <ClCompile Include="..\src\engine\Engine.cpp" />
     <ClCompile Include="..\src\engine\Model.cpp" />
@@ -186,12 +187,15 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClCompile Include="..\src\engine\VAO.cpp" />
     <ClCompile Include="..\src\engine\VBO.cpp" />
     <ClCompile Include="..\src\engine\World.cpp" />
+    <ClCompile Include="..\src\engine\XMLParser.cpp" />
     <ClCompile Include="..\src\glad.c" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\pugixml.cpp" />
     <ClCompile Include="..\src\stb.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\Camera.h" />
+    <ClInclude Include="..\src\engine\Culler.h" />
     <ClInclude Include="..\src\engine\EBO.h" />
     <ClInclude Include="..\src\engine\Engine.h" />
     <ClInclude Include="..\src\engine\Model.h" />
@@ -202,6 +206,7 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClInclude Include="..\src\engine\VAO.h" />
     <ClInclude Include="..\src\engine\VBO.h" />
     <ClInclude Include="..\src\engine\World.h" />
+    <ClInclude Include="..\src\engine\XMLParser.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

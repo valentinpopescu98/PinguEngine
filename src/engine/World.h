@@ -7,10 +7,12 @@
 #include <iostream>
 
 #include "Utils.h"
+#include "XMLParser.h"
 #include "Camera.h"
 #include "Shader.h"
 #include "Mesh.h"
 #include "Model.h"
+#include "Culler.h"
 
 class World : public Utils
 {
@@ -24,10 +26,10 @@ class World : public Utils
 		void AfterDrawing(GLFWwindow* window);
 
 		// INSTANCES
+		XMLParser parser;
 		Shader objectShader, lightShader;
 		Camera camera;
 		std::vector<Mesh> meshLights, meshObjects;
-		std::vector<Model> modelLights, modelObjects;
 
 		// UNIFORMS
 		glm::mat4 view, projection;

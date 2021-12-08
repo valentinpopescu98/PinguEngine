@@ -1,9 +1,12 @@
 #include "Model.h"
 
 // Import mesh. Use with render method without texture parameters
-void Model::Import(std::string meshPath)
+void Model::Import(std::string meshPath, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
-    hasTexture = 0;
+    this->position = position + parent.position;
+    this->rotation = rotation + parent.rotation;
+    this->scale = scale * parent.scale;
+    this->color = color;
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(meshPath, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -17,9 +20,13 @@ void Model::Import(std::string meshPath)
 }
 
 // Import mesh and textures from a texture structure. Use with render method with texture parameters
-void Model::Import(std::string meshPath, std::vector<TextureStruct> customTextures)
+void Model::Import(std::string meshPath, std::vector<TextureStruct> customTextures, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
-    hasTexture = 1;
+    this->position = position + parent.position;
+    this->rotation = rotation + parent.rotation;
+    this->scale = scale * parent.scale;
+    this->color = color;
+
     textures = customTextures;
 
     Assimp::Importer importer;
@@ -34,9 +41,13 @@ void Model::Import(std::string meshPath, std::vector<TextureStruct> customTextur
 }
 
 // Import mesh and textures from a physical directory. Use with render method with texture parameters
-void Model::Import(std::string meshPath, std::string texturesDirPath)
+void Model::Import(std::string meshPath, std::string texturesDirPath, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
-    hasTexture = 2;
+    this->position = position + parent.position;
+    this->rotation = rotation + parent.rotation;
+    this->scale = scale * parent.scale;
+    this->color = color;
+
     this->texturesDirPath = texturesDirPath;
 
     Assimp::Importer importer;
@@ -69,7 +80,11 @@ void Model::Import(std::string meshPath, std::string texturesDirPath)
     }
 
     ProcessNode(scene->mRootNode, scene);
+}
 
+// Create textures for imported models
+void Model::CreateTextures()
+{
     for (GLuint i = 0; i < meshes.size(); i++)
     {
         meshes[i].textures = textures;
@@ -77,24 +92,13 @@ void Model::Import(std::string meshPath, std::string texturesDirPath)
     }
 }
 
-// Render meshes. Use with import method without texture parameters
-void Model::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+// Delete all buffers for all the meshes
+void Model::DeleteBuffers()
 {
-    this->position = position;
-    this->rotation = rotation;
-    this->scale = scale;
-    this->color = color;
-
     for (GLuint i = 0; i < meshes.size(); i++)
     {
-        meshes[i].Draw(shaderID, position, rotation, scale, color);
+        meshes[i].DeleteBuffers();
     }
-}
-
-// Render child meshes. Use with import method without texture parameters
-void Model::DrawChild(GLuint shaderID, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
-{
-    Draw(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
 }
 
 // Delete all textures for all the meshes
@@ -103,6 +107,15 @@ void Model::DeleteTextures()
     for (GLuint i = 0; i < meshes.size(); i++)
     {
         meshes[i].DeleteTextures();
+    }
+}
+
+// Render meshes. Use with import method without texture parameters
+void Model::Draw(GLuint shaderID)
+{
+    for (GLuint i = 0; i < meshes.size(); i++)
+    {
+        meshes[i].Draw(shaderID, this->position, this->rotation, this->scale, this->color);
     }
 }
 
