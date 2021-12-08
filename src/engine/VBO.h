@@ -6,7 +6,7 @@
 
 #include "Utils.h"
 
-class VBO : public Utils
+class VBO
 {
 	public:
 		void Create(std::vector<GLfloat> vertices);

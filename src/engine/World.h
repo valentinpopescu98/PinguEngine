@@ -11,10 +11,9 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Mesh.h"
-#include "Model.h"
 #include "Culler.h"
 
-class World : public Utils
+class World
 {
 	public:
 		void Init();

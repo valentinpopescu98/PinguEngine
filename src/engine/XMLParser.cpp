@@ -43,13 +43,13 @@ void XMLParser::CreateModels(pugi::xml_node node)
 			if (entity.name() == (std::string)"light")
 			{
 				modelLights.push_back(Model());
-				modelLights.back().Import(modelPath, parent,
+				modelLights.back().Import(parent, modelPath,
 					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
 			}
 			else if (entity.name() == (std::string)"object")
 			{
 				modelObjects.push_back(Model());
-				modelObjects.back().Import(modelPath, parent,
+				modelObjects.back().Import(parent, modelPath,
 					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
 			}
 		}
@@ -58,14 +58,14 @@ void XMLParser::CreateModels(pugi::xml_node node)
 			if (entity.name() == (std::string)"light")
 			{
 				modelLights.push_back(Model());
-				modelLights.back().Import(modelPath, texturePath, parent,
+				modelLights.back().Import(parent, modelPath, texturePath,
 					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
 				modelLights.back().CreateTextures();
 			}
 			else if (entity.name() == (std::string)"object")
 			{
 				modelObjects.push_back(Model());
-				modelObjects.back().Import(modelPath, texturePath, parent,
+				modelObjects.back().Import(parent, modelPath, texturePath,
 					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
 				modelObjects.back().CreateTextures();
 			}

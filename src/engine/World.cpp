@@ -146,9 +146,7 @@ void World::Init()
 
 	// Create models
 	parser.ParseScene("src/xml/scene.xml"); // Parse XML
-	parser.CreateModels(parser.scene); // Initialize models
-	//parser.CreateModelLights(parser.scene); // Initialize all lights of type MODEL from the XML
-	//parser.CreateModelObjects(parser.scene); // Initialize all objects of type MODEL from the XML
+	parser.CreateModels(parser.scene); // Initialize models from the XML
 
 	// Create textures
 	//meshObjects[0].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);

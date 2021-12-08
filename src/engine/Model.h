@@ -12,16 +12,16 @@
 #include "Mesh.h"
 #include "Texture.h"
 
-class Model : public Utils
+class Model
 {
 public:
-	void Import(std::string meshPath, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
-	void Import(std::string meshPath, std::vector<TextureStruct> customTextures, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
-	void Import(std::string meshPath, std::string texturesDirPath, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
-	void Draw(GLuint shaderID);
-	void CreateTextures();
+	void Import(Model& parent, std::string meshPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+	void Import(Model& parent, std::string meshPath, std::vector<TextureStruct> customTextures, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+	void Import(Model& parent, std::string meshPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
 	void DeleteBuffers();
+	void CreateTextures();
 	void DeleteTextures();
+	void Draw(GLuint shaderID);
 
 	glm::vec3 position;
 	glm::vec3 rotation;
@@ -29,7 +29,6 @@ public:
 	glm::vec3 color;
 private:
 	int CheckErrors(const aiScene* scene, Assimp::Importer& importer);
-	void TextureFromFile(const char* path);
 	std::vector<TextureStruct> ReadTexturesOfType(aiMaterial* mat, aiTextureType type, std::string typeName);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	void ProcessNode(aiNode* node, const aiScene* scene);

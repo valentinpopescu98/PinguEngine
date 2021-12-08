@@ -25,10 +25,10 @@ struct TextureStruct
 class Utils
 {
 public:
-	std::string GetFileContents(const char* filePath);
-	std::vector<std::string> GetFileLines(const char* filePath);
-	void SendMatrix4x4_Uniform(GLuint shaderID, const char* uniform, glm::mat4 matrix);
-	void Send1f_Uniform(GLuint shaderID, const char* uniform, float value);
-	void Send1i_Uniform(GLuint shaderID, const char* uniform, int value);
-	void Send3f_Uniform(GLuint shaderID, const char* uniform, glm::vec3 values);
+	static std::string GetFileContents(const char* filePath);
+	static std::vector<std::string> GetFileLines(const char* filePath);
+	static void SendMatrix4x4_Uniform(GLuint shaderID, const char* uniform, glm::mat4 matrix);
+	static void Send1f_Uniform(GLuint shaderID, const char* uniform, float value);
+	static void Send1i_Uniform(GLuint shaderID, const char* uniform, int value);
+	static void Send3f_Uniform(GLuint shaderID, const char* uniform, glm::vec3 values);
 };

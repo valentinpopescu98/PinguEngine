@@ -15,7 +15,7 @@
 #include "VBO.h"
 #include "EBO.h"
 
-class Mesh : public Utils
+class Mesh
 {
 	public:
         void CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices);
@@ -37,9 +37,7 @@ class Mesh : public Utils
         glm::vec3 position;
         glm::vec3 rotation;
         glm::vec3 scale;
-        glm::vec3 color;
-
-        bool hasTexture = false;
+        glm::vec3 color;        
     private:
         // Render data
         VAO vao;
@@ -48,4 +46,5 @@ class Mesh : public Utils
         Texture texture;
         /* Variable that toggles when any of the CreateTexture overloads is called.
            To work properly, you need to create a new Mesh or Model class for every new object, even if it is of the same type. */
+        bool hasTexture = false;
 };

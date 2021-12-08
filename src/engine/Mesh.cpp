@@ -71,7 +71,7 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
         else if (textures[i].type == "texture_normal")
             number = std::to_string(normalNr++); // transfer unsigned int to string
 
-        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
+        Utils::Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
         texture.Bind(textureDimension, i); // Bind proper texture to the GPU
 
         texture.GenerateMipmap(interpType, wrapType); // Generate mipmap
@@ -104,7 +104,7 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
         else if (textures[i].type == "texture_height")
             number = std::to_string(heightNr++); // transfer unsigned int to string
 
-        Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
+        Utils::Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
         texture.Bind(textureDimension, i); // Bind proper texture to the GPU
 
         texture.GenerateMipmap(interpType, &borderColor[0]); // Generate mipmap with specific border color
@@ -136,9 +136,9 @@ void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::ve
     model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     model = glm::scale(model, scale);
 
-    Send1i_Uniform(shaderID, "hasTexture", hasTexture);
-    SendMatrix4x4_Uniform(shaderID, "model", model); // Send view matrix as uniform to the GPU
-    Send3f_Uniform(shaderID, "objColor", glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
+    Utils::Send1i_Uniform(shaderID, "hasTexture", hasTexture);
+    Utils::SendMatrix4x4_Uniform(shaderID, "model", model); // Send view matrix as uniform to the GPU
+    Utils::Send3f_Uniform(shaderID, "objColor", glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
 
     // Draw mesh
     vao.Bind();

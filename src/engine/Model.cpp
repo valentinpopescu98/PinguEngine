@@ -1,7 +1,7 @@
 #include "Model.h"
 
 // Import mesh. Use with render method without texture parameters
-void Model::Import(std::string meshPath, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Model::Import(Model& parent, std::string meshPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->position = position + parent.position;
     this->rotation = rotation + parent.rotation;
@@ -20,7 +20,7 @@ void Model::Import(std::string meshPath, Model& parent, glm::vec3 position, glm:
 }
 
 // Import mesh and textures from a texture structure. Use with render method with texture parameters
-void Model::Import(std::string meshPath, std::vector<TextureStruct> customTextures, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Model::Import(Model& parent, std::string meshPath, std::vector<TextureStruct> customTextures, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->position = position + parent.position;
     this->rotation = rotation + parent.rotation;
@@ -41,7 +41,7 @@ void Model::Import(std::string meshPath, std::vector<TextureStruct> customTextur
 }
 
 // Import mesh and textures from a physical directory. Use with render method with texture parameters
-void Model::Import(std::string meshPath, std::string texturesDirPath, Model& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Model::Import(Model& parent, std::string meshPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->position = position + parent.position;
     this->rotation = rotation + parent.rotation;

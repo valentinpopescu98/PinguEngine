@@ -5,7 +5,7 @@
 
 #include "Utils.h"
 
-class Shader : public Utils
+class Shader
 {
 	public:
 		void Create(const char* vertexShaderPath, const char* fragmentShaderPath);
