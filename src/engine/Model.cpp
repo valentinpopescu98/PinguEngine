@@ -1,7 +1,7 @@
 #include "Model.h"
 
 // Import mesh. Use with render method without texture parameters
-void Model::Import(Model& parent, std::string meshPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Model::Import(Model& parent, std::string modelPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->position = position + parent.position;
     this->rotation = rotation + parent.rotation;
@@ -9,28 +9,7 @@ void Model::Import(Model& parent, std::string meshPath, glm::vec3 position, glm:
     this->color = color;
 
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(meshPath, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-    if (CheckErrors(scene, importer))
-    {
-        return;
-    }
-
-    ProcessNode(scene->mRootNode, scene);
-}
-
-// Import mesh and textures from a texture structure. Use with render method with texture parameters
-void Model::Import(Model& parent, std::string meshPath, std::vector<TextureStruct> customTextures, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
-{
-    this->position = position + parent.position;
-    this->rotation = rotation + parent.rotation;
-    this->scale = scale * parent.scale;
-    this->color = color;
-
-    textures = customTextures;
-
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(meshPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate);
 
     if (CheckErrors(scene, importer))
     {
@@ -41,7 +20,7 @@ void Model::Import(Model& parent, std::string meshPath, std::vector<TextureStruc
 }
 
 // Import mesh and textures from a physical directory. Use with render method with texture parameters
-void Model::Import(Model& parent, std::string meshPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+void Model::Import(Model& parent, std::string modelPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->position = position + parent.position;
     this->rotation = rotation + parent.rotation;
@@ -51,7 +30,7 @@ void Model::Import(Model& parent, std::string meshPath, std::string texturesDirP
     this->texturesDirPath = texturesDirPath;
 
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(meshPath, aiProcess_Triangulate);
+    const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
     if (CheckErrors(scene, importer))
     {

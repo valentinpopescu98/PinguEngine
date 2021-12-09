@@ -8,14 +8,15 @@
 #include <iostream>
 
 #include "Model.h"
+#include "Culler.h"
 
 class XMLParser
 {
 	public:
 		void ParseScene(const char* path);
 		void CreateModels(pugi::xml_node node);
-		void DrawModelLights(GLuint shaderID);
-		void DrawModelObjects(GLuint shaderID);
+		void DrawModelLights(GLuint shaderID, Camera& camera);
+		void DrawModelObjects(GLuint shaderID, Camera& camera);
 
 		pugi::xml_node scene;
 		std::vector<Model> modelLights, modelObjects;

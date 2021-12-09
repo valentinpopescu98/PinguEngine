@@ -207,6 +207,7 @@ void World::End()
 
 void World::BeforeDrawing()
 {
+	glfwPollEvents(); // Take care of GLFW events
 	glClearColor(0.05f, 0.1f, 0.2f, 1.0f); // Wipe drawing from previous frame with a black color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color buffer and depth buffer
 }
@@ -221,7 +222,7 @@ void World::Draw(GLFWwindow* window)
 	lightShader.Use(); // Use light source's shaders
 	lightShader.InitMatrices(view, projection); // Send view and projection matrix to light source's shaders
 
-	parser.DrawModelLights(lightShader.id); // Draw all lights of type MODEL from the XML
+	parser.DrawModelLights(lightShader.id, camera); // Draw all lights of type MODEL from the XML
 
 	// RENDER NORMAL OBJECTS SECTION
 	objectShader.Use(); // Use object's shader
@@ -236,13 +237,13 @@ void World::Draw(GLFWwindow* window)
 	meshObjects[1].DrawChild(objectShader.id, meshObjects[0],
 		glm::vec3(2.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 
-	parser.DrawModelObjects(objectShader.id); // Draw all objects of type MODEL from the XML
+	parser.DrawModelObjects(objectShader.id, camera); // Draw all objects of type MODEL from the XML
 }
 
 void World::AfterDrawing(GLFWwindow* window)
 {
 	glfwSwapBuffers(window); // Swap front and back buffer
-	glfwPollEvents(); // Take care of GLFW events
+	glFlush(); // Empty buffers - improves performance
 }
 
 void World::Run(GLFWwindow* window)

@@ -15,9 +15,8 @@
 class Model
 {
 public:
-	void Import(Model& parent, std::string meshPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
-	void Import(Model& parent, std::string meshPath, std::vector<TextureStruct> customTextures, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
-	void Import(Model& parent, std::string meshPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+	void Import(Model& parent, std::string modelPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+	void Import(Model& parent, std::string modelPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
 	void DeleteBuffers();
 	void CreateTextures();
 	void DeleteTextures();

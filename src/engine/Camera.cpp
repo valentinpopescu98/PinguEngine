@@ -19,7 +19,7 @@ void Camera::UpdateMatrices(float FOVdeg, float nearPlane, float farPlane, glm::
 	// Compute view matrix based on camera rotation
 	view = glm::lookAt(position, position + orientation, up);
 	// Compute the projection matrix based on perspective
-	projection = glm::perspective(glm::radians(FOVdeg), Engine::aspectRation, nearPlane, farPlane);
+	projection = glm::perspective(glm::radians(FOVdeg), Engine::aspectRatio, nearPlane, farPlane);
 }
 
 void Camera::TreatMouseRotation(GLFWwindow* window, double deltaTime)

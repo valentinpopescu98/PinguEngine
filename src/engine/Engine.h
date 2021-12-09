@@ -14,8 +14,8 @@ public:
 	static void EnableVsync(bool isEnabled);
 	static void CheckErrorCodes();
 
-	static unsigned int resX, resY;
-	static float aspectRation;
+	static GLuint resX, resY;
+	static float aspectRatio;
 
 	static double previousTime;
 	static double elapsedTime;

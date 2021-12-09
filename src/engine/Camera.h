@@ -21,8 +21,8 @@ class Camera
 		glm::vec3 orientation = glm::vec3(0.0f, 0.0f, -1.0f); // Variable for the forward vector
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // Variable for the up vector
 		glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f); // Variable for the right vector
-		float nearPlane, farPlane;
 		float FOVdeg;
+		float nearPlane, farPlane;
 
 		// UNIFORMS
 		GLuint viewLoc, projectionLoc;

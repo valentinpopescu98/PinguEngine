@@ -6,31 +6,23 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Camera.h"
-
-struct Plan
-{
-    glm::vec3 normal = { 0.0f, 1.0f, 0.0f }; // Unit vector
-    float distance = 0.0f; // Distance from origin to the nearest point in the plan
-};
-
-struct Frustum
-{
-    Plan topFace;
-    Plan bottomFace;
-
-    Plan leftFace;
-    Plan rightFace;
-
-    Plan nearFace;
-    Plan farFace;
-};
+#include "Mesh.h"
+#include "Model.h"
 
 class Culler
 {
 	public:
 		static void FrontFaceCulling();
 		static void BackFaceCulling();
-		static void FrustumCulling();
+		static bool MeshInFrustum(Camera& camera, Mesh& mesh);
+		static bool ModelInFrustum(Camera& camera, Model& model);
     private:
-        Frustum CreateFrustumFromCamera(const Camera& cam, float aspect, float fovY, float zNear, float zFar);
+		static void SetCamInternals(Camera& camera);
+		static void SetCamDef(Camera& camera);
+		static int SphereInFrustum(Camera& camera, glm::vec3 spherePos, float radius);
+
+		static enum { OUTSIDE, INTERSECT, INSIDE };
+		static glm::vec3 X, Y, Z; // Camera referential
+		static float sphereFactorX, sphereFactorY; // Variables required to test spheres
+		static float tang;
 };

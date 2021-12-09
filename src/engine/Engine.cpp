@@ -1,7 +1,7 @@
 #include "Engine.h"
 
-unsigned int Engine::resX, Engine::resY;
-float Engine::aspectRation;
+GLuint Engine::resX, Engine::resY;
+float Engine::aspectRatio;
 
 double Engine::previousTime = 0.0;
 double Engine::elapsedTime = 0.0;
@@ -54,7 +54,7 @@ GLFWwindow* Engine::CreateWindow(unsigned int resX, unsigned int resY)
 	// Set resolution variables for further use
 	Engine::resX = resX;
 	Engine::resY = resY;
-	Engine::aspectRation = (float)resX / resY; // Set aspect ratio variable for further use
+	Engine::aspectRatio = (float)resX / resY; // Set aspect ratio variable for further use
 	
 	return window;
 }

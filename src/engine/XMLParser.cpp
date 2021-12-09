@@ -89,7 +89,7 @@ void XMLParser::CreateModels(pugi::xml_node node)
 }
 
 // Draw all lights of type MODEL from the XML
-void XMLParser::DrawModelLights(GLuint shaderID)
+void XMLParser::DrawModelLights(GLuint shaderID, Camera& camera)
 {
 	for (Model lightSource : modelLights)
 	{
@@ -98,10 +98,13 @@ void XMLParser::DrawModelLights(GLuint shaderID)
 }
 
 // Draw all objects of type MODEL from the XML
-void XMLParser::DrawModelObjects(GLuint shaderID)
+void XMLParser::DrawModelObjects(GLuint shaderID, Camera& camera)
 {
 	for (Model object : modelObjects)
 	{
-		object.Draw(shaderID);
+		if (Culler::ModelInFrustum(camera, object))
+		{
+			object.Draw(shaderID);
+		}
 	}
 }
