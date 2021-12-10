@@ -225,8 +225,14 @@ void World::Draw(GLFWwindow* window)
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
 
-	meshObjects[0].Draw(objectShader.id);
-	meshObjects[1].Draw(objectShader.id);
+	if (Culler::MeshInFrustum(camera, meshObjects[0]))
+	{
+		meshObjects[0].Draw(objectShader.id);
+	}
+	if (Culler::MeshInFrustum(camera, meshObjects[1]))
+	{
+		meshObjects[1].Draw(objectShader.id);
+	}
 
 	parser.DrawModelObjects(objectShader.id, camera); // Draw all objects of type MODEL from the XML
 }

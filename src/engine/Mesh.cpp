@@ -68,9 +68,8 @@ void Mesh::CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum texture
     this->firstTextureID = firstTextureID;
 
     GLuint diffuseNr = 1;
-    GLuint specularNr = 1;
-    GLuint normalNr = 1;
-    GLuint heightNr = 1;
+    //GLuint specularNr = 1;
+    //GLuint normalNr = 1;
     std::string number;
 
     for (GLuint i = 0; i < textures.size(); i++)
@@ -80,10 +79,10 @@ void Mesh::CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum texture
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
-        else if (textures[i].type == "texture_specular")
-            number = std::to_string(specularNr++); // Transfer unsigned int to string
-        else if (textures[i].type == "texture_normal")
-            number = std::to_string(normalNr++); // transfer unsigned int to string
+        //else if (textures[i].type == "texture_specular")
+        //    number = std::to_string(specularNr++); // Transfer unsigned int to string
+        //else if (textures[i].type == "texture_normal")
+        //    number = std::to_string(normalNr++); // transfer unsigned int to string
 
         Utils::Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
         texture.Bind(textureDimension, i + firstTextureID); // Bind proper texture to the GPU
@@ -101,8 +100,8 @@ void Mesh::CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum texture
     this->firstTextureID = firstTextureID;
 
     GLuint diffuseNr = 1; // Counter for diffuse texture number
-    GLuint specularNr = 1; // Counter for specular texture number
-    GLuint normalNr = 1; // Counter for normal texture number
+    //GLuint specularNr = 1; // Counter for specular texture number
+    //GLuint normalNr = 1; // Counter for normal texture number
     std::string number; // String for the number of the used texture
 
     for (GLuint i = 0; i < textures.size(); i++)
@@ -112,10 +111,10 @@ void Mesh::CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum texture
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
-        else if (textures[i].type == "texture_specular")
-            number = std::to_string(specularNr++); // Transfer unsigned int to string
-        else if (textures[i].type == "texture_normal")
-            number = std::to_string(normalNr++); // transfer unsigned int to string
+        //else if (textures[i].type == "texture_specular")
+        //    number = std::to_string(specularNr++); // Transfer unsigned int to string
+        //else if (textures[i].type == "texture_normal")
+        //    number = std::to_string(normalNr++); // transfer unsigned int to string
 
         Utils::Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
         texture.Bind(textureDimension, i + firstTextureID); // Bind proper texture to the GPU

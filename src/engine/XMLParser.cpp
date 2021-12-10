@@ -97,7 +97,10 @@ void XMLParser::DrawModelLights(GLuint shaderID, Camera& camera)
 {
 	for (Model lightSource : modelLights)
 	{
-		lightSource.Draw(shaderID);
+		if (Culler::ModelInFrustum(camera, lightSource))
+		{
+			lightSource.Draw(shaderID);
+		}
 	}
 }
 

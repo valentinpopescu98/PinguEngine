@@ -52,9 +52,9 @@ void Model::Import(Model& parent, std::string modelPath, std::string texturesDir
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
         /*std::vector<TextureStruct> specularMaps = ReadTexturesOfType(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());*/
+        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-        /*std::vector<TextureStruct> normalMaps = ReadTexturesOfType(material, aiTextureType_HEIGHT, "texture_normal");
+        std::vector<TextureStruct> normalMaps = ReadTexturesOfType(material, aiTextureType_HEIGHT, "texture_normal");
         textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());*/
     }
 
@@ -71,7 +71,7 @@ void Model::CreateTextures(GLuint firstTextureID)
         meshes[i].CreateTextures(shaderID, firstTextureID, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
     }
 
-    nextTextureID = firstTextureID + 3; // Give texture index for the next model
+    nextTextureID = firstTextureID + 1; // Give texture index for the next model
 }
 
 // Delete all buffers for all the meshes
