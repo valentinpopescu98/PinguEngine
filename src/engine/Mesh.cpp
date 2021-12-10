@@ -136,11 +136,6 @@ void Mesh::DeleteTextures()
 // Use this to render a mesh
 void Mesh::Draw(GLuint shaderID)
 {
-    this->position = position;
-    this->rotation = rotation;
-    this->scale = scale;
-    this->color = color;
-
     glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
     // Calculate object's global position, rotation and scale
     model = glm::translate(model, position);

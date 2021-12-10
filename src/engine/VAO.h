@@ -6,12 +6,12 @@
 
 class VAO
 {
-public:
-	void Create();
-	void Delete();
-	void Bind();
-	void Unbind();
-	void LinkVBO(VBO& vbo, GLuint layoutLocation, GLsizei stride, const void* startPtr);
+	public:
+		void Create();
+		void Delete();
+		void Bind();
+		void Unbind();
+		void LinkVBO(VBO& vbo, GLuint layoutLocation, GLsizei stride, const void* startPtr);
 
-	GLuint id;
+		GLuint id;
 };

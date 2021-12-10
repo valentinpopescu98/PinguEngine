@@ -6,21 +6,21 @@
 
 class Engine
 {
-public:
-	static void Init();
-	static void End(GLFWwindow* window);
-	static GLFWwindow* CreateWindow(unsigned int resX, unsigned int resY);
-	static void SetTimeValues();
-	static void EnableVsync(bool isEnabled);
-	static void CheckErrorCodes();
+	public:
+		static void Init();
+		static void End(GLFWwindow* window);
+		static GLFWwindow* CreateWindow(unsigned int resX, unsigned int resY);
+		static void SetTimeValues();
+		static void EnableVsync(bool isEnabled);
+		static void CheckErrorCodes();
 
-	static GLuint resX, resY;
-	static float aspectRatio;
+		static GLuint resX, resY;
+		static float aspectRatio;
 
-	static double previousTime;
-	static double elapsedTime;
-	static double deltaTime;
-private:
-	static int CheckFailCreateWindow(GLFWwindow* window);
-	static int LoadGlad();
+		static double previousTime;
+		static double elapsedTime;
+		static double deltaTime;
+	private:
+		static int CheckFailCreateWindow(GLFWwindow* window);
+		static int LoadGlad();
 };

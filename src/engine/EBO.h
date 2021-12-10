@@ -5,11 +5,11 @@
 
 class EBO
 {
-public:
-	void Create(std::vector<GLuint> indices);
-	void Delete();
-	void Bind();
-	void Unbind();
+	public:
+		void Create(std::vector<GLuint> indices);
+		void Delete();
+		void Bind();
+		void Unbind();
 
-	GLuint id;
+		GLuint id;
 };
