@@ -138,35 +138,29 @@ void World::Init()
 	lightShader.Create("src/shaders/light.vert", "src/shaders/light.frag");
 	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
 
+	// Initialize camera
+	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 0.0f), 60.0f, 0.1f, 100.0f);
+
 	// Create meshes
+	Mesh origin;
+	origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
+	origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
 	meshObjects.push_back(Mesh());
-	meshObjects[0].CreateBuffers(cubeVertices, cubeIndices, defaultTexture);
+	meshObjects[0].CreateBuffers(cubeVertices, cubeIndices, defaultTexture,
+		origin, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	meshObjects.push_back(Mesh());
-	meshObjects[1].CreateBuffers(pyramidVertices, pyramidIndices, noiseTexture);
+	meshObjects[1].CreateBuffers(pyramidVertices, pyramidIndices, noiseTexture,
+		meshObjects[0], glm::vec3(2.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+
+	// Create mesh textures
+	meshObjects[0].CreateTextures(objectShader.id, 0, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
+	meshObjects[1].CreateTextures(objectShader.id, meshObjects[0].textures.size(), GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
 
 	// Create models
-	parser.ParseScene("src/xml/scene.xml"); // Parse XML
+	parser.Init("src/xml/scene.xml", meshObjects[0].textures.size() + meshObjects[1].textures.size()); // Parse XML
 	parser.CreateModels(parser.scene); // Initialize models from the XML
-
-	// Create textures
-	//meshObjects[0].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-	//meshObjects[1].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-
-	// Create texture
-	//meshObjects[0].hasTexture = true;
-	//texture.Create(meshObjects[0].textures[0].path.c_str(), 0, GL_TEXTURE0); // Load proper image and create a texture for it
-	////Send1i_Uniform(objectShader.id, "texture_diffuse1", 0); // Send texture name to the shader
-	//texture.Bind(GL_TEXTURE_2D, 0); // Bind proper texture to the GPU
-	//texture.GenerateMipmap(GL_LINEAR, GL_REPEAT); // Generate mipmap
-	//texture.Unbind(); // Unbind texture
-
-	//// Create texture
-	//meshObjects[1].hasTexture = true;
-	//texture.Create(meshObjects[1].textures[0].path.c_str(), 2, GL_TEXTURE0); // Load proper image and create a texture for it
-	////Send1i_Uniform(objectShader.id, "texture_diffuse1", 2); // Send texture name to the shader
-	//texture.Bind(GL_TEXTURE_2D, 0); // Bind proper texture to the GPU
-	//texture.GenerateMipmap(GL_LINEAR, GL_REPEAT); // Generate mipmap
-	//texture.Unbind(); // Unbind texture
 
 	// Enable backface culling
 	Culler::BackFaceCulling();
@@ -216,7 +210,7 @@ void World::Draw(GLFWwindow* window)
 {
 	// Treat camera inputs (WASD - move on X/Z axis, LEFT CTRL/SPACE - move on Y axis, SHIFT - speed modifier)
 	camera.TreatInputs(window, Engine::deltaTime);
-	camera.UpdateMatrices(60.0f, 0.1f, 100.0f, view, projection); // Compute view and projection matrices
+	camera.UpdateMatrices(view, projection); // Compute view and projection matrices
 
 	// RENDER LIGHT SOURCES SECTION
 	lightShader.Use(); // Use light source's shaders
@@ -231,11 +225,8 @@ void World::Draw(GLFWwindow* window)
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
 
-	meshObjects[0].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-	meshObjects[0].Draw(objectShader.id, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	meshObjects[1].CreateTextures(objectShader.id, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
-	meshObjects[1].DrawChild(objectShader.id, meshObjects[0],
-		glm::vec3(2.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+	meshObjects[0].Draw(objectShader.id);
+	meshObjects[1].Draw(objectShader.id);
 
 	parser.DrawModelObjects(objectShader.id, camera); // Draw all objects of type MODEL from the XML
 }
@@ -243,15 +234,12 @@ void World::Draw(GLFWwindow* window)
 void World::AfterDrawing(GLFWwindow* window)
 {
 	glfwSwapBuffers(window); // Swap front and back buffer
-	glFlush(); // Empty buffers - improves performance
+	glFlush(); // Empties buffers - improves performance
 }
 
 void World::Run(GLFWwindow* window)
 {
 	glEnable(GL_DEPTH_TEST); // Enable depth
-
-	// Initialize camera with window dimensions and with specified starting position
-	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Loop until window is closed
 	while (!glfwWindowShouldClose(window))

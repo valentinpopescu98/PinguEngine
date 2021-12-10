@@ -18,7 +18,7 @@ public:
 	void Import(Model& parent, std::string modelPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
 	void Import(Model& parent, std::string modelPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
 	void DeleteBuffers();
-	void CreateTextures();
+	void CreateTextures(GLuint firstTextureID);
 	void DeleteTextures();
 	void Draw(GLuint shaderID);
 
@@ -26,6 +26,8 @@ public:
 	glm::vec3 rotation;
 	glm::vec3 scale;
 	glm::vec3 color;
+
+	GLuint nextTextureID;
 private:
 	int CheckErrors(const aiScene* scene, Assimp::Importer& importer);
 	std::vector<TextureStruct> ReadTexturesOfType(aiMaterial* mat, aiTextureType type, std::string typeName);

@@ -1,9 +1,15 @@
 #include "Mesh.h"
 
-void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices)
+void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint> indices,
+    Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->vertices = vertices;
     this->indices = indices;
+
+    this->position = position + parent.position;
+    this->rotation = rotation + parent.rotation;
+    this->scale = scale * parent.scale;
+    this->color = color;
 
     // Create buffers
     vao.Create(); // Create VAO and bind it
@@ -20,11 +26,17 @@ void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigne
     ebo.Unbind(); // Unbind EBO
 }
 
-void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<unsigned int> indices, std::vector<TextureStruct> textures)
+void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint> indices, std::vector<TextureStruct> textures,
+    Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
     this->vertices = vertices;
     this->indices = indices;
     this->textures = textures;
+
+    this->position = position + parent.position;
+    this->rotation = rotation + parent.rotation;
+    this->scale = scale * parent.scale;
+    this->color = color;
 
     // Create buffers
     vao.Create(); // Create VAO and bind it
@@ -49,9 +61,11 @@ void Mesh::DeleteBuffers()
 }
 
 // Use this for objects with textures wrapped with anything except GL_CLAMP_TO_BORDER
-void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, GLint wrapType)
+void Mesh::CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum textureDimension, GLint interpType, GLint wrapType)
 {
     hasTexture = true;
+    this->textureDimension = textureDimension;
+    this->firstTextureID = firstTextureID;
 
     GLuint diffuseNr = 1;
     GLuint specularNr = 1;
@@ -62,7 +76,7 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
     for (GLuint i = 0; i < textures.size(); i++)
     {
         // Create texture
-        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+        texture.Create(textures[i].path.c_str(), i + firstTextureID, GL_TEXTURE0 + i); // Load proper image and create a texture for it
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
@@ -72,7 +86,7 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
             number = std::to_string(normalNr++); // transfer unsigned int to string
 
         Utils::Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
-        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
+        texture.Bind(textureDimension, i + firstTextureID); // Bind proper texture to the GPU
 
         texture.GenerateMipmap(interpType, wrapType); // Generate mipmap
         texture.Unbind(); // Unbind texture
@@ -80,20 +94,21 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
 }
 
 // Use this for objects with textures wrapped with GL_CLAMP_TO_BORDER
-void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
+void Mesh::CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor)
 {
     hasTexture = true;
+    this->textureDimension = textureDimension;
+    this->firstTextureID = firstTextureID;
 
     GLuint diffuseNr = 1; // Counter for diffuse texture number
     GLuint specularNr = 1; // Counter for specular texture number
     GLuint normalNr = 1; // Counter for normal texture number
-    GLuint heightNr = 1; // Counter for height texture number
     std::string number; // String for the number of the used texture
 
     for (GLuint i = 0; i < textures.size(); i++)
     {
         // Create texture
-        texture.Create(textures[i].path.c_str(), i, GL_TEXTURE0 + i); // Load proper image and create a texture for it
+        texture.Create(textures[i].path.c_str(), i + firstTextureID, GL_TEXTURE0 + i); // Load proper image and create a texture for it
 
         if (textures[i].type == "texture_diffuse")
             number = std::to_string(diffuseNr++); // Transfer unsigned int to string
@@ -101,11 +116,9 @@ void Mesh::CreateTextures(GLuint shaderID, GLenum textureDimension, GLint interp
             number = std::to_string(specularNr++); // Transfer unsigned int to string
         else if (textures[i].type == "texture_normal")
             number = std::to_string(normalNr++); // transfer unsigned int to string
-        else if (textures[i].type == "texture_height")
-            number = std::to_string(heightNr++); // transfer unsigned int to string
 
         Utils::Send1i_Uniform(shaderID, (textures[i].type + number).c_str(), i); // Send texture name to the shader
-        texture.Bind(textureDimension, i); // Bind proper texture to the GPU
+        texture.Bind(textureDimension, i + firstTextureID); // Bind proper texture to the GPU
 
         texture.GenerateMipmap(interpType, &borderColor[0]); // Generate mipmap with specific border color
         texture.Unbind(); // Unbind texture
@@ -120,8 +133,8 @@ void Mesh::DeleteTextures()
     }
 }
 
-// Use this to render a mesh with no texture
-void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+// Use this to render a mesh
+void Mesh::Draw(GLuint shaderID)
 {
     this->position = position;
     this->rotation = rotation;
@@ -142,13 +155,15 @@ void Mesh::Draw(GLuint shaderID, glm::vec3 position, glm::vec3 rotation, glm::ve
 
     // Draw mesh
     vao.Bind();
+    for (GLuint i = 0; i < textures.size(); i++)
+    {
+        texture.Bind(textureDimension, i + firstTextureID); // Bind proper texture to the GPU
+    }
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     vao.Unbind();
+    for (GLuint i = 0; i < textures.size(); i++)
+    {
+        texture.Unbind(); // Unbind texture
+    }
     glActiveTexture(GL_TEXTURE0); // Reset to default texture
-}
-
-// Use this to render a child mesh with no texture
-void Mesh::DrawChild(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
-{
-    Draw(shaderID, position + parent.position, rotation + parent.rotation, scale * parent.scale, color);
 }

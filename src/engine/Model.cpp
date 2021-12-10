@@ -62,13 +62,16 @@ void Model::Import(Model& parent, std::string modelPath, std::string texturesDir
 }
 
 // Create textures for imported models
-void Model::CreateTextures()
+void Model::CreateTextures(GLuint firstTextureID)
 {
     for (GLuint i = 0; i < meshes.size(); i++)
     {
-        meshes[i].textures = textures;
-        meshes[i].CreateTextures(shaderID, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
+        meshes[i].textures = textures; // Give the parsed textures to each mesh
+        // Create texture diffuse, texture specular and texture normal
+        meshes[i].CreateTextures(shaderID, firstTextureID, GL_TEXTURE_2D, GL_LINEAR, GL_REPEAT);
     }
+
+    nextTextureID = firstTextureID + 3; // Give texture index for the next model
 }
 
 // Delete all buffers for all the meshes
@@ -94,7 +97,7 @@ void Model::Draw(GLuint shaderID)
 {
     for (GLuint i = 0; i < meshes.size(); i++)
     {
-        meshes[i].Draw(shaderID, this->position, this->rotation, this->scale, this->color);
+        meshes[i].Draw(shaderID);
     }
 }
 
@@ -207,8 +210,14 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     }
 
     // Process material
+    Mesh origin;
+    origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
     Mesh meshObj;
-    meshObj.CreateBuffers(vertices, indices, textures);
+    meshObj.CreateBuffers(vertices, indices, textures,
+        origin, this->position, this->rotation, this->scale, this->color);
 
     return meshObj;
 }

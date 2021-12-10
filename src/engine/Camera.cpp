@@ -1,18 +1,18 @@
 #include "Camera.h"
 
-void Camera::Init(unsigned int width, unsigned int height, glm::vec3 position)
+void Camera::Init(GLuint width, GLuint height, glm::vec3 position, float FOVdeg, float nearPlane, float farPlane)
 {
 	this->width = width;
 	this->height = height;
 	this->position = position;
-}
 
-void Camera::UpdateMatrices(float FOVdeg, float nearPlane, float farPlane, glm::mat4& view, glm::mat4& projection)
-{
 	this->FOVdeg = FOVdeg;
 	this->nearPlane = nearPlane;
 	this->farPlane = farPlane;
+}
 
+void Camera::UpdateMatrices(glm::mat4& view, glm::mat4& projection)
+{
 	view = glm::mat4(1.0f); // Create view matrix as identity matrix
 	projection = glm::mat4(1.0f); // Create projection matrix as identity matrix
 

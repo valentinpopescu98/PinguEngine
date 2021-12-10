@@ -1,7 +1,9 @@
 #include "XMLParser.h"
 
-void XMLParser::ParseScene(const char* path)
+void XMLParser::Init(const char* path, GLuint firstTextureID)
 {
+	this->firstTextureID = firstTextureID;
+
 	pugi::xml_parse_result result = doc.load_file(path); // Load the XML file
 	scene = doc.child("scene"); // Create node for the scene
 }
@@ -60,14 +62,16 @@ void XMLParser::CreateModels(pugi::xml_node node)
 				modelLights.push_back(Model());
 				modelLights.back().Import(parent, modelPath, texturePath,
 					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
-				modelLights.back().CreateTextures();
+				modelLights.back().CreateTextures(firstTextureID);
+				firstTextureID += modelLights.back().nextTextureID;
 			}
 			else if (entity.name() == (std::string)"object")
 			{
 				modelObjects.push_back(Model());
 				modelObjects.back().Import(parent, modelPath, texturePath,
 					glm::vec3(posX, posY, posZ), glm::vec3(rotX, rotY, rotZ), glm::vec3(scaleX, scaleY, scaleZ), glm::vec3(colX, colY, colZ));
-				modelObjects.back().CreateTextures();
+				modelObjects.back().CreateTextures(firstTextureID);
+				firstTextureID += modelObjects.back().nextTextureID;
 			}
 		}
 

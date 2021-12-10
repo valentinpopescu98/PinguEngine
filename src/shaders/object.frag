@@ -18,7 +18,9 @@ uniform bool hasTexture; // Variable that determines if textures are to be used 
 uniform vec3 lightColor; // Color of the light source (TODO: implement a combined color from many light sources)
 uniform vec3 lightPos; // Color of the light position (TODO: implement an array of many light sources)
 uniform vec3 camPos; // Position of the camera
-uniform sampler2D texture_diffuse1; // Value coresponding to the used texture slot
+uniform sampler2D texture_diffuse1; // Value coresponding to the used diffuse texture slot
+uniform sampler2D texture_specular1; // Value coresponding to the used specular texture slot
+uniform sampler2D texture_normal1; // Value coresponding to the used normal texture slot
 uniform Material material;
 
 void main()
@@ -49,7 +51,8 @@ void main()
 
 	if (hasTexture)
 	{
-		outColor = texture(texture_diffuse1, textCoord) * vec4(color * lightColor * phong, 1.0f); // Output color of each fragment
+		outColor =  mix(texture(texture_diffuse1, textCoord), texture(texture_specular1, textCoord), texture(texture_normal1, textCoord)) *
+			vec4(color * lightColor * phong, 1.0f); // Output color of each fragment
 	}
 	else
 	{
