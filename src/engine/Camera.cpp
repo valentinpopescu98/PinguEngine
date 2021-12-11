@@ -1,12 +1,12 @@
 #include "Camera.h"
 
-void Camera::Init(GLuint width, GLuint height, glm::vec3 position, float FOVdeg, float nearPlane, float farPlane)
+void Camera::Init(GLuint width, GLuint height, glm::vec3 position, float fovY, float nearPlane, float farPlane)
 {
 	this->width = width;
 	this->height = height;
 	this->position = position;
 
-	this->FOVdeg = FOVdeg;
+	this->fovY = fovY;
 	this->nearPlane = nearPlane;
 	this->farPlane = farPlane;
 }
@@ -44,7 +44,7 @@ void Camera::UpdateMatrices(glm::mat4& view, glm::mat4& projection)
 	// Compute view matrix based on camera rotation
 	view = glm::lookAt(position, position + forward, vecUp);
 	// Compute the projection matrix based on perspective
-	projection = glm::perspective(glm::radians(FOVdeg), Engine::aspectRatio, nearPlane, farPlane);
+	projection = glm::perspective(glm::radians(fovY), Engine::aspectRatio, nearPlane, farPlane);
 }
 
 void Camera::TreatMouseRotation(GLFWwindow* window, double deltaTime)

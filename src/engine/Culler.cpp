@@ -18,9 +18,6 @@ void Culler::BackFaceCulling()
 
 bool Culler::MeshInFrustum(Camera& camera, Mesh& mesh)
 {
-	SetCamInternals(camera);
-	SetCamDef(camera);
-
 	float longestSide = mesh.scale.x;
 	longestSide = mesh.scale.y > mesh.scale.x ? mesh.scale.y : mesh.scale.x;
 	longestSide = mesh.scale.z > longestSide ? mesh.scale.z : longestSide;
@@ -35,9 +32,6 @@ bool Culler::MeshInFrustum(Camera& camera, Mesh& mesh)
 
 bool Culler::ModelInFrustum(Camera& camera, Model& model)
 {
-	SetCamInternals(camera);
-	SetCamDef(camera);
-
 	float longestSide = model.scale.x;
 	longestSide = model.scale.y > model.scale.x ? model.scale.y : model.scale.x;
 	longestSide = model.scale.z > longestSide ? model.scale.z : longestSide;
@@ -50,60 +44,55 @@ bool Culler::ModelInFrustum(Camera& camera, Model& model)
 	return true;
 }
 
-void Culler::SetCamInternals(Camera& camera)
+void Culler::ComputeSphereData(Camera& camera)
 {
-	// Compute width and height of the near section
-	tang = tan(glm::radians(camera.FOVdeg / 2.0f));
-	sphereFactorY = 1.0f / cos(camera.FOVdeg / 2.0f);
+	tang = tan(glm::radians(camera.fovY / 2.0f)); // Tangent needed to calculate the height of the frustum
 
-	// Compute half of the the horizontal field of view and sphereFactorX
-	float angleX = glm::atan(tang * Engine::aspectRatio);
-	sphereFactorX = 1.0f / cos(angleX);
-}
+	sphereFactorY = 1.0f / cos(camera.fovY / 2.0f); // How small the the sphere is vertically relative to its size near the camera
 
-void Culler::SetCamDef(Camera& camera)
-{
-	// Compute the Z axis of the camera referential
-	// This axis points in the same direction from the looking direction
-	Z = glm::normalize(camera.forward - camera.position);
+	float angleX = glm::atan(tang * Engine::aspectRatio); // Compute half of the the horizontal FOV and sphereFactorX
+	sphereFactorX = 1.0f / cos(angleX); // How small the the sphere is horizontally relative to its size near the camera
 
-	// X axis of camera is the cross product of Z axis and given "up" vector 
-	X = glm::normalize(camera.right - camera.position);
-
-	// The real "up" vector is the cross product of X and Z
-	Y = glm::cross(X, Z);
+	Z = glm::normalize(camera.forward - camera.position); // Forward vector from camera
+	X = glm::normalize(camera.right - camera.position); // Right vector from camera
+	Y = glm::cross(X, Z); // Up vector from camera
 }
 
 int Culler::SphereInFrustum(Camera& camera, glm::vec3 spherePos, float radius)
 {
-	float d;
-	float az, ax, ay;
-	int result = INSIDE;
+	ComputeSphereData(camera);
 
-	glm::vec3 v = spherePos - camera.position;
+	float d; // The sphere radius length without taking perspective in consideration
+	float ax, ay, az; // Sphere center coordinates relative to camera's X, Y, Z
+	int result = INSIDE; // Sphere actual state
+
+	glm::vec3 v = spherePos - camera.position; // Vector from camera to sphere center
 
 	az = glm::dot(v, Z);
+	// Check if sphere inner radius is outside the frustum on OZ axis
 	if (az > camera.farPlane + radius or az < camera.nearPlane - radius)
 		return(OUTSIDE);
-
+	// Check if sphere inner radius is intersecting the frustum on OZ axis
 	if (az > camera.farPlane - radius or az < camera.nearPlane + radius)
 		result = INTERSECT;
 
 	ay = glm::dot(v, Y);
+	az *= tang; // This is now the height of the frustum
 	d = sphereFactorY * radius;
-	az *= tang;
+	// Check if sphere inner radius is outside the frustum on OY axis
 	if (ay > az + d or ay < -az - d)
 		return(OUTSIDE);
-
+	// Check if sphere inner radius is intersecting the frustum on OY axis
 	if (ay > az - d or ay < -az + d)
 		result = INTERSECT;
 
 	ax = glm::dot(v, X);
-	az *= Engine::aspectRatio;
+	az *= Engine::aspectRatio; // This is now the width of the frustum
 	d = sphereFactorX * radius;
+	// Check if sphere inner radius is outside the frustum on OX axis
 	if (ax > az + d or ax < -az - d)
 		return(OUTSIDE);
-
+	// Check if sphere inner radius is intersecting the frustum on OX axis
 	if (ax > az - d or ax < -az + d)
 		result = INTERSECT;
 

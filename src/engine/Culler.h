@@ -17,8 +17,7 @@ class Culler
 		static bool MeshInFrustum(Camera& camera, Mesh& mesh);
 		static bool ModelInFrustum(Camera& camera, Model& model);
     private:
-		static void SetCamInternals(Camera& camera);
-		static void SetCamDef(Camera& camera);
+		static void ComputeSphereData(Camera& camera);
 		static int SphereInFrustum(Camera& camera, glm::vec3 spherePos, float radius);
 
 		static enum { OUTSIDE, INTERSECT, INSIDE };
