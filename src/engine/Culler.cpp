@@ -52,31 +52,26 @@ bool Culler::ModelInFrustum(Camera& camera, Model& model)
 
 void Culler::SetCamInternals(Camera& camera)
 {
-	// compute width and height of the near section
-	tang = tan(glm::radians(camera.FOVdeg / 2));
-	sphereFactorY = 1.0 / cos(camera.FOVdeg / 2);
+	// Compute width and height of the near section
+	tang = tan(glm::radians(camera.FOVdeg / 2.0f));
+	sphereFactorY = 1.0f / cos(camera.FOVdeg / 2.0f);
 
-	// compute half of the the horizontal field of view and sphereFactorX
-	float anglex = glm::atan(tang * Engine::aspectRatio);
-	sphereFactorX = 1.0 / cos(anglex);
-	//heigth = nearD * tang;
-	//width = height * ratio;
+	// Compute half of the the horizontal field of view and sphereFactorX
+	float angleX = glm::atan(tang * Engine::aspectRatio);
+	sphereFactorX = 1.0f / cos(angleX);
 }
 
 void Culler::SetCamDef(Camera& camera)
 {
-	// compute the Z axis of the camera referential
-	// this axis points in the same direction from
-	// the looking direction
-	Z = camera.orientation - camera.position;
-	glm::normalize(Z);
+	// Compute the Z axis of the camera referential
+	// This axis points in the same direction from the looking direction
+	Z = glm::normalize(camera.forward - camera.position);
 
 	// X axis of camera is the cross product of Z axis and given "up" vector 
-	X = Z * camera.up;
-	glm::normalize(X);
+	X = glm::normalize(camera.right - camera.position);
 
-	// the real "up" vector is the cross product of X and Z
-	Y = X * Z;
+	// The real "up" vector is the cross product of X and Z
+	Y = glm::cross(X, Z);
 }
 
 int Culler::SphereInFrustum(Camera& camera, glm::vec3 spherePos, float radius)
@@ -87,29 +82,29 @@ int Culler::SphereInFrustum(Camera& camera, glm::vec3 spherePos, float radius)
 
 	glm::vec3 v = spherePos - camera.position;
 
-	az = glm::dot(v, -Z);
-	if (az > camera.farPlane + radius || az < camera.nearPlane - radius)
+	az = glm::dot(v, Z);
+	if (az > camera.farPlane + radius or az < camera.nearPlane - radius)
 		return(OUTSIDE);
 
-	if (az > camera.farPlane - radius || az < camera.nearPlane + radius)
+	if (az > camera.farPlane - radius or az < camera.nearPlane + radius)
 		result = INTERSECT;
 
 	ay = glm::dot(v, Y);
 	d = sphereFactorY * radius;
 	az *= tang;
-	if (ay > az + d || ay < -az - d)
+	if (ay > az + d or ay < -az - d)
 		return(OUTSIDE);
 
-	if (ay > az - d || ay < -az + d)
+	if (ay > az - d or ay < -az + d)
 		result = INTERSECT;
 
 	ax = glm::dot(v, X);
 	az *= Engine::aspectRatio;
 	d = sphereFactorX * radius;
-	if (ax > az + d || ax < -az - d)
+	if (ax > az + d or ax < -az - d)
 		return(OUTSIDE);
 
-	if (ax > az - d || ax < -az + d)
+	if (ax > az - d or ax < -az + d)
 		result = INTERSECT;
 
 	return(result);
