@@ -139,7 +139,7 @@ void World::Init()
 	objectShader.Create("src/shaders/object.vert", "src/shaders/object.frag");
 
 	// Initialize camera
-	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 0.0f), 60.0f, 0.1f, 100.0f);
+	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 0.0f), 70.0f, 0.1f, 20.0f);
 
 	// Create meshes
 	Mesh origin;

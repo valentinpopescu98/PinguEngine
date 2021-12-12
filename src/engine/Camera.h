@@ -20,6 +20,7 @@ class Camera
 		glm::vec3 position;
 		glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f); // Variable for the forward vector
 		glm::vec3 right; // Variable for the right vector
+		glm::vec3 vecUp = glm::vec3(0.0f, 1.0f, 0.0f); // Variable for (0, 1, 0)
 		float fovY;
 		float nearPlane, farPlane;
 
@@ -29,7 +30,6 @@ class Camera
 		void TreatMouseRotation(GLFWwindow* window, double deltaTime);
 		void TreatKeyboardInputs(GLFWwindow* window, double deltaTime);
 
-		glm::vec3 vecUp = glm::vec3(0.0f, 1.0f, 0.0f); // Variable for the up vector
 		bool firstClick = true; // Variable for moving cursor to the middle of the cursor only one time in the main loop
 		GLuint width, height;
 		float speed = 2.5f; // Default speed with SHIFT unpressed

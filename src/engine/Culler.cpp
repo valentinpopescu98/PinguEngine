@@ -46,15 +46,15 @@ bool Culler::ModelInFrustum(Camera& camera, Model& model)
 
 void Culler::ComputeSphereData(Camera& camera)
 {
-	tang = tan(glm::radians(camera.fovY / 2.0f)); // Tangent needed to calculate the height of the frustum
+	float angleY = glm::radians(camera.fovY / 2.0f); // Compute half of the the vertical FOV in radians
+	tang = tan(angleY); // Tangent needed to calculate the height of the frustum
+	sphereFactorY = 1.0f / cos(angleY); // How small the the sphere is vertically relative to its size near the camera
 
-	sphereFactorY = 1.0f / cos(camera.fovY / 2.0f); // How small the the sphere is vertically relative to its size near the camera
-
-	float angleX = glm::atan(tang * Engine::aspectRatio); // Compute half of the the horizontal FOV and sphereFactorX
+	float angleX = glm::atan(tang * Engine::aspectRatio); // Compute half of the the horizontal FOV in radians
 	sphereFactorX = 1.0f / cos(angleX); // How small the the sphere is horizontally relative to its size near the camera
 
 	Z = glm::normalize(camera.forward - camera.position); // Forward vector from camera
-	X = glm::normalize(camera.right - camera.position); // Right vector from camera
+	X = glm::normalize(glm::cross(Z, camera.vecUp)); // Right vector from camera
 	Y = glm::cross(X, Z); // Up vector from camera
 }
 
