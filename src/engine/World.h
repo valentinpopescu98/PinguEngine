@@ -23,6 +23,7 @@ class World
 		void BeforeDrawing();
 		void Draw(GLFWwindow* window);
 		void AfterDrawing(GLFWwindow* window);
+		void ReloadModels();
 
 		// INSTANCES
 		XMLParser parser;

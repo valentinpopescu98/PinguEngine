@@ -250,6 +250,11 @@ void World::Run(GLFWwindow* window)
 	// Loop until window is closed
 	while (!glfwWindowShouldClose(window))
 	{
+		//if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+		//{
+		//	ReloadModels(); // LAGGY AF
+		//}
+
 		BeforeDrawing();
 		Draw(window);
 		AfterDrawing(window);
@@ -257,4 +262,10 @@ void World::Run(GLFWwindow* window)
 		Engine::SetTimeValues(); // Compute deltaTime
 		Engine::CheckErrorCodes(); // Check for GLAD error codes
 	}
+}
+
+void World::ReloadModels()
+{
+	parser.Init("src/xml/scene.xml", meshObjects[0].textures.size() + meshObjects[1].textures.size()); // Parse XML
+	parser.CreateModels(parser.scene); // Initialize models from the XML
 }

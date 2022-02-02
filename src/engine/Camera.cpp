@@ -92,12 +92,12 @@ void Camera::TreatKeyboardInputs(GLFWwindow* window, double deltaTime)
 		position += speed * right * (float)deltaTime;
 	}
 	// Treat SPACE as upwards move
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 	{
 		position += speed * vecUp * (float)deltaTime;
 	}
 	// Treat LEFT CTRL as downwards move
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 	{
 		position += speed * -vecUp * (float)deltaTime;
 	}
