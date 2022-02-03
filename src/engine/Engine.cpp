@@ -1,15 +1,19 @@
 #include "Engine.h"
 
-GLuint Engine::resX, Engine::resY;
+GLint Engine::resX, Engine::resY;
 float Engine::aspectRatio;
 
 double Engine::previousTime = 0.0;
 double Engine::elapsedTime = 0.0;
 double Engine::deltaTime = 0.0;
 
-void Engine::Init() 
+int Engine::Init() 
 {
-	glfwInit(); // Initialize GLFW
+	// Initialize GLFW
+	if (!glfwInit())
+	{
+		return -1;
+	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // GLFW version 3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // GLFW version 3.3
@@ -41,7 +45,7 @@ int Engine::LoadGlad()
 	}
 }
 
-GLFWwindow* Engine::CreateWindow(unsigned int resX, unsigned int resY) 
+GLFWwindow* Engine::CreateWindow(int resX, int resY) 
 {
 	GLFWwindow* window = glfwCreateWindow(resX, resY, "Pingu Engine", NULL, NULL); // Create window
 
@@ -49,8 +53,10 @@ GLFWwindow* Engine::CreateWindow(unsigned int resX, unsigned int resY)
 	glfwMakeContextCurrent(window); // Make window's context current
 
 	LoadGlad();
-	glViewport(0, 0, resX, resY); // Set viewport between bottom left and top right corner of the window
 
+	/* TODO: resX, resYand aspectRatio are computed after each frame
+	*  If I remove next lines program will crash because it needs these variables for camera I think.
+	*/
 	// Set resolution variables for further use
 	Engine::resX = resX;
 	Engine::resY = resY;

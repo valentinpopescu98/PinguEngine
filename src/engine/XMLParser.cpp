@@ -1,6 +1,6 @@
 #include "XMLParser.h"
 
-void XMLParser::Init(const char* path, GLuint firstTextureID)
+void XmlParser::Init(const char* path, GLuint firstTextureID)
 {
 	this->firstTextureID = firstTextureID;
 
@@ -9,7 +9,7 @@ void XMLParser::Init(const char* path, GLuint firstTextureID)
 }
 
 // Initialize all MODELS from the XML
-void XMLParser::CreateModels(pugi::xml_node node)
+void XmlParser::CreateModels(pugi::xml_node node)
 {
 	for (pugi::xml_node entity : node.children())
 	{
@@ -93,7 +93,7 @@ void XMLParser::CreateModels(pugi::xml_node node)
 }
 
 // Draw all lights of type MODEL from the XML
-void XMLParser::DrawModelLights(GLuint shaderID, Camera& camera)
+void XmlParser::DrawModelLights(GLuint shaderID, Camera& camera)
 {
 	for (Model lightSource : modelLights)
 	{
@@ -105,7 +105,7 @@ void XMLParser::DrawModelLights(GLuint shaderID, Camera& camera)
 }
 
 // Draw all objects of type MODEL from the XML
-void XMLParser::DrawModelObjects(GLuint shaderID, Camera& camera)
+void XmlParser::DrawModelObjects(GLuint shaderID, Camera& camera)
 {
 	for (Model object : modelObjects)
 	{

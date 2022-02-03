@@ -7,14 +7,14 @@
 class Engine
 {
 	public:
-		static void Init();
+		static int Init();
 		static void End(GLFWwindow* window);
-		static GLFWwindow* CreateWindow(unsigned int resX, unsigned int resY);
+		static GLFWwindow* CreateWindow(int resX, int resY);
 		static void SetTimeValues();
 		static void EnableVsync(bool isEnabled);
 		static void CheckErrorCodes();
 
-		static GLuint resX, resY;
+		static GLint resX, resY;
 		static float aspectRatio;
 
 		static double previousTime;

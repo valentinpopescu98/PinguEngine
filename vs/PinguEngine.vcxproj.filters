@@ -8,11 +8,9 @@
     <ClCompile Include="..\src\engine\World.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\glad.c" />
     <ClCompile Include="..\src\engine\Shader.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\stb.c" />
     <ClCompile Include="..\src\engine\VAO.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -40,8 +38,20 @@
     <ClCompile Include="..\src\engine\Culler.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pugixml.cpp" />
-    <ClCompile Include="..\src\engine\XMLParser.cpp">
+    <ClCompile Include="..\src\engine\XmlParser.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\src\glad.c" />
+    <ClCompile Include="..\dependencies\src\pugixml.cpp" />
+    <ClCompile Include="..\dependencies\src\stb.c" />
+    <ClCompile Include="..\dependencies\src\imgui.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_demo.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_draw.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_tables.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_widgets.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\src\engine\GuiDrawer.cpp">
       <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -109,7 +119,11 @@
     <ClInclude Include="..\src\engine\Culler.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\engine\XMLParser.h">
+    <ClInclude Include="..\src\engine\XmlParser.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\src\engine\GuiDrawer.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>

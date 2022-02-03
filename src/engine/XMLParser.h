@@ -10,7 +10,7 @@
 #include "Model.h"
 #include "Culler.h"
 
-class XMLParser
+class XmlParser
 {
 	public:
 		void Init(const char* path, GLuint firstTextureID);

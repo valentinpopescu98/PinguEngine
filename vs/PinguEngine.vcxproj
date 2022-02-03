@@ -175,10 +175,21 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependencies\src\glad.c" />
+    <ClCompile Include="..\dependencies\src\imgui.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_demo.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_draw.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_tables.cpp" />
+    <ClCompile Include="..\dependencies\src\imgui_widgets.cpp" />
+    <ClCompile Include="..\dependencies\src\pugixml.cpp" />
+    <ClCompile Include="..\dependencies\src\stb.c" />
     <ClCompile Include="..\src\engine\Camera.cpp" />
     <ClCompile Include="..\src\engine\Culler.cpp" />
     <ClCompile Include="..\src\engine\EBO.cpp" />
     <ClCompile Include="..\src\engine\Engine.cpp" />
+    <ClCompile Include="..\src\engine\GuiDrawer.cpp" />
     <ClCompile Include="..\src\engine\Model.cpp" />
     <ClCompile Include="..\src\engine\Texture.cpp" />
     <ClCompile Include="..\src\engine\Utils.cpp" />
@@ -187,17 +198,15 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClCompile Include="..\src\engine\VAO.cpp" />
     <ClCompile Include="..\src\engine\VBO.cpp" />
     <ClCompile Include="..\src\engine\World.cpp" />
-    <ClCompile Include="..\src\engine\XMLParser.cpp" />
-    <ClCompile Include="..\src\glad.c" />
+    <ClCompile Include="..\src\engine\XmlParser.cpp" />
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\pugixml.cpp" />
-    <ClCompile Include="..\src\stb.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\Camera.h" />
     <ClInclude Include="..\src\engine\Culler.h" />
     <ClInclude Include="..\src\engine\EBO.h" />
     <ClInclude Include="..\src\engine\Engine.h" />
+    <ClInclude Include="..\src\engine\GuiDrawer.h" />
     <ClInclude Include="..\src\engine\Model.h" />
     <ClInclude Include="..\src\engine\Texture.h" />
     <ClInclude Include="..\src\engine\Utils.h" />
@@ -206,7 +215,8 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClInclude Include="..\src\engine\VAO.h" />
     <ClInclude Include="..\src\engine\VBO.h" />
     <ClInclude Include="..\src\engine\World.h" />
-    <ClInclude Include="..\src\engine\XMLParser.h" />
+    <ClInclude Include="..\src\engine\XmlParser.h" />
+    <ClInclude Include="..\src\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

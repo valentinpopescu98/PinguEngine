@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "Utils.h"
+#include "GuiDrawer.h"
 #include "XMLParser.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -26,7 +27,7 @@ class World
 		void ReloadModels();
 
 		// INSTANCES
-		XMLParser parser;
+		XmlParser parser;
 		Shader objectShader, lightShader;
 		Camera camera;
 		std::vector<Mesh> meshLights, meshObjects;
