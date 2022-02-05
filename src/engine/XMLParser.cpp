@@ -9,7 +9,7 @@ void XmlParser::Init(const char* path, GLuint firstTextureID)
 }
 
 // Initialize all MODELS from the XML
-void XmlParser::CreateModels(pugi::xml_node node)
+void XmlParser::CreateModels(pugi::xml_node node, std::vector<Model>& modelLights, std::vector<Model>& modelObjects)
 {
 	for (pugi::xml_node entity : node.children())
 	{
@@ -87,31 +87,7 @@ void XmlParser::CreateModels(pugi::xml_node node)
 				parent = modelObjects.back();
 			}
 
-			CreateModels(childrenNode);
-		}
-	}
-}
-
-// Draw all lights of type MODEL from the XML
-void XmlParser::DrawModelLights(GLuint shaderID, Camera& camera)
-{
-	for (Model lightSource : modelLights)
-	{
-		if (Culler::ModelInFrustum(camera, lightSource))
-		{
-			lightSource.Draw(shaderID);
-		}
-	}
-}
-
-// Draw all objects of type MODEL from the XML
-void XmlParser::DrawModelObjects(GLuint shaderID, Camera& camera)
-{
-	for (Model object : modelObjects)
-	{
-		if (Culler::ModelInFrustum(camera, object))
-		{
-			object.Draw(shaderID);
+			CreateModels(childrenNode, modelLights, modelObjects);
 		}
 	}
 }

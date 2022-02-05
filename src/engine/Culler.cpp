@@ -18,11 +18,9 @@ void Culler::BackFaceCulling()
 
 bool Culler::MeshInFrustum(Camera& camera, Mesh& mesh)
 {
-	float longestSide = mesh.scale.x;
-	longestSide = mesh.scale.y > mesh.scale.x ? mesh.scale.y : mesh.scale.x;
-	longestSide = mesh.scale.z > longestSide ? mesh.scale.z : longestSide;
+	float radius = Utils::Get3DObjectLongestSide(mesh.scale.x, mesh.scale.y, mesh.scale.z) / 2;
 
-	int status = SphereInFrustum(camera, mesh.position, longestSide);
+	int status = SphereInFrustum(camera, mesh.position, radius);
 	if (status == OUTSIDE)
 	{
 		return false;
@@ -32,11 +30,9 @@ bool Culler::MeshInFrustum(Camera& camera, Mesh& mesh)
 
 bool Culler::ModelInFrustum(Camera& camera, Model& model)
 {
-	float longestSide = model.scale.x;
-	longestSide = model.scale.y > model.scale.x ? model.scale.y : model.scale.x;
-	longestSide = model.scale.z > longestSide ? model.scale.z : longestSide;
+	float radius = Utils::Get3DObjectLongestSide(model.scale.x, model.scale.y, model.scale.z) / 2;
 
-	int status = SphereInFrustum(camera, model.position, longestSide);
+	int status = SphereInFrustum(camera, model.position, radius);
 	if (status == OUTSIDE)
 	{
 		return false;
@@ -54,7 +50,7 @@ void Culler::ComputeSphereData(Camera& camera)
 	sphereFactorX = 1.0f / cos(angleX); // How small the the sphere is horizontally relative to its size near the camera
 
 	Z = glm::normalize(camera.forward - camera.position); // Forward vector from camera
-	X = glm::normalize(glm::cross(Z, camera.vecUp)); // Right vector from camera
+	X = glm::normalize(glm::cross(Z, camera.up)); // Right vector from camera
 	Y = glm::cross(X, Z); // Up vector from camera
 }
 

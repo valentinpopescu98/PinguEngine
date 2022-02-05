@@ -14,12 +14,9 @@ class XmlParser
 {
 	public:
 		void Init(const char* path, GLuint firstTextureID);
-		void CreateModels(pugi::xml_node node);
-		void DrawModelLights(GLuint shaderID, Camera& camera);
-		void DrawModelObjects(GLuint shaderID, Camera& camera);
+		void CreateModels(pugi::xml_node node, std::vector<Model>& modelLights, std::vector<Model>& modelObjects);
 
 		pugi::xml_node scene;
-		std::vector<Model> modelLights, modelObjects;
 	private:
 		pugi::xml_document doc;
 		GLuint firstTextureID;

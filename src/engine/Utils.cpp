@@ -37,6 +37,15 @@ std::vector<std::string> Utils::GetFileLines(const char* filePath)
 	throw(errno + " ERROR: Could not open file.");
 }
 
+float Utils::Get3DObjectLongestSide(float x, float y, float z)
+{
+	float longestSide = x;
+	longestSide = y > x ? y : x;
+	longestSide = z > longestSide ? z : longestSide;
+
+	return longestSide;
+}
+
 void Utils::SendMatrix4x4_Uniform(GLuint shaderID, const char* uniform, glm::mat4 matrix)
 {
 	GLuint location = glGetUniformLocation(shaderID, uniform); // Create uniform variable

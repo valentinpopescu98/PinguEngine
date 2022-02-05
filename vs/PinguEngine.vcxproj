@@ -186,6 +186,7 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClCompile Include="..\dependencies\src\pugixml.cpp" />
     <ClCompile Include="..\dependencies\src\stb.c" />
     <ClCompile Include="..\src\engine\Camera.cpp" />
+    <ClCompile Include="..\src\engine\CollisionManager.cpp" />
     <ClCompile Include="..\src\engine\Culler.cpp" />
     <ClCompile Include="..\src\engine\EBO.cpp" />
     <ClCompile Include="..\src\engine\Engine.cpp" />
@@ -203,6 +204,7 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\Camera.h" />
+    <ClInclude Include="..\src\engine\CollisionManager.h" />
     <ClInclude Include="..\src\engine\Culler.h" />
     <ClInclude Include="..\src\engine\EBO.h" />
     <ClInclude Include="..\src\engine\Engine.h" />

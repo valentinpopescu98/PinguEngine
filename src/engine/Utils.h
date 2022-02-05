@@ -27,6 +27,7 @@ class Utils
 	public:
 		static std::string GetFileContents(const char* filePath);
 		static std::vector<std::string> GetFileLines(const char* filePath);
+		static float Get3DObjectLongestSide(float x, float y, float z);
 		static void SendMatrix4x4_Uniform(GLuint shaderID, const char* uniform, glm::mat4 matrix);
 		static void Send1f_Uniform(GLuint shaderID, const char* uniform, float value);
 		static void Send1i_Uniform(GLuint shaderID, const char* uniform, int value);

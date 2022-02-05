@@ -9,7 +9,7 @@ int main()
 	Engine::EnableVsync(true); // Enable vertical synchronization
 
 	World world; // Create world object
-	world.Init(); // Create prerequisites
+	world.Init(window); // Create prerequisites
 	world.Run(window); // Run main loop
 	world.End(); // Terminate prerequisites
 

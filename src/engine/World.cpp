@@ -1,21 +1,21 @@
 #include "World.h"
 
-void World::Init()
+void World::Init(GLFWwindow* window)
 {
 	// Data for a plane
 	std::vector<VertexStruct> planeVertices =
 	{
 		//	             COORDS		                   NORMALS                 TEXT COORDS                  COLORS
-		{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // front left
-		{glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // front right
+		{glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)}, // back left
 		{glm::vec3( 0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // back right
-		{glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)}  // back left
+		{glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // front right
+		{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}  // front left
 	};
 
 	std::vector<GLuint> planeIndices
 	{
 		0, 1, 2,		// bottom right triangle
-		3, 2, 0			// top left triangle
+		2, 3, 0			// top left triangle
 	};
 
 	// Data for a pyramid
@@ -158,7 +158,9 @@ void World::Init()
 
 	// Create models
 	parser.Init("src/xml/scene.xml", meshObjects[0].textures.size() + meshObjects[1].textures.size()); // Parse XML
-	parser.CreateModels(parser.scene); // Initialize models from the XML
+	parser.CreateModels(parser.scene, modelLights, modelObjects); // Initialize models from the XML
+
+	GuiDrawer::Init(window);
 
 	// Enable backface culling
 	Culler::BackFaceCulling();
@@ -172,26 +174,26 @@ void World::End()
 	meshObjects[0].DeleteBuffers();
 	meshObjects[1].DeleteBuffers();
 
-	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	for (GLuint i = 0; i < modelLights.size(); i++)
 	{
-		parser.modelLights[i].DeleteBuffers();
+		modelLights[i].DeleteBuffers();
 	}
-	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	for (GLuint i = 0; i < modelLights.size(); i++)
 	{
-		parser.modelObjects[i].DeleteBuffers();
+		modelObjects[i].DeleteBuffers();
 	}
 
 	// Delete textures
 	meshObjects[0].DeleteTextures();
 	meshObjects[1].DeleteTextures();
 
-	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	for (GLuint i = 0; i < modelLights.size(); i++)
 	{
-		parser.modelLights[i].DeleteTextures();
+		modelLights[i].DeleteTextures();
 	}
-	for (GLuint i = 0; i < parser.modelLights.size(); i++)
+	for (GLuint i = 0; i < modelLights.size(); i++)
 	{
-		parser.modelObjects[i].DeleteTextures();
+		modelObjects[i].DeleteTextures();
 	}
 
 	// Delete shaders
@@ -199,42 +201,57 @@ void World::End()
 	objectShader.Delete();
 }
 
-void World::BeforeDrawing()
+void World::BeforeDrawing(GLFWwindow* window)
 {
 	glfwPollEvents(); // Take care of GLFW events
 	glClearColor(0.05f, 0.1f, 0.2f, 1.0f); // Wipe drawing from previous frame with a black color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color buffer and depth buffer
+
+	// Treat camera inputs (WASD - move on X/Z axis, LEFT CTRL/SPACE - move on Y axis, SHIFT - speed modifier)
+	camera.TreatInputs(window, Engine::deltaTime);
 }
 
 void World::Draw(GLFWwindow* window)
 {
-	// Treat camera inputs (WASD - move on X/Z axis, LEFT CTRL/SPACE - move on Y axis, SHIFT - speed modifier)
-	camera.TreatInputs(window, Engine::deltaTime);
 	camera.UpdateMatrices(view, projection); // Compute view and projection matrices
 
 	// RENDER LIGHT SOURCES SECTION
 	lightShader.Use(); // Use light source's shaders
 	lightShader.InitMatrices(view, projection); // Send view and projection matrix to light source's shaders
 
-	parser.DrawModelLights(lightShader.id, camera); // Draw all lights of type MODEL from the XML
+	// Draw all lights of type MODEL from the XML
+	for (Model modelLight : modelLights)
+	{
+			modelLight.Draw(lightShader.id);
+		/*if (Culler::ModelInFrustum(camera, modelLight))
+		{
+		}*/
+	}
 
 	// RENDER NORMAL OBJECTS SECTION
 	objectShader.Use(); // Use object's shader
 	// Send material data to object's shaders
-	objectShader.InitMaterial(parser.modelLights[0].position, parser.modelLights[0].color, camera.position,
+	objectShader.InitMaterial(modelLights[0].position, modelLights[0].color, camera.position,
 		glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
 	objectShader.InitMatrices(view, projection); // Send view and projection matrix to object's shaders
 
-	if (Culler::MeshInFrustum(camera, meshObjects[0]))
+	// Draw all objects of type MESH from the local buffers
+	for (Mesh meshObject : meshObjects)
 	{
-		meshObjects[0].Draw(objectShader.id);
-	}
-	if (Culler::MeshInFrustum(camera, meshObjects[1]))
-	{
-		meshObjects[1].Draw(objectShader.id);
+			meshObject.Draw(objectShader.id);
+		/*if (Culler::MeshInFrustum(camera, meshObject))
+		{
+		}*/
 	}
 
-	parser.DrawModelObjects(objectShader.id, camera); // Draw all objects of type MODEL from the XML
+	// Draw all objects of type MODEL from the XML
+	for (Model modelObject : modelObjects)
+	{
+			modelObject.Draw(objectShader.id);
+		/*if (Culler::ModelInFrustum(camera, modelObject))
+		{
+		}*/
+	}
 }
 
 void World::AfterDrawing(GLFWwindow* window)
@@ -250,23 +267,54 @@ void World::AfterDrawing(GLFWwindow* window)
 
 void World::Run(GLFWwindow* window)
 {
-	GuiDrawer::Init(window);
-
 	glEnable(GL_DEPTH_TEST); // Enable depth
 
 	// Loop until window is closed
 	while (!glfwWindowShouldClose(window))
 	{
+		//std::cout << meshObjects[0].position.x << " " << meshObjects[0].position.y << " " << meshObjects[0].position.z << std::endl;
+		//std::cout << meshObjects[1].position.x << " " << meshObjects[1].position.y << " " << meshObjects[1].position.z << std::endl << std::endl;
+
+		/* DEMO COLLISIONS:
+		*  Code block to be removed from the framework after demo.
+		*  Add WASD to control the cube and make it not clip through the pyramid
+		*/
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		{
+			meshObjects[0].position += 5.0f * camera.forward * (float)Engine::deltaTime;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		{
+			meshObjects[0].position += 5.0f * -camera.forward * (float)Engine::deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		{
+			meshObjects[0].position += 5.0f * -camera.right * (float)Engine::deltaTime;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		{
+			meshObjects[0].position += 5.0f * camera.right * (float)Engine::deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		{
+			meshObjects[0].position += 5.0f * -camera.up * (float)Engine::deltaTime;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			meshObjects[0].position += 5.0f * camera.up * (float)Engine::deltaTime;
+		}
+
 		//if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
 		//{
 		//	ReloadModels(); // LAGGY AF
 		//}
 
-		BeforeDrawing();
+		BeforeDrawing(window);
 		Draw(window);
 		//GuiDrawer::Draw();
 		AfterDrawing(window);
 
+		CollisionManager::Uncollide(meshObjects, modelObjects);
 		Engine::SetTimeValues(); // Compute deltaTime
 		Engine::CheckErrorCodes(); // Check for GLAD error codes
 	}
@@ -275,5 +323,5 @@ void World::Run(GLFWwindow* window)
 void World::ReloadModels()
 {
 	parser.Init("src/xml/scene.xml", meshObjects[0].textures.size() + meshObjects[1].textures.size()); // Parse XML
-	parser.CreateModels(parser.scene); // Initialize models from the XML
+	parser.CreateModels(parser.scene, modelLights, modelObjects); // Initialize models from the XML
 }

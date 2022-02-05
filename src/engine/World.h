@@ -13,15 +13,18 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "Culler.h"
+#include "CollisionManager.h"
 
 class World
 {
 	public:
-		void Init();
+		void Init(GLFWwindow* window);
 		void End();
 		void Run(GLFWwindow* window);
+
+		std::vector<Model> modelLights, modelObjects;
 	private:
-		void BeforeDrawing();
+		void BeforeDrawing(GLFWwindow* window);
 		void Draw(GLFWwindow* window);
 		void AfterDrawing(GLFWwindow* window);
 		void ReloadModels();

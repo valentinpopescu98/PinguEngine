@@ -54,6 +54,9 @@
     <ClCompile Include="..\src\engine\GuiDrawer.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\engine\CollisionManager.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="engine">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="..\src\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="..\src\engine\GuiDrawer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\CollisionManager.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>

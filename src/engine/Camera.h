@@ -20,7 +20,7 @@ class Camera
 		glm::vec3 position;
 		glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f); // Variable for the forward vector
 		glm::vec3 right; // Variable for the right vector
-		glm::vec3 vecUp = glm::vec3(0.0f, 1.0f, 0.0f); // Variable for (0, 1, 0)
+		const glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // Constant for (0, 1, 0)
 		float fovY;
 		float nearPlane, farPlane;
 
