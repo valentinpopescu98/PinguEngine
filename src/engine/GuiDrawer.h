@@ -14,8 +14,10 @@ class GuiDrawer
 		static void End();
 		static void Draw();
 
-		static ImVec4 particleBirthColor;
-		static ImVec4 particleDeathColor;
+		static ImVec4 particlePosition;
+		static ImVec4 particleColorBirth, particleColorDeath;
+		static ImVec4 particleSpeed;
+		static float particleScaleBirth, particleScaleDeath;
 		static float particleLifeTime;
 	private:
 		//static bool show_demo_window;

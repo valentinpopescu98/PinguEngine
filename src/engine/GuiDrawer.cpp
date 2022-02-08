@@ -3,9 +3,14 @@
 //bool GuiDrawer::show_demo_window = true;
 //bool GuiDrawer::show_another_window = false;
 //ImVec4 GuiDrawer::clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-ImVec4 GuiDrawer::particleBirthColor = ImVec4(1.0f, 1.0f, 0.0f, 1.0f);
-ImVec4 GuiDrawer::particleDeathColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
-float GuiDrawer::particleLifeTime = 0.1f;
+
+ImVec4 GuiDrawer::particlePosition = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+ImVec4 GuiDrawer::particleColorBirth = ImVec4(1.0f, 1.0f, 0.0f, 1.0f);
+ImVec4 GuiDrawer::particleColorDeath = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+ImVec4 GuiDrawer::particleSpeed = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+float GuiDrawer::particleScaleBirth = 0.5f;
+float GuiDrawer::particleScaleDeath = 0.0f;
+float GuiDrawer::particleLifeTime = 1.0f;
 
 void GuiDrawer::Init(GLFWwindow* window)
 {
@@ -94,11 +99,15 @@ void GuiDrawer::Draw()
 
     // Particle System window
     {
-        ImGui::Begin("Particle System"); // Create window
+        ImGui::Begin("Particle System Manager"); // Create window
 
-        ImGui::ColorEdit3("Birth Color", (float*)&particleBirthColor); // Edit 3 floats representing a color
-        ImGui::ColorEdit3("Death Color", (float*)&particleDeathColor); // Edit 3 floats representing a color
-        ImGui::SliderFloat("Life Time", &particleLifeTime, 0.1f, 10.0f); // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat3("Starting Position", (float*)&particlePosition, -1000.0f, 1000.0f); // Edit 3 floats using a slider
+        ImGui::ColorEdit3("Birth Color", (float*)&particleColorBirth); // Edit 3 floats representing a color
+        ImGui::ColorEdit3("Death Color", (float*)&particleColorDeath); // Edit 3 floats representing a color
+        ImGui::SliderFloat3("Starting Speed", (float*)&particleSpeed, -10.0f, 10.0f); // Edit 3 floats representing a vec3
+        ImGui::SliderFloat("Birth Scale", &particleScaleBirth, 0.0f, 10.0f); // Edit 1 float using a slider
+        ImGui::SliderFloat("Death Scale", &particleScaleDeath, 0.0f, 10.0f); // Edit 1 float using a slider
+        ImGui::SliderFloat("Life Time", &particleLifeTime, 0.1f, 10.0f); // Edit 1 float using a slider
 
         ImGui::End(); // Destroy window
     }

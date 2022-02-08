@@ -129,8 +129,8 @@ void World::Update(GLFWwindow* window)
 	{
 		for (int i = 0; i < 5; i++)
 		{
-			particleSystem.CreateParticle(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-				glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3.0f, 1.0f, 1.0f), 0.5f, 0.0f, 0.3f, 1.0f);
+			particleSystem.CreateParticle(GuiDrawer::particlePosition, GuiDrawer::particleColorBirth, GuiDrawer::particleColorDeath,
+				GuiDrawer::particleSpeed, GuiDrawer::particleScaleBirth, GuiDrawer::particleScaleDeath, GuiDrawer::particleLifeTime);
 		}
 	}
 

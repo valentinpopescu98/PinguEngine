@@ -10,28 +10,25 @@ void ParticleSystem::Init(GLuint particleCount)
 	origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
-void ParticleSystem::CreateParticle(glm::vec3 position, glm::vec4 colorBirth, glm::vec4 colorDeath, glm::vec3 speed,
-	glm::vec3 speedMultiplier, float scaleBirth, float scaleDeath, float scaleMultiplier, float lifeTime)
+void ParticleSystem::CreateParticle(ImVec4 position, ImVec4 colorBirth, ImVec4 colorDeath, ImVec4 speed,
+	 float scaleBirth, float scaleDeath, float lifeTime)
 {
 	Particle& particle = particles[particleIndex];
 
 	particle.active = true;
-	particle.position = position;
+	particle.position = glm::vec3(position.x, position.y, position.z);
 
 	particle.rotation = glm::vec3(
 		Utils::GetRandomFloat(0.0f, 2.0f * glm::pi<float>()),
 		Utils::GetRandomFloat(0.0f, 2.0f * glm::pi<float>()),
 		Utils::GetRandomFloat(0.0f, 2.0f * glm::pi<float>()));
 
-	particle.colorBirth = colorBirth;
-	particle.colorDeath = colorDeath;
+	particle.colorBirth = glm::vec4(colorBirth.x, colorBirth.y, colorBirth.z, colorBirth.w);
+	particle.colorDeath = glm::vec4(colorDeath.x, colorDeath.y, colorDeath.z, colorDeath.w);
 
-	particle.speed = speed;
-	particle.speed.x += speedMultiplier.x * Utils::GetRandomFloat(-0.5f, 0.5f);
-	particle.speed.y += speedMultiplier.y * Utils::GetRandomFloat(-0.5f, 0.5f);
-	particle.speed.z += speedMultiplier.z * Utils::GetRandomFloat(-0.5f, 0.5f);
+	particle.speed = glm::vec3(speed.x, speed.y, speed.z) + Utils::GetRandomFloat(-0.5f, 0.5f);
 
-	particle.scaleBirth = scaleBirth + scaleMultiplier * Utils::GetRandomFloat(-0.5f, 0.5f);
+	particle.scaleBirth = scaleBirth + Utils::GetRandomFloat(-0.5f, 0.5f);
 	particle.scaleDeath = scaleDeath;
 
 	particle.lifeTime = lifeTime;

@@ -12,6 +12,7 @@
 
 #include "Utils.h"
 #include "Mesh.h"
+#include "GuiDrawer.h"
 
 class ParticleSystem
 {
@@ -19,8 +20,8 @@ class ParticleSystem
 		void Init(GLuint particleCount);
 		//void End();
 
-		void CreateParticle(glm::vec3 position, glm::vec4 colorBirth, glm::vec4 colorDeath, glm::vec3 speed,
-			glm::vec3 speedMultiplier, float scaleBirth, float scaleDeath, float scaleMultiplier, float lifeTime);
+		void CreateParticle(ImVec4 position, ImVec4 colorBirth, ImVec4 colorDeath, ImVec4 speed,
+			float scaleBirth, float scaleDeath, float lifeTime);
 		void UpdateParticleData(double deltaTime);
 		void DrawParticle(GLuint shaderID, Mesh& parent);
 	private:

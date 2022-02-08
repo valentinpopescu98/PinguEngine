@@ -1,6 +1,7 @@
 # General
 /*
 !.gitignore
+!imgui.ini
 !icon.ico
 
 # Visual Studio
