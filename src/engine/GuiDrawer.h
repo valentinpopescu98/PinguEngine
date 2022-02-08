@@ -13,9 +13,12 @@ class GuiDrawer
 		static void Init(GLFWwindow* window);
 		static void End();
 		static void Draw();
+
+		static ImVec4 particleBirthColor;
+		static ImVec4 particleDeathColor;
+		static float particleLifeTime;
 	private:
-		// Our state
-		static bool show_demo_window;
-		static bool show_another_window;
-		static ImVec4 clear_color;
+		//static bool show_demo_window;
+		//static bool show_another_window;
+		//static ImVec4 clear_color;
 };

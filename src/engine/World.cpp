@@ -2,124 +2,10 @@
 
 void World::Init(GLFWwindow* window)
 {
-	// Data for a plane
-	std::vector<VertexStruct> planeVertices =
-	{
-		//	             COORDS		                   NORMALS                 TEXT COORDS                  COLORS
-		{glm::vec3(-0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)}, // back left
-		{glm::vec3( 0.5f, 0.0f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // back right
-		{glm::vec3( 0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // front right
-		{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}  // front left
-	};
-
-	std::vector<GLuint> planeIndices
-	{
-		0, 1, 2,		// bottom right triangle
-		2, 3, 0			// top left triangle
-	};
-
-	// Data for a pyramid
-	std::vector<VertexStruct> pyramidVertices
-	{
-		//	             COORDS		                    NORMALS                  TEXT COORDS                  COLORS
-		// Base face
-		{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back left
-		{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back right
-		{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)}, // front right
-		{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front left
-
-		// Front face	    
-		{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front left
-		{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)}, // front right
-		{glm::vec3( 0.0f,  0.5f,  0.0f), glm::vec3(0.0f,  1.0f,  1.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f)}, // top
-
-		// Right face	    
-		{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)}, // front right
-		{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back right
-		{glm::vec3( 0.0f,  0.5f,  0.0f), glm::vec3(1.0f,  1.0f,  0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f)}, // top
-
-		// Back face	    
-		{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  1.0f, -1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back right
-		{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  1.0f, -1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back left
-		{glm::vec3( 0.0f,  0.5f,  0.0f), glm::vec3(0.0f,  1.0f, -1.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f)}, // top
-
-		// Left face	    
-		{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back left
-		{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front left
-		{glm::vec3( 0.0f,  0.5f,  0.0f), glm::vec3(-1.0f,  1.0f,  0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f)}  // top
-	};
-
-	std::vector<GLuint> pyramidIndices
-	{
-		0, 1, 2,		// bottom right base triangle
-		2, 3, 0,		// top left base triangle
-		4, 5, 6,		// front face triangle
-		7, 8, 9,		// right face triangle
-		10, 11, 12,		// back face triangle
-		13, 14, 15		// left face triangle
-	};
-
-	// Data for a cube
-	std::vector<VertexStruct> cubeVertices
-	{
-		//	             COORDS		                    NORMALS                  TEXT COORDS                  COLORS
-		// Bottom face
-		{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back bottom left
-		{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back bottom right
-		{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)}, // front bottom right
-		{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front bottom left
-
-		// Top face
-		{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front top left
-		{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)}, // front top right
-		{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back top right
-		{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back top left
-
-		// Front face
-		{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front bottom left
-		{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)}, // front bottom right
-		{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)}, // front top right
-		{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front top left
-
-		// Right face
-		{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)}, // front bottom right
-		{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back bottom right
-		{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back top right
-		{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f)}, // front top right
-
-		// Back face
-		{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back bottom right
-		{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back bottom left
-		{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back top left
-		{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.0f)}, // back top right
-
-		// Left face
-		{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, // back bottom left
-		{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front bottom left
-		{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)}, // front top left
-		{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)}  // back top left
-	};
-
-	std::vector<GLuint> cubeIndices
-	{
-		0, 1, 2,		// bottom right, front face triangle
-		2, 3, 0,		// top left, front face triangle
-
-		4, 5, 6,		// bottom right, back face triangle
-		6, 7, 4,		// top left, back face triangle
-
-		8, 9, 10,		// bottom right, left face triangle
-		10, 11, 8,		// top left, left face triangle
-
-		12, 13, 14,		// bottom right, right face triangle
-		14, 15, 12,		// top left, right face triangle
-
-		16, 17, 18,		// bottom right, top face triangle
-		18, 19, 16,		// top left, top face triangle
-
-		20, 21, 22,		// bottom right, bottom face triangle
-		22, 23, 20		// top right, bottom face triangle
-	};
+	// Set origin
+	origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
+	origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	// Supports: texture_diffuse, texture_specular, texture_normal, texture_height
 	std::vector<TextureStruct> defaultTexture
@@ -139,17 +25,15 @@ void World::Init(GLFWwindow* window)
 	// Initialize camera
 	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 0.0f), 70.0f, 0.1f, 20.0f);
 
-	// Create meshes
-	Mesh origin;
-	origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
-	origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	// Initialize particle system
+	particleSystem.Init(1000);
 
+	// Create meshes
 	meshObjects.push_back(Mesh());
-	meshObjects[0].CreateBuffers(cubeVertices, cubeIndices, defaultTexture,
+	meshObjects[0].CreateBuffers(Utils::cubeVertices, Utils::cubeIndices, defaultTexture,
 		origin, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	meshObjects.push_back(Mesh());
-	meshObjects[1].CreateBuffers(pyramidVertices, pyramidIndices, noiseTexture,
+	meshObjects[1].CreateBuffers(Utils::pyramidVertices, Utils::pyramidIndices, noiseTexture,
 		meshObjects[0], glm::vec3(2.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
 
 	// Create mesh textures
@@ -160,6 +44,7 @@ void World::Init(GLFWwindow* window)
 	parser.Init("src/xml/scene.xml", meshObjects[0].textures.size() + meshObjects[1].textures.size()); // Parse XML
 	parser.CreateModels(parser.scene, modelLights, modelObjects); // Initialize models from the XML
 
+	// Initialize GUI
 	GuiDrawer::Init(window);
 
 	// Enable backface culling
@@ -169,31 +54,23 @@ void World::Init(GLFWwindow* window)
 void World::End()
 {
 	GuiDrawer::End();
+	//particleSystem.End();
 
-	// Delete buffers
-	meshObjects[0].DeleteBuffers();
-	meshObjects[1].DeleteBuffers();
-
-	for (GLuint i = 0; i < modelLights.size(); i++)
+	for (Mesh meshObject : meshObjects)
 	{
-		modelLights[i].DeleteBuffers();
-	}
-	for (GLuint i = 0; i < modelLights.size(); i++)
-	{
-		modelObjects[i].DeleteBuffers();
+		meshObject.DeleteBuffers(); // Delete buffers
+		meshObject.DeleteTextures(); // Delete textures
 	}
 
-	// Delete textures
-	meshObjects[0].DeleteTextures();
-	meshObjects[1].DeleteTextures();
-
-	for (GLuint i = 0; i < modelLights.size(); i++)
+	for (Model modelLight : modelLights)
 	{
-		modelLights[i].DeleteTextures();
+		modelLight.DeleteBuffers(); // Delete buffers
+		modelLight.DeleteTextures(); // Delete textures
 	}
-	for (GLuint i = 0; i < modelLights.size(); i++)
+	for (Model modelObject : modelObjects)
 	{
-		modelObjects[i].DeleteTextures();
+		modelObject.DeleteBuffers(); // Delete buffers
+		modelObject.DeleteTextures(); // Delete textures
 	}
 
 	// Delete shaders
@@ -201,7 +78,7 @@ void World::End()
 	objectShader.Delete();
 }
 
-void World::BeforeDrawing(GLFWwindow* window)
+void World::BeforeUpdate(GLFWwindow* window)
 {
 	glfwPollEvents(); // Take care of GLFW events
 	glClearColor(0.05f, 0.1f, 0.2f, 1.0f); // Wipe drawing from previous frame with a black color
@@ -211,8 +88,54 @@ void World::BeforeDrawing(GLFWwindow* window)
 	camera.TreatInputs(window, Engine::deltaTime);
 }
 
-void World::Draw(GLFWwindow* window)
+void World::Update(GLFWwindow* window)
 {
+	/* DEMO COLLISIONS:
+	*  Code block to be removed from the framework after demo.
+	*  Add WASD to control the cube and make it not clip through the pyramid
+	*/
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		meshObjects[0].position += 5.0f * camera.forward * (float)Engine::deltaTime;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		meshObjects[0].position += 5.0f * -camera.forward * (float)Engine::deltaTime;
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+	{
+		meshObjects[0].position += 5.0f * -camera.right * (float)Engine::deltaTime;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	{
+		meshObjects[0].position += 5.0f * camera.right * (float)Engine::deltaTime;
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	{
+		meshObjects[0].position += 5.0f * -camera.up * (float)Engine::deltaTime;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		meshObjects[0].position += 5.0f * camera.up * (float)Engine::deltaTime;
+	}
+
+	//if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+	//{
+	//	ReloadModels(); // LAGGY AF
+	//}
+
+	// Create particles when pressing P
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			particleSystem.CreateParticle(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+				glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3.0f, 1.0f, 1.0f), 0.5f, 0.0f, 0.3f, 1.0f);
+		}
+	}
+
+	particleSystem.UpdateParticleData(Engine::deltaTime); // Update particle data
+
 	camera.UpdateMatrices(view, projection); // Compute view and projection matrices
 
 	// RENDER LIGHT SOURCES SECTION
@@ -252,9 +175,15 @@ void World::Draw(GLFWwindow* window)
 		{
 		}*/
 	}
+
+	// Draw all objects of type MESH from the local buffers created in the particle system
+	particleSystem.DrawParticle(objectShader.id, origin);
+
+	// Draw GUI
+	GuiDrawer::Draw();
 }
 
-void World::AfterDrawing(GLFWwindow* window)
+void World::AfterUpdate(GLFWwindow* window)
 {
 	// Set resolution variables
 	glfwGetFramebufferSize(window, &Engine::resX, &Engine::resY); // Get window sizes
@@ -272,47 +201,9 @@ void World::Run(GLFWwindow* window)
 	// Loop until window is closed
 	while (!glfwWindowShouldClose(window))
 	{
-		//std::cout << meshObjects[0].position.x << " " << meshObjects[0].position.y << " " << meshObjects[0].position.z << std::endl;
-		//std::cout << meshObjects[1].position.x << " " << meshObjects[1].position.y << " " << meshObjects[1].position.z << std::endl << std::endl;
-
-		/* DEMO COLLISIONS:
-		*  Code block to be removed from the framework after demo.
-		*  Add WASD to control the cube and make it not clip through the pyramid
-		*/
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		{
-			meshObjects[0].position += 5.0f * camera.forward * (float)Engine::deltaTime;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		{
-			meshObjects[0].position += 5.0f * -camera.forward * (float)Engine::deltaTime;
-		}
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		{
-			meshObjects[0].position += 5.0f * -camera.right * (float)Engine::deltaTime;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		{
-			meshObjects[0].position += 5.0f * camera.right * (float)Engine::deltaTime;
-		}
-		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-		{
-			meshObjects[0].position += 5.0f * -camera.up * (float)Engine::deltaTime;
-		}
-		else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		{
-			meshObjects[0].position += 5.0f * camera.up * (float)Engine::deltaTime;
-		}
-
-		//if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-		//{
-		//	ReloadModels(); // LAGGY AF
-		//}
-
-		BeforeDrawing(window);
-		Draw(window);
-		//GuiDrawer::Draw();
-		AfterDrawing(window);
+		BeforeUpdate(window);
+		Update(window);
+		AfterUpdate(window);
 
 		CollisionManager::Uncollide(meshObjects, modelObjects);
 		Engine::SetTimeValues(); // Compute deltaTime

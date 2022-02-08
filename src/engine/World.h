@@ -14,6 +14,7 @@
 #include "Mesh.h"
 #include "Culler.h"
 #include "CollisionManager.h"
+#include "ParticleSystem.h"
 
 class World
 {
@@ -24,16 +25,18 @@ class World
 
 		std::vector<Model> modelLights, modelObjects;
 	private:
-		void BeforeDrawing(GLFWwindow* window);
-		void Draw(GLFWwindow* window);
-		void AfterDrawing(GLFWwindow* window);
+		void BeforeUpdate(GLFWwindow* window);
+		void Update(GLFWwindow* window);
+		void AfterUpdate(GLFWwindow* window);
 		void ReloadModels();
 
 		// INSTANCES
 		XmlParser parser;
+		ParticleSystem particleSystem;
 		Shader objectShader, lightShader;
 		Camera camera;
 		std::vector<Mesh> meshLights, meshObjects;
+		Mesh origin;
 
 		// UNIFORMS
 		glm::mat4 view, projection;

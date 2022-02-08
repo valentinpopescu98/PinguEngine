@@ -53,6 +53,47 @@ void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint>
     ebo.Unbind(); // Unbind EBO
 }
 
+void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint> indices)
+{
+    this->vertices = vertices;
+    this->indices = indices;
+
+    // Create buffers
+    vao.Create(); // Create VAO and bind it
+    vbo.Create(vertices); // Create VBO, bind and send buffers to GPU
+    ebo.Create(indices); // Create EBO, bind and send buffers to GPU
+
+    vao.LinkVBO(vbo, 0, sizeof(VertexStruct), (void*)0); // Link VBOs to location 0
+    vao.LinkVBO(vbo, 1, sizeof(VertexStruct), (void*)offsetof(VertexStruct, normals)); // Link VBOs to location 1
+    vao.LinkVBO(vbo, 2, sizeof(VertexStruct), (void*)offsetof(VertexStruct, textCoords)); // Link VBOs to location 2
+    vao.LinkVBO(vbo, 3, sizeof(VertexStruct), (void*)offsetof(VertexStruct, colors)); // Link VBOs to location 3
+
+    vao.Unbind(); // Unbind VAO
+    vbo.Unbind(); // Unbind VBO
+    ebo.Unbind(); // Unbind EBO
+}
+
+void Mesh::CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint> indices, std::vector<TextureStruct> textures)
+{
+    this->vertices = vertices;
+    this->indices = indices;
+    this->textures = textures;
+
+    // Create buffers
+    vao.Create(); // Create VAO and bind it
+    vbo.Create(vertices); // Create VBO, bind and send buffers to GPU
+    ebo.Create(indices); // Create EBO, bind and send buffers to GPU
+
+    vao.LinkVBO(vbo, 0, sizeof(VertexStruct), (void*)0); // Link VBOs to location 0
+    vao.LinkVBO(vbo, 1, sizeof(VertexStruct), (void*)offsetof(VertexStruct, normals)); // Link VBOs to location 1
+    vao.LinkVBO(vbo, 2, sizeof(VertexStruct), (void*)offsetof(VertexStruct, textCoords)); // Link VBOs to location 2
+    vao.LinkVBO(vbo, 3, sizeof(VertexStruct), (void*)offsetof(VertexStruct, colors)); // Link VBOs to location 3
+
+    vao.Unbind(); // Unbind VAO
+    vbo.Unbind(); // Unbind VBO
+    ebo.Unbind(); // Unbind EBO
+}
+
 void Mesh::DeleteBuffers()
 {
     vao.Delete(); // Delete VAO
@@ -135,13 +176,40 @@ void Mesh::DeleteTextures()
 // Use this to render a mesh
 void Mesh::Draw(GLuint shaderID)
 {
-    glm::mat4 model = glm::mat4(1.0f); // Create model matrix as identity matrix
-    // Calculate object's global position, rotation and scale
-    model = glm::translate(model, position);
-    model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, scale);
+    // Create model matrix and calculate object's global position, rotation and scale
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), position) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)) *
+        glm::scale(glm::mat4(1.0f), scale);
+
+    Utils::Send1i_Uniform(shaderID, "hasTexture", hasTexture);
+    Utils::SendMatrix4x4_Uniform(shaderID, "model", model); // Send view matrix as uniform to the GPU
+    Utils::Send3f_Uniform(shaderID, "objColor", glm::vec3(color.r, color.g, color.b)); // Send color as uniform to the GPU
+
+    // Draw mesh
+    vao.Bind();
+    for (GLuint i = 0; i < textures.size(); i++)
+    {
+        texture.Bind(textureDimension, i + firstTextureID); // Bind proper texture to the GPU
+    }
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    vao.Unbind();
+    for (GLuint i = 0; i < textures.size(); i++)
+    {
+        texture.Unbind(); // Unbind texture
+    }
+    glActiveTexture(GL_TEXTURE0); // Reset to default texture
+}
+
+void Mesh::Draw(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
+{
+    // Create model matrix and calculate object's global position, rotation and scale
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), position + parent.position) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x + parent.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y + parent.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z + parent.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)) *
+        glm::scale(glm::mat4(1.0f), scale * parent.scale);
 
     Utils::Send1i_Uniform(shaderID, "hasTexture", hasTexture);
     Utils::SendMatrix4x4_Uniform(shaderID, "model", model); // Send view matrix as uniform to the GPU

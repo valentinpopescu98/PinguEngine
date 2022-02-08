@@ -41,4 +41,6 @@ class Model
 		std::vector<TextureStruct> textures;
 		std::vector<Mesh> meshes;
 		std::string texturesDirPath;
+
+		Mesh origin;
 };

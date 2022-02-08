@@ -57,6 +57,12 @@
     <ClCompile Include="..\src\engine\CollisionManager.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\engine\ScriptingSystem.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\ParticleSystem.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="engine">
@@ -82,6 +88,9 @@
     </Filter>
     <Filter Include="resources\textures\scimitar">
       <UniqueIdentifier>{5588e7b8-e5c5-474f-8e5e-f22ccd7de61d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scripting">
+      <UniqueIdentifier>{952cadef-dd5e-468d-976a-04be6b862f41}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +139,12 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\CollisionManager.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\ScriptingSystem.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\ParticleSystem.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>

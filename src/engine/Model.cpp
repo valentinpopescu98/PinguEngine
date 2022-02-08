@@ -3,6 +3,10 @@
 // Import mesh. Use with render method without texture parameters
 void Model::Import(Model& parent, std::string modelPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
+    origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
     this->position = position + parent.position;
     this->rotation = rotation + parent.rotation;
     this->scale = scale * parent.scale;
@@ -22,6 +26,10 @@ void Model::Import(Model& parent, std::string modelPath, glm::vec3 position, glm
 // Import mesh and textures from a physical directory. Use with render method with texture parameters
 void Model::Import(Model& parent, std::string modelPath, std::string texturesDirPath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color)
 {
+    origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
     this->position = position + parent.position;
     this->rotation = rotation + parent.rotation;
     this->scale = scale * parent.scale;
@@ -210,11 +218,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     }
 
     // Process material
-    Mesh origin;
-    origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
-    origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    origin.scale = glm::vec3(1.0f, 1.0f, 1.0f);
-
     Mesh meshObj;
     meshObj.CreateBuffers(vertices, indices, textures,
         origin, this->position, this->rotation, this->scale, this->color);

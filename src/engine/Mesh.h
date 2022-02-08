@@ -22,11 +22,14 @@ class Mesh
             Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
         void CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint> indices, std::vector<TextureStruct> textures,
             Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
+        void CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint> indices);
+        void CreateBuffers(std::vector<VertexStruct> vertices, std::vector<GLuint> indices, std::vector<TextureStruct> textures);
         void DeleteBuffers();
         void CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum textureDimension, GLint interpType, GLint wrapType);
         void CreateTextures(GLuint shaderID, GLuint firstTextureID, GLenum textureDimension, GLint interpType, glm::vec3 borderColor);
         void DeleteTextures();
         void Draw(GLuint shaderID);
+        void Draw(GLuint shaderID, Mesh& parent, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 color);
 
         // Mesh data
         std::vector<VertexStruct> vertices;

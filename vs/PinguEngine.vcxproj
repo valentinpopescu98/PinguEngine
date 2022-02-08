@@ -143,8 +143,8 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../dependencies/lib/GLFW;../dependencies/lib/assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3dll.lib;opengl32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../dependencies/lib/GLFW;../dependencies/lib/assimp;../dependencies/lib/lua;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3dll.lib;opengl32.lib;assimp-vc142-mt.lib;lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "$(ProjectDir)..\dependencies\bin\GLFW\glfw3.dll" "$(OutDir)"
@@ -192,6 +192,8 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClCompile Include="..\src\engine\Engine.cpp" />
     <ClCompile Include="..\src\engine\GuiDrawer.cpp" />
     <ClCompile Include="..\src\engine\Model.cpp" />
+    <ClCompile Include="..\src\engine\ParticleSystem.cpp" />
+    <ClCompile Include="..\src\engine\ScriptingSystem.cpp" />
     <ClCompile Include="..\src\engine\Texture.cpp" />
     <ClCompile Include="..\src\engine\Utils.cpp" />
     <ClCompile Include="..\src\engine\Mesh.cpp" />
@@ -210,6 +212,8 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <ClInclude Include="..\src\engine\Engine.h" />
     <ClInclude Include="..\src\engine\GuiDrawer.h" />
     <ClInclude Include="..\src\engine\Model.h" />
+    <ClInclude Include="..\src\engine\ParticleSystem.h" />
+    <ClInclude Include="..\src\engine\ScriptingSystem.h" />
     <ClInclude Include="..\src\engine\Texture.h" />
     <ClInclude Include="..\src\engine\Utils.h" />
     <ClInclude Include="..\src\engine\Mesh.h" />
