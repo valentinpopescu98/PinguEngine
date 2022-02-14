@@ -15,6 +15,7 @@
 #include "Culler.h"
 #include "CollisionManager.h"
 #include "ParticleSystem.h"
+#include "ScriptingSystem.h"
 
 class World
 {

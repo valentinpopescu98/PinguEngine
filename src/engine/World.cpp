@@ -2,6 +2,8 @@
 
 void World::Init(GLFWwindow* window)
 {
+	ScriptingSystem::CallFunctionByName("src/scripts/hello.lua", "Init");
+
 	// Set origin
 	origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	origin.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -25,7 +27,7 @@ void World::Init(GLFWwindow* window)
 	// Initialize camera
 	camera.Init(Engine::resX, Engine::resY, glm::vec3(0.0f, 0.0f, 0.0f), 70.0f, 0.1f, 20.0f);
 
-	// Initialize particle system
+	// Initialize 1000 particles
 	particleSystem.Init(1000);
 
 	// Create meshes
@@ -90,6 +92,8 @@ void World::BeforeUpdate(GLFWwindow* window)
 
 void World::Update(GLFWwindow* window)
 {
+	ScriptingSystem::CallFunctionByName("src/scripts/hello.lua", "Update");
+
 	/* DEMO COLLISIONS:
 	*  Code block to be removed from the framework after demo.
 	*  Add WASD to control the cube and make it not clip through the pyramid
@@ -133,7 +137,6 @@ void World::Update(GLFWwindow* window)
 				GuiDrawer::particleSpeed, GuiDrawer::particleScaleBirth, GuiDrawer::particleScaleDeath, GuiDrawer::particleLifeTime);
 		}
 	}
-
 	particleSystem.UpdateParticleData(Engine::deltaTime); // Update particle data
 
 	camera.UpdateMatrices(view, projection); // Compute view and projection matrices

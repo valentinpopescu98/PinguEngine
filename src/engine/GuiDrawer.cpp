@@ -4,7 +4,7 @@
 //bool GuiDrawer::show_another_window = false;
 //ImVec4 GuiDrawer::clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-ImVec4 GuiDrawer::particlePosition = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+ImVec4 GuiDrawer::particlePosition = ImVec4(0.0f, 0.0f, -1.0f, 0.0f);
 ImVec4 GuiDrawer::particleColorBirth = ImVec4(1.0f, 1.0f, 0.0f, 1.0f);
 ImVec4 GuiDrawer::particleColorDeath = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
 ImVec4 GuiDrawer::particleSpeed = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -17,8 +17,8 @@ void GuiDrawer::Init(GLFWwindow* window)
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    (void)io;
+    //ImGuiIO& io = ImGui::GetIO();
+    //(void)io;
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -98,19 +98,17 @@ void GuiDrawer::Draw()
     //}
 
     // Particle System window
-    {
-        ImGui::Begin("Particle System Manager"); // Create window
+    ImGui::Begin("Particle System Manager"); // Create window
 
-        ImGui::SliderFloat3("Starting Position", (float*)&particlePosition, -1000.0f, 1000.0f); // Edit 3 floats using a slider
-        ImGui::ColorEdit3("Birth Color", (float*)&particleColorBirth); // Edit 3 floats representing a color
-        ImGui::ColorEdit3("Death Color", (float*)&particleColorDeath); // Edit 3 floats representing a color
-        ImGui::SliderFloat3("Starting Speed", (float*)&particleSpeed, -10.0f, 10.0f); // Edit 3 floats representing a vec3
-        ImGui::SliderFloat("Birth Scale", &particleScaleBirth, 0.0f, 10.0f); // Edit 1 float using a slider
-        ImGui::SliderFloat("Death Scale", &particleScaleDeath, 0.0f, 10.0f); // Edit 1 float using a slider
-        ImGui::SliderFloat("Life Time", &particleLifeTime, 0.1f, 10.0f); // Edit 1 float using a slider
+    ImGui::SliderFloat3("Starting Position", (float*)&particlePosition, -1000.0f, 1000.0f); // Edit 3 floats using a slider
+    ImGui::ColorEdit3("Birth Color", (float*)&particleColorBirth); // Edit 3 floats representing a color
+    ImGui::ColorEdit3("Death Color", (float*)&particleColorDeath); // Edit 3 floats representing a color
+    ImGui::SliderFloat3("Starting Speed", (float*)&particleSpeed, -10.0f, 10.0f); // Edit 3 floats representing a vec3
+    ImGui::SliderFloat("Birth Scale", &particleScaleBirth, 0.0f, 10.0f); // Edit 1 float using a slider
+    ImGui::SliderFloat("Death Scale", &particleScaleDeath, 0.0f, 10.0f); // Edit 1 float using a slider
+    ImGui::SliderFloat("Life Time", &particleLifeTime, 0.1f, 10.0f); // Edit 1 float using a slider
 
-        ImGui::End(); // Destroy window
-    }
+    ImGui::End(); // Destroy window
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

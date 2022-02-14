@@ -89,7 +89,7 @@
     <Filter Include="resources\textures\scimitar">
       <UniqueIdentifier>{5588e7b8-e5c5-474f-8e5e-f22ccd7de61d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="scripting">
+    <Filter Include="scripts">
       <UniqueIdentifier>{952cadef-dd5e-468d-976a-04be6b862f41}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -190,6 +190,9 @@
     </None>
     <None Include="..\resources\models\scimitar.mtl">
       <Filter>resources\models</Filter>
+    </None>
+    <None Include="..\src\scripts\hello.lua">
+      <Filter>scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
