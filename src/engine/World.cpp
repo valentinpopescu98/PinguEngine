@@ -2,7 +2,7 @@
 
 void World::Init(GLFWwindow* window)
 {
-	ScriptingSystem::CallFunctionByName("src/scripts/hello.lua", "Init");
+	//ScriptingSystem::CallFunctionByName("src/scripts/hello.lua", "Init");
 
 	// Set origin
 	origin.position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -92,7 +92,7 @@ void World::BeforeUpdate(GLFWwindow* window)
 
 void World::Update(GLFWwindow* window)
 {
-	ScriptingSystem::CallFunctionByName("src/scripts/hello.lua", "Update");
+	//ScriptingSystem::CallFunctionByName("src/scripts/hello.lua", "Update");
 
 	/* DEMO COLLISIONS:
 	*  Code block to be removed from the framework after demo.

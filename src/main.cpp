@@ -5,7 +5,7 @@
 int main() 
 {
 	Engine::Init(); // Initialize GLFW
-	GLFWwindow* window = Engine::CreateWindow(1024, 768); // Create window of given resolution
+	GLFWwindow* window = Engine::CreateWindow(2048, 1536); // Create window of given resolution
 	Engine::EnableVsync(true); // Enable vertical synchronization
 
 	World world; // Create world object
