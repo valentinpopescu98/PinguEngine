@@ -9,7 +9,7 @@ class Engine
 	public:
 		static int Init();
 		static void End(GLFWwindow* window);
-		static GLFWwindow* CreateWindow(int resX, int resY);
+		static GLFWwindow* CreateWindow(int resX, int resY, bool fullscreen);
 		static void SetTimeValues();
 		static void EnableVsync(bool isEnabled);
 		static void CheckErrorCodes();
@@ -21,6 +21,6 @@ class Engine
 		static double elapsedTime;
 		static double deltaTime;
 	private:
-		static int CheckFailCreateWindow(GLFWwindow* window);
-		static int LoadGlad();
+		static bool CheckWindowCreatedSuccessfully(GLFWwindow* window);
+		static bool LoadGlad();
 };

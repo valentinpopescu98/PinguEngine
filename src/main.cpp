@@ -5,7 +5,8 @@
 int main() 
 {
 	Engine::Init(); // Initialize GLFW
-	GLFWwindow* window = Engine::CreateWindow(2048, 1536); // Create window of given resolution
+	// Create window of given resolution and choose if using fullscreen
+	GLFWwindow* window = Engine::CreateWindow(800, 600, false);
 	Engine::EnableVsync(true); // Enable vertical synchronization
 
 	World world; // Create world object

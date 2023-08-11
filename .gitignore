@@ -5,8 +5,14 @@
 !imgui.ini
 !LICENSE.md
 
-# Visual Studio
+# Application
+!/deps
+!/docs
+!/resources
+!/src
 !/vs
+
+# Visual Studio
 /vs/*
 !/vs/*.aps
 !/vs/*.rc
@@ -15,10 +21,3 @@
 !/vs/*.vcxproj.filters
 !/vs/*.vcxproj.user
 !/vs/resource.h
-
-# Application
-
-!/deps
-!/docs
-!/resources
-!/src

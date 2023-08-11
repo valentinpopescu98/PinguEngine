@@ -26,33 +26,38 @@ void Engine::End(GLFWwindow* window)
 	glfwTerminate();
 }
 
-int Engine::CheckFailCreateWindow(GLFWwindow* window) 
+bool Engine::CheckWindowCreatedSuccessfully(GLFWwindow* window)
 {
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window." << std::endl;
 		glfwTerminate();
-		return -1;
+		return false;
 	}
+
+	return true;
 }
 
-int Engine::LoadGlad()
+bool Engine::LoadGlad()
 {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
+		return false;
 	}
+
+	return true;
 }
 
-GLFWwindow* Engine::CreateWindow(int resX, int resY) 
+GLFWwindow* Engine::CreateWindow(int resX, int resY, bool fullscreen) 
 {
-	GLFWwindow* window = glfwCreateWindow(resX, resY, "Pingu Engine", NULL, NULL); // Create window
+	GLFWmonitor* primaryMonitor = fullscreen ? glfwGetPrimaryMonitor() : NULL;
+	GLFWwindow* window = glfwCreateWindow(resX, resY, "Pingu Engine", primaryMonitor, NULL); // Create window
 
-	CheckFailCreateWindow(window);
+	if (!CheckWindowCreatedSuccessfully(window)) return;
 	glfwMakeContextCurrent(window); // Make window's context current
 
-	LoadGlad();
+	if (!LoadGlad()) return;
 
 	/* TODO: resX, resYand aspectRatio are computed after each frame
 	*  If I remove next lines program will crash because it needs these variables for camera I think.
@@ -74,14 +79,7 @@ void Engine::SetTimeValues()
 
 void Engine::EnableVsync(bool isEnabled)
 {
-	if (isEnabled)
-	{
-		glfwSwapInterval(1);
-	}
-	else
-	{
-		glfwSwapInterval(0);
-	}
+	glfwSwapInterval(isEnabled);
 }
 
 void Engine::CheckErrorCodes()
