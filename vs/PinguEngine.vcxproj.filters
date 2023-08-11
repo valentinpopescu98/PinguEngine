@@ -41,16 +41,6 @@
     <ClCompile Include="..\src\engine\XmlParser.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\src\glad.c" />
-    <ClCompile Include="..\dependencies\src\pugixml.cpp" />
-    <ClCompile Include="..\dependencies\src\stb.c" />
-    <ClCompile Include="..\dependencies\src\imgui.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_demo.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_draw.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_tables.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_widgets.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\src\engine\GuiDrawer.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -63,6 +53,16 @@
     <ClCompile Include="..\src\engine\ParticleSystem.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\deps\src\glad.c" />
+    <ClCompile Include="..\deps\src\imgui.cpp" />
+    <ClCompile Include="..\deps\src\imgui_demo.cpp" />
+    <ClCompile Include="..\deps\src\imgui_draw.cpp" />
+    <ClCompile Include="..\deps\src\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\deps\src\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\deps\src\imgui_tables.cpp" />
+    <ClCompile Include="..\deps\src\imgui_widgets.cpp" />
+    <ClCompile Include="..\deps\src\pugixml.cpp" />
+    <ClCompile Include="..\deps\src\stb.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="engine">
@@ -194,6 +194,9 @@
     <None Include="..\src\scripts\hello.lua">
       <Filter>scripts</Filter>
     </None>
+    <None Include="..\.gitignore" />
+    <None Include="..\imgui.ini" />
+    <None Include="..\LICENSE.md" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\resources\models\sphere.obj">

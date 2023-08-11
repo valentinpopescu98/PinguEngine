@@ -1,15 +1,16 @@
 # General
 /*
 !.gitignore
-!imgui.ini
 !icon.ico
+!imgui.ini
+!LICENSE.md
 
 # Visual Studio
 !/vs
 /vs/*
-!/vs/*.sln
-!/vs/*.rc
 !/vs/*.aps
+!/vs/*.rc
+!/vs/*.sln
 !/vs/*.vcxproj
 !/vs/*.vcxproj.filters
 !/vs/*.vcxproj.user
@@ -17,7 +18,7 @@
 
 # Application
 
-!/dependencies
+!/deps
+!/docs
 !/resources
 !/src
-!/docs

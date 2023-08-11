@@ -138,19 +138,19 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../dependencies/include;../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../deps/include;../src</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../dependencies/lib/GLFW;../dependencies/lib/assimp;../dependencies/lib/lua;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3dll.lib;opengl32.lib;assimp-vc142-mt.lib;lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../deps/lib/GLFW;../deps/lib/assimp;../deps/lib/lua;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3dll.lib;opengl32.lib;assimp-vc142-mt.lib;lua.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(ProjectDir)..\dependencies\bin\GLFW\glfw3.dll" "$(OutDir)"
-xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(OutDir)"
-xcopy /y /d "$(ProjectDir)..\dependencies\bin\lua\lua.dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "$(ProjectDir)..\deps\bin\GLFW\glfw3.dll" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)..\deps\bin\assimp\assimp-vc142-mt.dll" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)..\deps\bin\lua\lua.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -177,16 +177,16 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\src\glad.c" />
-    <ClCompile Include="..\dependencies\src\imgui.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_demo.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_draw.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_tables.cpp" />
-    <ClCompile Include="..\dependencies\src\imgui_widgets.cpp" />
-    <ClCompile Include="..\dependencies\src\pugixml.cpp" />
-    <ClCompile Include="..\dependencies\src\stb.c" />
+    <ClCompile Include="..\deps\src\glad.c" />
+    <ClCompile Include="..\deps\src\imgui.cpp" />
+    <ClCompile Include="..\deps\src\imgui_demo.cpp" />
+    <ClCompile Include="..\deps\src\imgui_draw.cpp" />
+    <ClCompile Include="..\deps\src\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\deps\src\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\deps\src\imgui_tables.cpp" />
+    <ClCompile Include="..\deps\src\imgui_widgets.cpp" />
+    <ClCompile Include="..\deps\src\pugixml.cpp" />
+    <ClCompile Include="..\deps\src\stb.c" />
     <ClCompile Include="..\src\engine\Camera.cpp" />
     <ClCompile Include="..\src\engine\CollisionManager.cpp" />
     <ClCompile Include="..\src\engine\Culler.cpp" />
@@ -238,6 +238,9 @@ xcopy /y /d "$(ProjectDir)..\dependencies\bin\assimp\assimp-vc142-mt.dll" "$(Out
     <Image Include="..\resources\textures\scimitar\diffuse.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.gitignore" />
+    <None Include="..\imgui.ini" />
+    <None Include="..\LICENSE.md" />
     <None Include="..\resources\models\backpack.mtl" />
     <None Include="..\resources\models\scimitar.mtl" />
     <None Include="..\src\scripts\hello.lua" />
